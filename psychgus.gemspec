@@ -3,7 +3,7 @@
 
 ###
 # This file is part of psychgus.
-# Copyright (c) 2017 Jonathan Bradley Whited (@esotericpig)
+# Copyright (c) 2017-2018 Jonathan Bradley Whited (@esotericpig)
 # 
 # psychgus is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -35,9 +35,8 @@ Gem::Specification.new do |spec|
   spec.description            = 'Easily style YAML files in Ruby.  Uses the psych parser as the back end.'
   spec.homepage               = 'https://github.com/esotericpig/psychgus'
   
-  spec.files                  = Dir.glob("{bin,lib}/**/*") + %w(
+  spec.files                  = Dir.glob("{lib}/**/*") + %w(
                                     Gemfile
-                                    Gemfile.lock
                                     LICENSE
                                     psychgus.gemspec
                                     README.md
@@ -48,5 +47,6 @@ Gem::Specification.new do |spec|
   
   spec.add_runtime_dependency 'psych','>= 2.2.2'
   
-  spec.add_development_dependency 'bundler','>= 1.15.0'
+  spec.add_development_dependency 'bundler','>= 1.16.1'
+  spec.add_development_dependency 'yard'   ,'>= 0.9.12'
 end
