@@ -30,8 +30,8 @@ module Psychgus
     #   - :end_column   [Integer]
     #   - :end_line     [Integer]
     #   - :implicit     [true,false]
-    #   - :index        [Integer] ignored (see Psychgus)
-    #   - :level        [Integer] ignored (see Psychgus)
+    #   - :index        [Array,Integer,Range] ignored; in Psychgus, the child index(es) to sniff
+    #   - :level        [Array,Integer,Range] ignored; in Psychgus, the level(s) to sniff
     #   - :plain        [true,false]
     #   - :quoted       [true,false]
     #   - :start_column [Integer]
@@ -63,9 +63,9 @@ module Psychgus
           next
         end
         
-        next unless node.respond_to?(key)
+        return false unless node.respond_to?(key)
         value = self.class.to_value(node,key,value)
-        next if value == Unset
+        return false if value == Unset
         node_value = node.send(key)
         
         # No reason for Range here, I think

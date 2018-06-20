@@ -26,7 +26,7 @@ module Psychgus
     attr_accessor :shooer
     attr_accessor :sniffer
     
-    def initialize(sniffer=Sniffer.new(),shooer=Shooer.new())
+    def initialize(sniffer=Sniffer.new(),shooer=nil)
       set(sniffer,shooer)
     end
     
@@ -35,7 +35,7 @@ module Psychgus
       return odorful
     end
     
-    def set(sniffer=Sniffer.new(),shooer=Shooer.new())
+    def set(sniffer=Sniffer.new(),shooer=nil)
       self.sniffer = sniffer
       
       if shooer.nil?()
