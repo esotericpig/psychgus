@@ -27,20 +27,31 @@ require 'psychgus/super_sniffer'
 module Psychgus
   class StyledTreeBuilder < Psych::TreeBuilder
     attr_accessor :sniffer
-    attr_reader :styler
+    attr_accessor :stylers
     
-    def initialize(styler=Styler::EMPTY)
+    def initialize(styler=nil)
       super()
       
-      @sniffer = (styler == Styler::EMPTY) ? SuperSniffer::EMPTY : SuperSniffer.new()
-      @styler = styler
+      @sniffer = SuperSniffer.new()
+      @stylers = []
+      
+      @stylers.push(styler) unless styler.nil?()
+    end
+    
+    def add_styler(styler)
+      @stylers.push(styler)
+      
+      return self
     end
     
     def alias(*)
       node = super
       
-      @styler.style(sniffer,node)
-      @styler.style_alias(sniffer,node)
+      @stylers.each do |styler|
+        styler.style(sniffer,node)
+        styler.style_alias(sniffer,node)
+      end
+      
       @sniffer.add_alias(node)
       
       return node
@@ -56,11 +67,22 @@ module Psychgus
       @sniffer.end_sequence()
     end
     
+    def pop_styler()
+      return @stylers.pop()
+    end
+    
+    def remove_styler(styler)
+      return @stylers.delete(styler)
+    end
+    
     def scalar(*)
       node = super
       
-      @styler.style(sniffer,node)
-      @styler.style_scalar(sniffer,node)
+      @stylers.each do |styler|
+        styler.style(sniffer,node)
+        styler.style_scalar(sniffer,node)
+      end
+      
       @sniffer.add_scalar(node)
       
       return node
@@ -69,8 +91,11 @@ module Psychgus
     def start_mapping(*)
       node = super
       
-      @styler.style(sniffer,node)
-      @styler.style_mapping(sniffer,node)
+      @stylers.each do |styler|
+        styler.style(sniffer,node)
+        styler.style_mapping(sniffer,node)
+      end
+      
       @sniffer.start_mapping(node)
       
       return node
@@ -79,18 +104,14 @@ module Psychgus
     def start_sequence(*)
       node = super
       
-      @styler.style(sniffer,node)
-      @styler.style_sequence(sniffer,node)
+      @stylers.each do |styler|
+        styler.style(sniffer,node)
+        styler.style_sequence(sniffer,node)
+      end
+      
       @sniffer.start_sequence(node)
       
       return node
-    end
-    
-    def styler=(styler)
-      @sniffer = SuperSniffer.new() if styler != Styler::EMPTY && @sniffer == SuperSniffer::EMPTY
-      @styler = styler
-      
-      return @styler
     end
   end
 end
