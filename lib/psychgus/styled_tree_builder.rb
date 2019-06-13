@@ -29,13 +29,21 @@ module Psychgus
     attr_accessor :sniffer
     attr_accessor :stylers
     
-    def initialize(styler=nil)
+    def initialize(*stylers)
       super()
       
       @sniffer = SuperSniffer.new()
       @stylers = []
       
-      @stylers.push(styler) unless styler.nil?()
+      if !stylers.nil?()
+        if stylers.respond_to?(:each)
+          stylers.each do |styler|
+            @stylers.push(styler)
+          end
+        else
+          @stylers.push(stylers)
+        end
+      end
     end
     
     def add_styler(styler)
