@@ -33,7 +33,6 @@ module Psychgus
     end
     
     class Parent
-      attr_accessor :child_position # For next child's position
       attr_accessor :child_type # For next child's mapping: nil, :key, or :value
       attr_reader :level
       attr_reader :node
@@ -41,7 +40,6 @@ module Psychgus
       attr_reader :tag # For debugging
       
       def initialize(sniffer,node,child_type: nil,tag: nil)
-        @child_position = 1
         @child_type = child_type
         @level = sniffer.level
         @node = node
@@ -77,12 +75,12 @@ module Psychgus
     end
     
     def add_alias(node)
-      next_position(node)
+      add_child(node)
       @aliases.push(node)
     end
     
     def add_scalar(node)
-      next_position(node)
+      add_child(node)
       @scalars.push(node)
     end
     
@@ -90,10 +88,8 @@ module Psychgus
       end_parent()
       
       if !@parent.nil?() && @parent.child_type == :key
-        end_parent()
-        
-        @level -= 1
-        @parent.child_type = :key if !@parent.nil?()
+        # add_child() will not be called again, so end the fake "parent" manually with a fake "value"
+        end_mapping_value()
       end
     end
     
@@ -103,42 +99,12 @@ module Psychgus
       @level -= 1
     end
     
-    def next_position(node)
-      if !@parent.nil?() && !@parent.child_type.nil?()
-        case @parent.child_type
-        when :key
-          tag = :unknown
-          
-          if node.respond_to?(:value,true)
-            tag = node.value
-          elsif node.respond_to?(:anchor,true)
-            tag = node.anchor
-          end
-          
-          start_parent(node,child_type: :value,tag: tag)
-          
-          @parent.child_position = @position
-          
-          @level += 1
-          @position = 1
-        when :value
-          end_parent()
-          
-          @level -= 1
-          @parent.child_type = :key if !@parent.nil?()
-        end
-      else
-        @position += 1
-        
-        @nodes.push(node)
-      end
-    end
-    
     def start_mapping(node)
       start_parent(node,child_type: :key,tag: :map)
       
       # Do not increment @level; the first child (key) will
-      @position = @parent.child_position
+      # - See add_child() and start_mapping_key()
+      @position = 1
       
       @mappings.push(node)
     end
@@ -147,20 +113,55 @@ module Psychgus
       start_parent(node,tag: :seq)
       
       @level += 1
-      @position = @parent.child_position
+      @position = 1
       
       @sequences.push(node)
     end
     
     protected
     
+    def add_child(node)
+      if !@parent.nil?() && !@parent.child_type.nil?()
+        # Fake a "parent"
+        case @parent.child_type
+        when :key
+          start_mapping_key(node)
+        when :value
+          end_mapping_value()
+        end
+      else
+        @position += 1
+        
+        @nodes.push(node)
+      end
+    end
+    
+    def end_mapping_value()
+      end_parent()
+      
+      @level -= 1
+      @parent.child_type = :key if !@parent.nil?()
+    end
+    
     def end_parent()
       @parent = @parents.pop()
+      @position = @parent.position + 1 if !@parent.nil?() # Next sibling's position
+    end
+    
+    def start_mapping_key(node)
+      tag = :unknown
       
-      if !@parent.nil?()
-        @parent.child_position += 1
-        @position = @parent.child_position
+      # Value must be first because Scalar also has an anchor
+      if node.respond_to?(:value)
+        tag = node.value
+      elsif node.respond_to?(:anchor)
+        tag = node.anchor
       end
+      
+      start_parent(node,child_type: :value,tag: tag)
+      
+      @level += 1
+      @position = 1
     end
     
     def start_parent(node,**extra)
