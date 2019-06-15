@@ -22,8 +22,14 @@
 require 'psychgus/super_sniffer'
 
 module Psychgus
-  class Styler
-    EMPTY = Styler.new().freeze()
+  module Styler
+    class Empty
+      include Styler
+    end
+  end
+  
+  module Styler
+    EMPTY = Empty.new().freeze()
     
     def style(sniffer,node); end
     def style_alias(sniffer,node); end
