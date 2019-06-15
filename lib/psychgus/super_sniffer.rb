@@ -22,17 +22,17 @@
 module Psychgus
   class SuperSniffer
     class Empty < SuperSniffer
-      def initialize(); end
-      def add_alias(node); end
-      def add_scalar(node); end
-      def end_mapping(); end
-      def end_sequence(); end
-      def next_position(node); end
-      def start_mapping(node); end
-      def start_sequence(node); end
+      def initialize(*); end
+      def add_alias(*); end
+      def add_scalar(*); end
+      def end_mapping(*); end
+      def end_sequence(*); end
+      def start_mapping(*); end
+      def start_sequence(*); end
     end
     
     class Parent
+      attr_accessor :child_position # For next child's position
       attr_accessor :child_type # For next child's mapping: nil, :key, or :value
       attr_reader :level
       attr_reader :node
@@ -40,11 +40,16 @@ module Psychgus
       attr_reader :tag # For debugging
       
       def initialize(sniffer,node,child_type: nil,tag: nil)
+        @child_position = 1
         @child_type = child_type
         @level = sniffer.level
         @node = node
         @position = sniffer.position
         @tag = tag
+      end
+      
+      def to_s()
+        return "<#{@tag}:(#{@level}:#{@position}):#{@child_type}:(:#{@child_position})>"
       end
     end
   end
@@ -85,12 +90,12 @@ module Psychgus
     end
     
     def end_mapping()
-      end_parent()
-      
-      if !@parent.nil?() && @parent.child_type == :key
+      if !@parent.nil?() && !@parent.child_type.nil?()
         # add_child() will not be called again, so end the fake "parent" manually with a fake "value"
         end_mapping_value()
       end
+      
+      end_parent()
     end
     
     def end_sequence()
@@ -121,31 +126,40 @@ module Psychgus
     protected
     
     def add_child(node)
-      if !@parent.nil?() && !@parent.child_type.nil?()
+      if !@parent.nil?()
         # Fake a "parent"
         case @parent.child_type
         when :key
           start_mapping_key(node)
+          return
         when :value
           end_mapping_value()
+          return
+        else
+          @parent.child_position += 1
         end
-      else
-        @position += 1
-        
-        @nodes.push(node)
       end
+      
+      @position += 1
+      
+      @nodes.push(node)
     end
     
     def end_mapping_value()
       end_parent()
       
       @level -= 1
-      @parent.child_type = :key if !@parent.nil?()
+      @parent.child_type = :key unless @parent.nil?()
     end
     
     def end_parent()
-      @parent = @parents.pop()
-      @position = @parent.position + 1 if !@parent.nil?() # Next sibling's position
+      @parents.pop()
+      @parent = @parents.last
+      
+      if !@parent.nil?()
+        @parent.child_position += 1
+        @position = @parent.child_position
+      end
     end
     
     def start_mapping_key(node)
