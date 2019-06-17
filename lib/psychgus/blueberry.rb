@@ -20,6 +20,6 @@
 ###
 
 module Psychgus
-  class Blueberry
+  module Blueberry
   end
 end
