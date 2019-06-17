@@ -102,6 +102,11 @@ module Psychgus
       end_parent()
       
       @level -= 1
+      
+      if !@parent.nil?() && !@parent.child_type.nil?()
+        # If a sequence is the value of a map's key, then this is necessary
+        end_mapping_value()
+      end
     end
     
     def start_mapping(node)
