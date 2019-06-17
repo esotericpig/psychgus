@@ -19,8 +19,6 @@
 # along with Psychgus.  If not, see <http://www.gnu.org/licenses/>.
 ###
 
-require 'bundler/setup'
-
 require 'psych'
 
 require 'psychgus/blueberry'
