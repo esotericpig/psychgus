@@ -29,25 +29,17 @@ module Psychgus
     attr_reader :sniffer
     attr_reader :stylers
     
-    def initialize(*stylers)
+    def initialize(*styler)
       super()
       
       @sniffer = SuperSniffer.new()
       @stylers = []
       
-      if !stylers.nil?()
-        if stylers.respond_to?(:each)
-          stylers.each do |styler|
-            @stylers.push(styler)
-          end
-        else
-          @stylers.push(stylers)
-        end
-      end
+      add_styler(*styler)
     end
     
-    def add_styler(styler)
-      @stylers.push(styler)
+    def add_styler(*styler)
+      @stylers.push(*styler)
       
       return self
     end
@@ -76,7 +68,9 @@ module Psychgus
     end
     
     def insert_styler(index,*styler)
-      return @stylers.insert(index,*styler)
+      @stylers.insert(index,*styler)
+      
+      return self
     end
     
     def pop_styler()
