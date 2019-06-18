@@ -85,6 +85,7 @@ module Psychgus
   # "The Blueberry" is the name of Gus's car from the TV show Psych.
   # 
   # @author Jonathan Bradley Whited (@esotericpig)
+  # @since  1.0.0
   ###
   module Blueberry
     # Duck Type this method to return the {Styler}(s) for your class/module/etc.
