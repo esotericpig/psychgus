@@ -84,6 +84,10 @@ module Psychgus
   STREAM_UTF16LE = node_const(:stream,:utf16le)
   STREAM_UTF16BE = node_const(:stream,:utf16be)
   
+  def self.parser(stylers: nil)
+    return Psych::Parser.new(StyledTreeBuilder.new(*stylers))
+  end
+  
   # You don't need to pass in stylers, if you're just going to call to_ruby()
   def self.parse(yaml,**kargs)
     parse_stream(yaml,**kargs) do |node|
@@ -114,10 +118,6 @@ module Psychgus
       
       return parser.handler.root
     end
-  end
-  
-  def self.parser(stylers: nil)
-    return Psych::Parser.new(StyledTreeBuilder.new(*stylers))
   end
   
   # Don't use keyword args for io & options so can be a drop-in-replacement for Psych
