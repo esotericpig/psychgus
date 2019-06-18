@@ -28,24 +28,9 @@ require 'psychgus/styler'
 require 'psychgus/super_sniffer'
 require 'psychgus/version'
 
-class Object
-  # Don't use keyword args for options so can be a drop-in-replacement for Psych
-  def to_yaml(options={},**kargs)
-    return Psychgus.dump(self,options,**kargs)
-  end
-end
-
-module Psych
-  module Nodes
-    class Node
-      # Old versions of Psych didn't have alias?(), mapping?(), etc.
-      # name can be a symbol or a string
-      def node_of?(name)
-        return is_a?(Psychgus.node_class(name))
-      end
-    end
-  end
-end
+require 'psychgus/ext/core_ext'
+require 'psychgus/ext/node_ext'
+require 'psychgus/ext/yaml_tree_ext'
 
 module Psychgus
   def self.node_class(name)
