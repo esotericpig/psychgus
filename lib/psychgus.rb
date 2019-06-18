@@ -32,6 +32,8 @@ require 'psychgus/ext/core_ext'
 require 'psychgus/ext/node_ext'
 require 'psychgus/ext/yaml_tree_ext'
 
+require 'psychgus/super_sniffer/parent'
+
 module Psychgus
   def self.node_class(name)
     name = name.to_sym().capitalize()
