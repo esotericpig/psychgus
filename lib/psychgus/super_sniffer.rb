@@ -19,6 +19,8 @@
 # along with Psychgus.  If not, see <http://www.gnu.org/licenses/>.
 ###
 
+require 'psychgus/super_sniffer/parent'
+
 module Psychgus
   class SuperSniffer
     class Empty < SuperSniffer
@@ -29,28 +31,6 @@ module Psychgus
       def end_sequence(*); end
       def start_mapping(*); end
       def start_sequence(*); end
-    end
-    
-    class Parent
-      attr_accessor :child_position # For next child's position
-      attr_accessor :child_type # For next child's mapping: nil, :key, or :value
-      attr_reader :level
-      attr_reader :node
-      attr_reader :position
-      attr_reader :tag # For debugging
-      
-      def initialize(sniffer,node,child_type: nil,tag: nil)
-        @child_position = 1
-        @child_type = child_type
-        @level = sniffer.level
-        @node = node
-        @position = sniffer.position
-        @tag = tag
-      end
-      
-      def to_s()
-        return "<#{@tag}:(#{@level}:#{@position}):#{@child_type}:(:#{@child_position})>"
-      end
     end
   end
   
@@ -110,7 +90,7 @@ module Psychgus
     end
     
     def start_mapping(node)
-      start_parent(node,child_type: :key,tag: :map)
+      start_parent(node,child_type: :key,debug_tag: :map)
       
       # Do not increment @level; the first child (key) will
       # - See add_child() and start_mapping_key()
@@ -120,7 +100,7 @@ module Psychgus
     end
     
     def start_sequence(node)
-      start_parent(node,tag: :seq)
+      start_parent(node,debug_tag: :seq)
       
       @level += 1
       @position = 1
@@ -168,16 +148,18 @@ module Psychgus
     end
     
     def start_mapping_key(node)
-      tag = :unknown
+      debug_tag = nil
       
       # Value must be first because Scalar also has an anchor
       if node.respond_to?(:value)
-        tag = node.value
+        debug_tag = node.value
       elsif node.respond_to?(:anchor)
-        tag = node.anchor
+        debug_tag = node.anchor
       end
       
-      start_parent(node,child_type: :value,tag: tag)
+      debug_tag = :noface if debug_tag.nil?()
+      
+      start_parent(node,child_type: :value,debug_tag: debug_tag)
       
       @level += 1
       @position = 1
