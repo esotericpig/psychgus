@@ -38,8 +38,24 @@ module Psychgus
         @position = sniffer.position
       end
       
+      def anchor=(anchor)
+        node.anchor = anchor
+      end
+      
+      def plain=(plain)
+        node.plain = plain
+      end
+      
+      def quoted=(quoted)
+        node.quoted = quoted
+      end
+      
       def style=(style)
         node.style = style
+      end
+      
+      def tag=(tag)
+        node.tag = tag
       end
       
       def value=(value)
