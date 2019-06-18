@@ -24,13 +24,13 @@ require 'psychgus/super_sniffer/parent'
 module Psychgus
   class SuperSniffer
     class Empty < SuperSniffer
-      def initialize(*); end
-      def add_alias(*); end
-      def add_scalar(*); end
-      def end_mapping(*); end
-      def end_sequence(*); end
-      def start_mapping(*); end
-      def start_sequence(*); end
+      def initialize(*) end
+      def add_alias(*) end
+      def add_scalar(*) end
+      def end_mapping(*) end
+      def end_sequence(*) end
+      def start_mapping(*) end
+      def start_sequence(*) end
     end
   end
   

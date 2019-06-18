@@ -31,10 +31,10 @@ module Psychgus
   module Styler
     EMPTY = Empty.new().freeze()
     
-    def style(sniffer,node); end
-    def style_alias(sniffer,node); end
-    def style_mapping(sniffer,node); end
-    def style_scalar(sniffer,node); end
-    def style_sequence(sniffer,node); end
+    def style(sniffer,node) end
+    def style_alias(sniffer,node) end
+    def style_mapping(sniffer,node) end
+    def style_scalar(sniffer,node) end
+    def style_sequence(sniffer,node) end
   end
 end
