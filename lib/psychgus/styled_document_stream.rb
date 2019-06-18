@@ -24,21 +24,40 @@ require 'psych'
 require 'psychgus/styled_tree_builder'
 
 module Psychgus
+  ###
+  # Use this wherever Psych::Handlers::DocumentStream would have been used, to enable styling.
+  # 
+  # @author Jonathan Bradley Whited (@esotericpig)
+  # @since  1.0.0
+  # 
+  # @see Psychgus.parse_stream Psychgus.parse_stream
+  # @see Psych::Handlers::DocumentStream
+  ###
   class StyledDocumentStream < StyledTreeBuilder
+    # Initialize this class with {Styler}(s) and a block.
+    # 
+    # @param stylers [Styler] {Styler}(s) to use for styling this DocumentStream
+    # @param block [Proc] a block to call in {#end_document} to denote a new YAML document
     def initialize(*stylers,&block)
       super(*stylers)
       
       @block = block
     end
     
-    def start_document(version,tag_directives,implicit)
-      node = Psych::Nodes::Document.new(version,tag_directives,implicit)
-      push(node)
-    end
-    
+    # This mimics the behavior of Psych::Handlers::DocumentStream#end_document.
+    # 
+    # @see Psych::Handlers::DocumentStream#end_document
     def end_document(implicit_end=!streaming?())
       @last.implicit_end = implicit_end
       @block.call(pop)
+    end
+    
+    # This mimics the behavior of Psych::Handlers::DocumentStream#start_document.
+    # 
+    # @see Psych::Handlers::DocumentStream#start_document
+    def start_document(version,tag_directives,implicit)
+      node = Psych::Nodes::Document.new(version,tag_directives,implicit)
+      push(node)
     end
   end
 end
