@@ -20,7 +20,80 @@
 ###
 
 module Psychgus
+  ###
+  # This is the pseudo-OOP way to style your classes/modules/etc.
+  # 
+  # Even though it's unnecessary to mix in (include) this module, it's recommended because new methods may be
+  # added in the future, so this pseudo-guarantees your class won't break in a new version.
+  # 
+  # A complete example:
+  #   require 'psychgus'
+  #   
+  #   class MyClass
+  #     include Psychgus::Blueberry
+  #     
+  #     attr_reader :my_hash
+  #     
+  #     def initialize()
+  #       @my_hash = {:key1=>'val1',:key2=>'val2'}
+  #     end
+  #     
+  #     def psychgus_styler(sniffer)
+  #       return MyClassStyler.new(sniffer)
+  #     end
+  #   end
+  #   
+  #   class MyClassStyler
+  #     include Psychgus::Styler
+  #     
+  #     def initialize(sniffer)
+  #       @level = sniffer.level
+  #     end
+  #     
+  #     def style_mapping(sniffer,node)
+  #       node.style = Psychgus::MAPPING_FLOW
+  #       
+  #       relative_level = sniffer.level - @level
+  #     end
+  #   end
+  #   
+  #   my_class = MyClass.new()
+  #   puts my_class.to_yaml()
+  # 
+  # Alternatively, MyClass could have been the {Blueberry} and the {Styler}, without the need for
+  # MyClassStyler:
+  #   class MyClass
+  #     include Psychgus::Blueberry
+  #     include Psychgus::Styler
+  #     
+  #     # ...
+  #     
+  #     def psychgus_styler(sniffer)
+  #       @level = sniffer.level # This will be included in the output of to_yaml()
+  #       
+  #       return self
+  #     end
+  #     
+  #     def style_mapping(sniffer,node)
+  #       # ...
+  #     end
+  #   end
+  # 
+  # However, it's best to put the styling logic inside of a separate class (or inner class) away from the main
+  # logic. This also prevents extra helper vars, like @level, from showing up in the output.
+  # 
+  # "The Blueberry" is the name of Gus's car from the TV show Psych.
+  # 
+  # @author Jonathan Bradley Whited (@esotericpig)
+  ###
   module Blueberry
+    # Duck Type this method to return the {Styler}(s) for your class/module/etc.
+    # 
+    # @param sniffer [SuperSniffer] passed in from {StyledTreeBuilder}; use this for storing the level,
+    #                               position, etc. for styling your instance variables later relative to your
+    #                               class/module/etc.
+    # 
+    # @return [Styler,Array<Styler>] {Styler}(s) for this class/module/etc.
     def psychgus_styler(sniffer)
       return nil
     end
