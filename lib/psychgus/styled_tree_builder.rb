@@ -26,8 +26,8 @@ require 'psychgus/super_sniffer'
 
 module Psychgus
   class StyledTreeBuilder < Psych::TreeBuilder
-    attr_accessor :sniffer
-    attr_accessor :stylers
+    attr_reader :sniffer
+    attr_reader :stylers
     
     def initialize(*stylers)
       super()
@@ -75,12 +75,20 @@ module Psychgus
       @sniffer.end_sequence()
     end
     
+    def insert_styler(index,*styler)
+      return @stylers.insert(index,*styler)
+    end
+    
     def pop_styler()
       return @stylers.pop()
     end
     
-    def remove_styler(styler)
-      return @stylers.delete(styler)
+    def remove_styler(styler,&block)
+      return @stylers.delete(styler,&block)
+    end
+    
+    def remove_styler_at(index)
+      return @stylers.delete_at(index)
     end
     
     def scalar(*)
