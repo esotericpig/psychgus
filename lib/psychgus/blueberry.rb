@@ -21,5 +21,8 @@
 
 module Psychgus
   module Blueberry
+    def psychgus_styler(sniffer)
+      return nil
+    end
   end
 end
