@@ -24,7 +24,7 @@ require 'psych'
 require 'psychgus/styled_tree_builder'
 
 module Psychgus
-  module YAMLTreeEx
+  module YAMLTreeExt
     def accept(target)
       styled = @emitter.is_a?(StyledTreeBuilder) && target.respond_to?(:psychgus_styler)
       
@@ -46,4 +46,4 @@ module Psychgus
   end
 end
 
-Psych::Visitors::YAMLTree.prepend(Psychgus::YAMLTreeEx)
+Psych::Visitors::YAMLTree.prepend(Psychgus::YAMLTreeExt)
