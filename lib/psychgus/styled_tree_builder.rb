@@ -121,11 +121,16 @@ module Psychgus
       return self
     end
     
-    # Remove the last {Styler} from the data structure.
+    # Remove the last {Styler}(s) from the data structure.
     # 
-    # @return [Styler,nil] the last {Styler} or nil if empty
-    def pop_styler()
-      return @stylers.pop()
+    # @param count [Integer] the optional amount of tail elements to pop
+    # 
+    # @return [Styler,Array<Styler>,nil] the last {Styler}(s) or nil if empty
+    def pop_styler(count=1)
+      return nil if count == 0
+      return @stylers.pop() if count == 1
+      
+      return @stylers.pop(count)
     end
     
     # Remove the {Styler} that matches +styler+ from the data structure.

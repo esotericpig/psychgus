@@ -26,20 +26,21 @@ require 'psychgus/styled_tree_builder'
 module Psychgus
   module YAMLTreeExt
     def accept(target)
-      styled = @emitter.is_a?(StyledTreeBuilder) && target.respond_to?(:psychgus_styler)
+      styler_count = 0
       
-      if styled
+      if @emitter.is_a?(StyledTreeBuilder) && target.respond_to?(:psychgus_styler)
         styler = target.psychgus_styler(@emitter.sniffer)
         stylers_old_len = @emitter.stylers.length
         
         @emitter.add_styler(*styler)
         
-        styled = @emitter.stylers.length > stylers_old_len
+        styler_count = @emitter.stylers.length - stylers_old_len
       end
       
       result = super(target)
       
-      @emitter.pop_styler() if styled
+      # Check styler_count because @emitter may not be a StyledTreeBuilder and target may not be a Blueberry
+      @emitter.pop_styler(styler_count) if styler_count > 0
       
       return result
     end
