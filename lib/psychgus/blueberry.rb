@@ -82,10 +82,17 @@ module Psychgus
   # However, it's best to put the styling logic inside of a separate class (or inner class) away from the main
   # logic. This also prevents extra helper vars, like @level, from showing up in the output.
   # 
+  # After your class and its children have been processed, the styler(s) will be removed from the logic for
+  # the next sibling object(s). Therefore, you can safely do class-specific checks on level, etc. without it
+  # affecting the sibling object(s). See {YAMLTreeExt} and {YAMLTreeExt#accept} for details.
+  # 
   # "The Blueberry" is the name of Gus's car from the TV show Psych.
   # 
   # @author Jonathan Bradley Whited (@esotericpig)
   # @since  1.0.0
+  # 
+  # @see YAMLTreeExt
+  # @see YAMLTreeExt#accept
   ###
   module Blueberry
     # Duck Type this method to return the {Styler}(s) for your class/module/etc.
