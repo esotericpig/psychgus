@@ -38,7 +38,7 @@ module Psychgus
   #       @my_hash = {:key1=>'val1',:key2=>'val2'}
   #     end
   #     
-  #     def psychgus_styler(sniffer)
+  #     def psychgus_stylers(sniffer)
   #       return MyClassStyler.new(sniffer)
   #     end
   #   end
@@ -68,7 +68,7 @@ module Psychgus
   #     
   #     # ...
   #     
-  #     def psychgus_styler(sniffer)
+  #     def psychgus_stylers(sniffer)
   #       @level = sniffer.level # This will be included in the output of to_yaml()
   #       
   #       return self
@@ -101,8 +101,8 @@ module Psychgus
     #                               position, etc. for styling your instance variables later relative to your
     #                               class/module/etc.
     # 
-    # @return [Styler,Array<Styler>] {Styler}(s) for this class/module/etc.
-    def psychgus_styler(sniffer)
+    # @return [Styler,Array<Styler>,nil] {Styler}(s) for this class/module/etc.
+    def psychgus_stylers(sniffer)
       return nil
     end
   end

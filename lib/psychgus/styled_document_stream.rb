@@ -36,10 +36,10 @@ module Psychgus
   class StyledDocumentStream < StyledTreeBuilder
     # Initialize this class with {Styler}(s) and a block.
     # 
-    # @param styler [Styler] {Styler}(s) to use for styling this DocumentStream
+    # @param stylers [Styler] {Styler}(s) to use for styling this DocumentStream
     # @param block [Proc] a block to call in {#end_document} to denote a new YAML document
-    def initialize(*styler,&block)
-      super(*styler)
+    def initialize(*stylers,&block)
+      super(*stylers)
       
       @block = block
     end

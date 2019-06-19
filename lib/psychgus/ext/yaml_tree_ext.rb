@@ -28,11 +28,11 @@ module Psychgus
     def accept(target)
       styler_count = 0
       
-      if @emitter.is_a?(StyledTreeBuilder) && target.respond_to?(:psychgus_styler)
-        styler = target.psychgus_styler(@emitter.sniffer)
+      if @emitter.is_a?(StyledTreeBuilder) && target.respond_to?(:psychgus_stylers)
+        stylers = target.psychgus_stylers(@emitter.sniffer)
         stylers_old_len = @emitter.stylers.length
         
-        @emitter.add_styler(*styler)
+        @emitter.add_styler(*stylers)
         
         styler_count = @emitter.stylers.length - stylers_old_len
       end

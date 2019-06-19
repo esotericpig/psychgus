@@ -44,23 +44,23 @@ module Psychgus
     
     # Initialize this class with {Styler}(s).
     # 
-    # @param styler [Styler] {Styler}(s) to use for styling this TreeBuilder
-    def initialize(*styler)
+    # @param stylers [Styler] {Styler}(s) to use for styling this TreeBuilder
+    def initialize(*stylers)
       super()
       
       @sniffer = SuperSniffer.new()
       @stylers = []
       
-      add_styler(*styler)
+      add_styler(*stylers)
     end
     
     # Add {Styler}(s) onto the end of the data structure.
     # 
-    # @param styler [Styler] {Styler}(s) to add
+    # @param stylers [Styler] {Styler}(s) to add
     # 
     # @return [self] this class
-    def add_styler(*styler)
-      @stylers.push(*styler)
+    def add_styler(*stylers)
+      @stylers.push(*stylers)
       
       return self
     end
@@ -112,11 +112,11 @@ module Psychgus
     
     # Insert {Styler}(s) at +index+ into the data structure.
     # 
-    # @param styler [Styler] {Styler}(s) to insert
+    # @param stylers [Styler] {Styler}(s) to insert
     # 
     # @return [self] this class
-    def insert_styler(index,*styler)
-      @stylers.insert(index,*styler)
+    def insert_styler(index,*stylers)
+      @stylers.insert(index,*stylers)
       
       return self
     end
@@ -125,7 +125,7 @@ module Psychgus
     # 
     # @param count [Integer] the optional amount of tail elements to pop
     # 
-    # @return [Styler,Array<Styler>,nil] the last {Styler}(s) or nil if empty
+    # @return [Styler,Array<Styler>,nil] the last {Styler}(s), or if empty or count==0, nil
     def pop_styler(count=1)
       return nil if count == 0
       return @stylers.pop() if count == 1
