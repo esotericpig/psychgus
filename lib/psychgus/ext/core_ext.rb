@@ -19,9 +19,14 @@
 # along with Psychgus.  If not, see <http://www.gnu.org/licenses/>.
 ###
 
-class Object
-  # Don't use keyword args for options so can be a drop-in-replacement for Psych
-  def to_yaml(options={},**kargs)
-    return Psychgus.dump(self,options,**kargs)
+module Psychgus
+  module ObjectExt
+    # Don't use keyword args for options so can be a drop-in-replacement for Psych
+    def to_yaml(options={},**kargs)
+      # Do not use Psych.dump() if no Stylers, because a class might be a Blueberry
+      return Psychgus.dump(self,options,**kargs)
+    end
   end
 end
+
+Object.prepend(Psychgus::ObjectExt)
