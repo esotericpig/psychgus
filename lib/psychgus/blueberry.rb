@@ -21,7 +21,7 @@
 
 module Psychgus
   ###
-  # This is the pseudo-OOP way to style your classes/modules/etc.
+  # This is the OOP way to style your classes/modules/etc.
   # 
   # Even though it's unnecessary to mix in (include) this module, it's recommended because new methods may be
   # added in the future, so this pseudo-guarantees your class won't break in a new version.
