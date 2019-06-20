@@ -25,9 +25,13 @@ require 'yard'
 
 require 'psychgus/version'
 
+require 'rake/clean'
 require 'rake/testtask'
 
 task default: [:test]
+
+CLEAN.exclude('.git/','stock/')
+CLOBBER.include('doc/')
 
 # Exec "rake ghp_doc" for a dry run
 # Exec "rake ghp_doc[true]" for actually deploying
@@ -46,6 +50,7 @@ Rake::TestTask.new() do |task|
   task.warning = true
 end
 
+# Exec "rake clobber yard" for pristine docs
 YARD::Rake::YardocTask.new() do |task|
   task.files += ['lib/**/*.rb']
   
