@@ -19,9 +19,11 @@
 # along with Psychgus.  If not, see <http://www.gnu.org/licenses/>.
 ###
 
-module Psych
-  module Nodes
-    class Node
+require 'psych'
+
+module Psychgus
+  module Ext
+    module NodeExt
       # Old versions of Psych didn't have alias?(), mapping?(), etc.
       # name can be a symbol or a string
       def node_of?(name)
@@ -30,3 +32,5 @@ module Psych
     end
   end
 end
+
+Psych::Nodes::Node.prepend(Psychgus::Ext::NodeExt)

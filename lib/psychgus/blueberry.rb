@@ -84,15 +84,15 @@ module Psychgus
   # 
   # After your class and its children have been processed, the styler(s) will be removed from the logic for
   # the next sibling object(s). Therefore, you can safely do class-specific checks on level, etc. without it
-  # affecting the sibling object(s). See {YAMLTreeExt} and {YAMLTreeExt#accept} for details.
+  # affecting the sibling object(s). See {Ext::YAMLTreeExt} and {Ext::YAMLTreeExt#accept} for details.
   # 
   # "The Blueberry" is the name of Gus's car from the TV show Psych.
   # 
   # @author Jonathan Bradley Whited (@esotericpig)
   # @since  1.0.0
   # 
-  # @see YAMLTreeExt
-  # @see YAMLTreeExt#accept
+  # @see Ext::YAMLTreeExt
+  # @see Ext::YAMLTreeExt#accept
   ###
   module Blueberry
     # Duck Type this method to return the {Styler}(s) for your class/module/etc.

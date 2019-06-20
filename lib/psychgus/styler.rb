@@ -61,24 +61,24 @@ module Psychgus
   # @since  1.0.0
   # 
   # @see Psychgus
-  # @see Object#to_yaml
+  # @see Ext::ObjectExt#to_yaml
   # @see Blueberry
   # @see StyledTreeBuilder#initialize
   # @see StyledDocumentStream#initialize
-  # @see YAMLTreeExt#accept
+  # @see Ext::YAMLTreeExt#accept
   ###
   module Styler
     EMPTY = Empty.new().freeze()
     
     # Style a node of any type.
     # 
-    # You can use {Psych::Nodes::Node#node_of?} to determine its type:
+    # You can use {Ext::NodeExt#node_of?} to determine its type:
     #   puts node.value if node.node_of?(:scalar)
     # 
     # @param sniffer [SuperSniffer] passed in from {StyledTreeBuilder}
     # @param node [Psych::Nodes::Node] passed in from {StyledTreeBuilder}
     # 
-    # @see Psych::Nodes::Node#node_of?
+    # @see Ext::NodeExt#node_of?
     def style(sniffer,node) end
     
     # Style a node guaranteed to be of type Psych::Nodes::Alias, to avoid if statements.
