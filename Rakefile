@@ -41,7 +41,7 @@ end
 
 Rake::TestTask.new() do |task|
   task.libs = ['lib','test']
-  task.pattern = 'test/**/test_*.rb'
+  task.pattern = 'test/**/*_test.rb'
   task.verbose = true
   task.warning = true
 end
