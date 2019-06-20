@@ -32,19 +32,16 @@ class IOStyler
   end
   
   def style(sniffer,node)
-    if !sniffer.parent.nil?()
-      (1...sniffer.level).each do
-        @io.print ' '
-      end
-      
-      if node.node_of?(:scalar)
-        @io.print "(#{sniffer.level}:#{sniffer.position}):#{node.value}"
-      else
-        @io.print "(#{sniffer.level}:#{sniffer.position}):#{node.class.name}"
-      end
-      
-      @io.puts " - #{sniffer.parent}"
+    return if sniffer.parent.nil?()
+    
+    (1...sniffer.level).each do
+      @io.print ' '
     end
+    
+    name = node.node_of?(:scalar) ? node.value : node.class.name
+    
+    @io.print "(#{sniffer.level}:#{sniffer.position}):#{name}"
+    @io.puts " - #{sniffer.parent}"
   end
 end
 
