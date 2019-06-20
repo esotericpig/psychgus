@@ -84,8 +84,33 @@ module Psychgus
   STREAM_UTF16LE = node_const(:stream,:utf16le)
   STREAM_UTF16BE = node_const(:stream,:utf16be)
   
-  def self.parser(stylers: nil)
-    return Psych::Parser.new(StyledTreeBuilder.new(*stylers))
+  # Don't use keyword args for io & options so can be a drop-in-replacement for Psych
+  def self.dump(object,io=nil,options={},**kargs)
+    return dump_stream(object,io: io,options: options,**kargs)
+  end
+  
+  # Mode can be 'w:UTF-8', 'a:UTF-16', etc.
+  # stylers: MyStyler.new
+  # stylers: [...]
+  def self.dump_file(filename,*objects,mode: 'w',perm: nil,opt: nil,**kargs)
+    File.open(filename,mode,perm,opt) do |file|
+      file.write(dump_stream(*objects,**kargs))
+    end
+  end
+  
+  def self.dump_stream(*objects,io: nil,options: {},stylers: nil)
+    if Hash === io
+      options = io
+      io = nil
+    end
+    
+    visitor = Psych::Visitors::YAMLTree.create(options,StyledTreeBuilder.new(*stylers))
+    
+    objects.each do |object|
+      visitor << object
+    end
+    
+    return visitor.tree.yaml(io,options)
   end
   
   # You don't need to pass in stylers, if you're just going to call to_ruby()
@@ -120,32 +145,53 @@ module Psychgus
     end
   end
   
-  # Don't use keyword args for io & options so can be a drop-in-replacement for Psych
-  def self.dump(object,io=nil,options={},**kargs)
-    return dump_stream(object,io: io,options: options,**kargs)
+  def self.parser(stylers: nil)
+    return Psych::Parser.new(StyledTreeBuilder.new(*stylers))
   end
   
-  # Mode can be 'w:UTF-8', 'a:UTF-16', etc.
-  # stylers: MyStyler.new
-  # stylers: [...]
-  def self.dump_file(filename,*objects,mode: 'w',perm: nil,opt: nil,**kargs)
-    File.open(filename,mode,perm,opt) do |file|
-      file.write(dump_stream(*objects,**kargs))
+  ###
+  # Unnecessary Methods
+  # 
+  # All of the below methods are not needed, but are defined
+  # so that Psychgus can be a drop-in replacement for Psych.
+  # 
+  # Instead, you should probably use Psych.
+  # This is also the recommended practice in case your version
+  # of Psych defines the method differently.
+  # 
+  # Private methods of Psych are not defined.
+  # 
+  # Because extend is used, do not prefix methods with "self."
+  ###
+  module PsychDropIn
+    def add_builtin_type(*args,&block)
+      Psych.add_builtin_type(*args,&block)
+    end
+    
+    def add_domain_type(*args,&block)
+      Psych.add_domain_type(*args,&block)
+    end
+    
+    def add_tag(*args)
+      Psych.add_tag(*args)
+    end
+    
+    def load_file(*args,**kargs)
+      Psych.load_file(*args,**kargs)
+    end
+    
+    def load_stream(*args,**kargs)
+      Psych.load_stream(*args,**kargs)
+    end
+    
+    def remove_type(*args)
+      Psych.remove_type(*args)
+    end
+    
+    def to_json(*args)
+      Psych.to_json(*args)
     end
   end
   
-  def self.dump_stream(*objects,io: nil,options: {},stylers: nil)
-    if Hash === io
-      options = io
-      io = nil
-    end
-    
-    visitor = Psych::Visitors::YAMLTree.create(options,StyledTreeBuilder.new(*stylers))
-    
-    objects.each do |object|
-      visitor << object
-    end
-    
-    return visitor.tree.yaml(io,options)
-  end
+  extend PsychDropIn
 end
