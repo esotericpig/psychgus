@@ -98,7 +98,7 @@ class SnifferTest < Minitest::Test
     EOS
     expected_out = PsychgusTest.lstrip_pipe(expected_out)
     
-    PsychgusTest::BASE_YAML.to_yaml(stylers: @io_styler)
+    PsychgusTest::BASE_DATA.to_yaml(stylers: @io_styler)
     assert_equal expected_out,@io_styler.io.string
   end
 end

@@ -26,7 +26,7 @@ require 'psychgus'
 
 module PsychgusTest
   # Changing this will break tests
-  BASE_YAML_STR = <<-EOS.freeze()
+  BASE_YAML = <<-EOS.freeze()
 Burgers:
   Classic:
     Sauce:  [Ketchup,Mustard]
@@ -46,7 +46,7 @@ Toppings:
   - [[Ketchup,Mustard], [Salt,Pepper]]
   EOS
   
-  BASE_YAML = Psych.load(BASE_YAML_STR).freeze()
+  BASE_DATA = Psych.load(BASE_YAML).freeze()
   
   # This is for "<<-" heredoc
   # - Purposely not using "<<~" (tilde) for older Ruby versions
