@@ -24,7 +24,7 @@ require 'minitest/autorun'
 
 require 'psychgus'
 
-module PsychgusTest
+module PsychgusTester
   # Changing this will break tests
   BASE_YAML = <<-EOS.freeze()
 Burgers:

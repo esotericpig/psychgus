@@ -19,7 +19,7 @@
 # along with Psychgus.  If not, see <http://www.gnu.org/licenses/>.
 ###
 
-require 'psychgus_test'
+require 'psychgus_tester'
 require 'stringio'
 
 class IOStyler
@@ -96,9 +96,9 @@ class SnifferTest < Minitest::Test
     |    (5:1):Salt - <seq:(4:2)::(:1)>
     |    (5:2):Pepper - <seq:(4:2)::(:2)>
     EOS
-    expected_out = PsychgusTest.lstrip_pipe(expected_out)
+    expected_out = PsychgusTester.lstrip_pipe(expected_out)
     
-    PsychgusTest::BASE_DATA.to_yaml(stylers: @io_styler)
+    PsychgusTester::BASE_DATA.to_yaml(stylers: @io_styler)
     assert_equal expected_out,@io_styler.io.string
   end
 end

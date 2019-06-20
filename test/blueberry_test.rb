@@ -19,7 +19,7 @@
 # along with Psychgus.  If not, see <http://www.gnu.org/licenses/>.
 ###
 
-require 'psychgus_test'
+require 'psychgus_tester'
 
 class Burger
   include Psychgus::Blueberry
@@ -133,7 +133,7 @@ class BlueberryTest < Minitest::Test
     |  - - Salt
     |    - Pepper
     EOS
-    expected_out = PsychgusTest.lstrip_pipe(expected_out)
+    expected_out = PsychgusTester.lstrip_pipe(expected_out)
     
     assert_equal expected_out,@burgers.to_yaml()
   end

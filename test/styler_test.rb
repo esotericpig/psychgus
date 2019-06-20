@@ -19,7 +19,7 @@
 # along with Psychgus.  If not, see <http://www.gnu.org/licenses/>.
 ###
 
-require 'psychgus_test'
+require 'psychgus_tester'
 
 class MyStyler
   include Psychgus::Styler
@@ -77,8 +77,8 @@ class StylerTest < Minitest::Test
     |- [Spinach, Onions, Pickles, Tomatoes]
     |- [[Ketchup, Mustard], [Salt, Pepper]]
     EOS
-    expected_out = PsychgusTest.lstrip_pipe(expected_out)
+    expected_out = PsychgusTester.lstrip_pipe(expected_out)
     
-    assert_equal expected_out,PsychgusTest::BASE_DATA.to_yaml(stylers: @styler)
+    assert_equal expected_out,PsychgusTester::BASE_DATA.to_yaml(stylers: @styler)
   end
 end
