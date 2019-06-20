@@ -109,7 +109,7 @@ class BlueberryTest < Minitest::Test
     @burgers = Burgers.new()
   end
   
-  def test_sniffer()
+  def test_blueberry()
     expected_out = <<-EOS
     |--- !ruby/object:Burgers
     |Burgers:
