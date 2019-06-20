@@ -20,6 +20,7 @@
 ###
 
 require 'psychgus_tester'
+
 require 'stringio'
 
 class IOStyler
