@@ -31,14 +31,71 @@ Gem::Specification.new do |spec|
   spec.email   = ['']
   spec.license = 'LGPL-3.0-or-later'
   
-  spec.summary     = 'Easily style YAML files in Ruby'
-  spec.description = 'Easily style YAML files in Ruby. Uses the Psych parser as the back end.'
   spec.homepage    = 'https://github.com/esotericpig/psychgus'
+  spec.summary     = %q(Easily style YAML files using Psych, like Sequence/Mapping Flow style.)
+  spec.description = <<-EOS
+Easily style YAML files using Psych, like Sequence/Mapping Flow style.
+
+Simple example:
+  class CoffeeStyler
+    include Psychgus::Styler
+    
+    def style_sequence(sniffer,node)
+      node.style = Psychgus::SEQUENCE_FLOW
+    end
+  end
   
-  spec.files         = Dir.glob("{lib}/**/*") + %w(
+  coffee = {
+    'Roast'=>['Light','Medium','Dark','Extra Dark'],
+    'Style'=>['Cappuccino','Espresso','Latte','Mocha']}
+  
+  puts coffee.to_yaml(stylers: CoffeeStyler.new)
+  
+  # Output:
+  # ---
+  # Roast: [Light, Medium, Dark, Extra Dark]
+  # Style: [Cappuccino, Espresso, Latte, Mocha]
+
+Class example:
+  class Coffee
+    include Psychgus::Blueberry
+    
+    def initialize
+      @roast = ['Light','Medium','Dark','Extra Dark']
+      @style = ['Cappuccino','Espresso','Latte','Mocha']
+    end
+    
+    def psychgus_stylers(sniffer)
+      CoffeeStyler.new
+    end
+  end
+  
+  puts Coffee.new.to_yaml
+  
+  # Output:
+  # --- !ruby/object:Coffee
+  # roast: [Light, Medium, Dark, Extra Dark]
+  # style: [Cappuccino, Espresso, Latte, Mocha]
+
+The produced YAML without Psychgus styling (i.e., without CoffeeStyler):
+  # ---
+  # Roast:
+  # - Light
+  # - Medium
+  # - Dark
+  # - Extra Dark
+  # Style:
+  # - Cappuccino
+  # - Espresso
+  # - Latte
+  # - Mocha
+  EOS
+  
+  spec.files         = Dir.glob("{lib,test,yard}/**/*") + %w(
                          Gemfile
                          LICENSE
                          psychgus.gemspec
+                         Rakefile
                          README.md
                        )
   spec.require_paths = ['lib']
@@ -47,6 +104,10 @@ Gem::Specification.new do |spec|
   
   spec.add_runtime_dependency 'psych','>= 2.2.2'
   
-  spec.add_development_dependency 'bundler','>= 1.16.1'
-  spec.add_development_dependency 'yard'   ,'>= 0.9.12'
+  spec.add_development_dependency 'bundler'  ,'~> 1.16.1'
+  spec.add_development_dependency 'minitest' ,'~> 5.11.3' # For testing
+  spec.add_development_dependency 'rake'     ,'~> 12.3.1'
+  spec.add_development_dependency 'rdoc'     ,'~> 6.1.1'  # For RDoc for YARD (*.rb)
+  spec.add_development_dependency 'redcarpet','~> 3.4.0'  # For Markdown for YARD (README.md)
+  spec.add_development_dependency 'yard'     ,'~> 0.9.12' # For documentation
 end
