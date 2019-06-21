@@ -34,6 +34,104 @@ module Psychgus
     end
   end
   
+  ###
+  # This is used in {StyledTreeBuilder} to "sniff" information about the YAML.
+  # 
+  # Then this information can be used in a {Styler} and/or a {Blueberry}.
+  # 
+  # Most information is straightforward:
+  # - {#aliases}   # Array of Psych::Nodes::Alias processed so far
+  # - {#mappings}  # Array of Psych::Nodes::Mapping processed so far
+  # - {#nodes}     # Array of all Psych::Nodes::Node processed so far
+  # - {#scalars}   # Array of Psych::Nodes::Scalar processed so far
+  # - {#sequences} # Array of Psych::Nodes::Sequence processed so far
+  # 
+  # {#parent} is the current {SuperSniffer::Parent} of the node being processed,
+  # which is nil for the first node.
+  # 
+  # {#parents} are all of the {SuperSniffer::Parent}(s) processed so far,
+  # which is empty for the first node.
+  # 
+  # A parent is a Mapping or Sequence, or a Key (Scalar) in a Mapping.
+  # 
+  # {#level} and {#position} can best be understand by an example.
+  # 
+  # If you have this YAML:
+  #  Burgers:
+  #     Classic:
+  #       Sauce:  [Ketchup,Mustard]
+  #       Cheese: American
+  #       Bun:    Sesame Seed
+  #     BBQ:
+  #       Sauce:  Honey BBQ
+  #       Cheese: Cheddar
+  #       Bun:    Kaiser
+  #     Fancy:
+  #       Sauce:  Spicy Wasabi
+  #       Cheese: Smoked Gouda
+  #       Bun:    Hawaiian
+  #   Toppings:
+  #     - Mushrooms
+  #     - [Lettuce, Onions, Pickles, Tomatoes]
+  #     - [[Ketchup,Mustard], [Salt,Pepper]]
+  # 
+  # Then the levels and positions will be as follows:
+  #   # (level:position):current_node - <parent:(parent_level:parent_position)>
+  #   
+  #   (1:1):Psych::Nodes::Mapping - <nil>
+  #   (1:1):Burgers - <map:(1:1)>
+  #    (2:1):Psych::Nodes::Mapping - <Burgers:(1:1)>
+  #    (2:1):Classic - <map:(2:1)>
+  #     (3:1):Psych::Nodes::Mapping - <Classic:(2:1)>
+  #     (3:1):Sauce - <map:(3:1)>
+  #      (4:1):Psych::Nodes::Sequence - <Sauce:(3:1)>
+  #       (5:1):Ketchup - <seq:(4:1)>
+  #       (5:2):Mustard - <seq:(4:1)>
+  #     (3:2):Cheese - <map:(3:1)>
+  #      (4:1):American - <Cheese:(3:2)>
+  #     (3:3):Bun - <map:(3:1)>
+  #      (4:1):Sesame Seed - <Bun:(3:3)>
+  #    (2:2):BBQ - <map:(2:1)>
+  #     (3:1):Psych::Nodes::Mapping - <BBQ:(2:2)>
+  #     (3:1):Sauce - <map:(3:1)>
+  #      (4:1):Honey BBQ - <Sauce:(3:1)>
+  #     (3:2):Cheese - <map:(3:1)>
+  #      (4:1):Cheddar - <Cheese:(3:2)>
+  #     (3:3):Bun - <map:(3:1)>
+  #      (4:1):Kaiser - <Bun:(3:3)>
+  #    (2:3):Fancy - <map:(2:1)>
+  #     (3:1):Psych::Nodes::Mapping - <Fancy:(2:3)>
+  #     (3:1):Sauce - <map:(3:1)>
+  #      (4:1):Spicy Wasabi - <Sauce:(3:1)>
+  #     (3:2):Cheese - <map:(3:1)>
+  #      (4:1):Smoked Gouda - <Cheese:(3:2)>
+  #     (3:3):Bun - <map:(3:1)>
+  #      (4:1):Hawaiian - <Bun:(3:3)>
+  #   (1:2):Toppings - <map:(1:1)>
+  #    (2:1):Psych::Nodes::Sequence - <Toppings:(1:2)>
+  #     (3:1):Mushrooms - <seq:(2:1)>
+  #     (3:2):Psych::Nodes::Sequence - <seq:(2:1)>
+  #      (4:1):Lettuce - <seq:(3:2)>
+  #      (4:2):Onions - <seq:(3:2)>
+  #      (4:3):Pickles - <seq:(3:2)>
+  #      (4:4):Tomatoes - <seq:(3:2)>
+  #     (3:3):Psych::Nodes::Sequence - <seq:(2:1)>
+  #      (4:1):Psych::Nodes::Sequence - <seq:(3:3)>
+  #       (5:1):Ketchup - <seq:(4:1)>
+  #       (5:2):Mustard - <seq:(4:1)>
+  #      (4:2):Psych::Nodes::Sequence - <seq:(3:3)>
+  #       (5:1):Salt - <seq:(4:2)>
+  #       (5:2):Pepper - <seq:(4:2)>
+  # 
+  # @note You should never call the methods that are not readers, like {#add_alias}, {#start_mapping}, etc.
+  # 
+  # @author Jonathan Bradley Whited (@esotericpig)
+  # @since  1.0.0
+  # 
+  # @see StyledTreeBuilder
+  # @see Styler
+  # @see Blueberry#psychgus_stylers
+  ###
   class SuperSniffer
     EMPTY = Empty.new().freeze()
     
