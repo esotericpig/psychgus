@@ -33,16 +33,16 @@ class IOStyler
   end
   
   def style(sniffer,node)
-    return if sniffer.parent.nil?()
-    
     (1...sniffer.level).each do
       @io.print ' '
     end
     
     name = node.node_of?(:scalar) ? node.value : node.class.name
+    parent = sniffer.parent
     
-    @io.print "(#{sniffer.level}:#{sniffer.position}):#{name}"
-    @io.puts " - #{sniffer.parent}"
+    @io.print "(#{sniffer.level}:#{sniffer.position}):#{name} - "
+    @io.print parent.nil?() ? '<nil>' : parent
+    @io.puts
   end
 end
 
@@ -53,6 +53,7 @@ class SnifferTest < Minitest::Test
   
   def test_sniffer()
     expected_out = <<-EOS
+    |(1:1):Psych::Nodes::Mapping - <nil>
     |(1:1):Burgers - <map:(1:1):key:(:1)>
     | (2:1):Psych::Nodes::Mapping - <Burgers:(1:1):value:(:1)>
     | (2:1):Classic - <map:(2:1):key:(:1)>
@@ -100,6 +101,7 @@ class SnifferTest < Minitest::Test
     expected_out = PsychgusTester.lstrip_pipe(expected_out)
     
     PsychgusTester::BASE_DATA.to_yaml(stylers: @io_styler)
-    assert_equal expected_out,@io_styler.io.string
+    hierarchy = @io_styler.io.string
+    assert_equal expected_out,hierarchy
   end
 end
