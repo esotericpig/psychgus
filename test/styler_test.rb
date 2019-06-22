@@ -38,7 +38,7 @@ class MyStyler
       node.style = Psychgus::MAPPING_FLOW if parent.node_of?(:scalar) && parent.value.casecmp('BBQ') == 0
       
       # Fancy
-      node.style = Psychgus::MAPPING_FLOW if parent.level == 2 && parent.position == 3
+      node.style = Psychgus::MAPPING_FLOW if parent.level == 4 && parent.position == 3
     end
   end
   
@@ -79,6 +79,6 @@ class StylerTest < Minitest::Test
     EOS
     expected_out = PsychgusTester.lstrip_pipe(expected_out)
     
-    assert_equal expected_out,PsychgusTester::BASE_DATA.to_yaml(stylers: @styler)
+    assert_equal expected_out,PsychgusTester::BURGERS_DATA.to_yaml(stylers: @styler)
   end
 end

@@ -100,7 +100,7 @@ class BurgerStyler
     relative_level = (sniffer.level - @level) + 1
     
     # [Ketchup, Mustard]
-    node.style = Psychgus::SEQUENCE_FLOW if relative_level == 2
+    node.style = Psychgus::SEQUENCE_FLOW if relative_level == 3
   end
 end
 

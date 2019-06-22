@@ -27,11 +27,11 @@ class FlowStyler
   include Psychgus::Styler
   
   def style_mapping(sniffer,node)
-    node.style = Psychgus::MAPPING_FLOW if sniffer.level >= 3
+    node.style = Psychgus::MAPPING_FLOW if sniffer.level >= 4
   end
   
   def style_sequence(sniffer,node)
-    node.style = Psychgus::SEQUENCE_FLOW if sniffer.level >= 3
+    node.style = Psychgus::SEQUENCE_FLOW if sniffer.level >= 4
   end
 end
 
@@ -53,9 +53,9 @@ class PsychgusTest < Minitest::Test
   end
   
   def test_dump()
-    assert_equal @expected_out,Psychgus.dump(PsychgusTester::BASE_DATA,stylers: @flow_styler)
-    assert_equal @expected_out,Psychgus.dump_stream(PsychgusTester::BASE_DATA,stylers: @flow_styler)
-    assert_equal @expected_out,PsychgusTester::BASE_DATA.to_yaml(stylers: @flow_styler)
+    assert_equal @expected_out,Psychgus.dump(PsychgusTester::BURGERS_DATA,stylers: @flow_styler)
+    assert_equal @expected_out,Psychgus.dump_stream(PsychgusTester::BURGERS_DATA,stylers: @flow_styler)
+    assert_equal @expected_out,PsychgusTester::BURGERS_DATA.to_yaml(stylers: @flow_styler)
   end
   
   # I don't like creating a temp file every time I run tests (which is a lot).
@@ -65,7 +65,7 @@ class PsychgusTest < Minitest::Test
     Tempfile.create(['Psychgus','.yaml']) do |file|
       puts "Testing #{self.class.name} w/ temp file: #{file.path}"
       
-      Psychgus.dump_file(file,PsychgusTester::BASE_DATA,stylers: @flow_styler)
+      Psychgus.dump_file(file,PsychgusTester::BURGERS_DATA,stylers: @flow_styler)
       
       file.rewind()
       lines = file.readlines().join()
@@ -85,14 +85,14 @@ class PsychgusTest < Minitest::Test
   
   def test_parse()
     parser = Psychgus.parser(stylers: @flow_styler)
-    parser.parse(PsychgusTester::BASE_YAML)
+    parser.parse(PsychgusTester::BURGERS_YAML)
     yaml = "---\n" + parser.handler.root.to_yaml()
     assert_equal @expected_out,yaml
     
-    node = Psychgus.parse(PsychgusTester::BASE_YAML,stylers: @flow_styler)
+    node = Psychgus.parse(PsychgusTester::BURGERS_YAML,stylers: @flow_styler)
     refute_equal false,node
     
-    yaml = Psychgus.parse_stream(PsychgusTester::BASE_YAML,stylers: @flow_styler).to_yaml()
+    yaml = Psychgus.parse_stream(PsychgusTester::BURGERS_YAML,stylers: @flow_styler).to_yaml()
     yaml = "---\n#{yaml}"
     assert_equal @expected_out,yaml
   end

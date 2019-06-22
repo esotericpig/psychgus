@@ -24,9 +24,9 @@ require 'minitest/autorun'
 
 require 'psychgus'
 
+# Changing the YAML/data will break tests
 module PsychgusTester
-  # Changing this will break tests
-  BASE_YAML = <<-EOS.freeze()
+  BURGERS_YAML = <<-EOS.freeze()
 Burgers:
   Classic:
     Sauce:  [Ketchup,Mustard]
@@ -45,8 +45,20 @@ Toppings:
   - [Lettuce, Onions, Pickles, Tomatoes]
   - [[Ketchup,Mustard], [Salt,Pepper]]
   EOS
+  BURGERS_DATA = Psych.load(BURGERS_YAML).freeze()
   
-  BASE_DATA = Psych.load(BASE_YAML).freeze()
+  COURSES_YAML = <<-EOS.freeze()
+Courses:
+  COSC: [470,'Computer Science']
+  MUSC: [340,'Music']
+  ARTS: [250,'The Arts']
+Schedule:
+- {Course: COSC,Time: '08:00'}
+- {Course: MUSC,Time: '10:30'}
+- {Course: ARTS,Time: '15:10'}
+- {Course: COSC,Time: '13:10'}
+  EOS
+  COURSES_DATA = Psych.load(COURSES_YAML).freeze()
   
   # This is for "<<-" heredoc
   # - Purposely not using "<<~" (tilde) for older Ruby versions

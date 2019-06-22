@@ -54,7 +54,7 @@ module Psychgus
   # 
   # A parent is a Mapping or Sequence, or a Key (Scalar) in a Mapping.
   # 
-  # {#level} and {#position} can best be understand by an example.
+  # {#level} and {#position} can be best understood by an example.
   # 
   # If you have this YAML:
   #  Burgers:
@@ -79,51 +79,55 @@ module Psychgus
   #   # (level:position):current_node - <parent:(parent_level:parent_position)>
   #   
   #   (1:1):Psych::Nodes::Mapping - <nil>
-  #   (1:1):Burgers - <map:(1:1)>
-  #    (2:1):Psych::Nodes::Mapping - <Burgers:(1:1)>
-  #    (2:1):Classic - <map:(2:1)>
-  #     (3:1):Psych::Nodes::Mapping - <Classic:(2:1)>
-  #     (3:1):Sauce - <map:(3:1)>
-  #      (4:1):Psych::Nodes::Sequence - <Sauce:(3:1)>
-  #       (5:1):Ketchup - <seq:(4:1)>
-  #       (5:2):Mustard - <seq:(4:1)>
-  #     (3:2):Cheese - <map:(3:1)>
-  #      (4:1):American - <Cheese:(3:2)>
-  #     (3:3):Bun - <map:(3:1)>
-  #      (4:1):Sesame Seed - <Bun:(3:3)>
-  #    (2:2):BBQ - <map:(2:1)>
-  #     (3:1):Psych::Nodes::Mapping - <BBQ:(2:2)>
-  #     (3:1):Sauce - <map:(3:1)>
-  #      (4:1):Honey BBQ - <Sauce:(3:1)>
-  #     (3:2):Cheese - <map:(3:1)>
-  #      (4:1):Cheddar - <Cheese:(3:2)>
-  #     (3:3):Bun - <map:(3:1)>
-  #      (4:1):Kaiser - <Bun:(3:3)>
-  #    (2:3):Fancy - <map:(2:1)>
-  #     (3:1):Psych::Nodes::Mapping - <Fancy:(2:3)>
-  #     (3:1):Sauce - <map:(3:1)>
-  #      (4:1):Spicy Wasabi - <Sauce:(3:1)>
-  #     (3:2):Cheese - <map:(3:1)>
-  #      (4:1):Smoked Gouda - <Cheese:(3:2)>
-  #     (3:3):Bun - <map:(3:1)>
-  #      (4:1):Hawaiian - <Bun:(3:3)>
-  #   (1:2):Toppings - <map:(1:1)>
-  #    (2:1):Psych::Nodes::Sequence - <Toppings:(1:2)>
-  #     (3:1):Mushrooms - <seq:(2:1)>
-  #     (3:2):Psych::Nodes::Sequence - <seq:(2:1)>
-  #      (4:1):Lettuce - <seq:(3:2)>
-  #      (4:2):Onions - <seq:(3:2)>
-  #      (4:3):Pickles - <seq:(3:2)>
-  #      (4:4):Tomatoes - <seq:(3:2)>
-  #     (3:3):Psych::Nodes::Sequence - <seq:(2:1)>
-  #      (4:1):Psych::Nodes::Sequence - <seq:(3:3)>
-  #       (5:1):Ketchup - <seq:(4:1)>
-  #       (5:2):Mustard - <seq:(4:1)>
-  #      (4:2):Psych::Nodes::Sequence - <seq:(3:3)>
-  #       (5:1):Salt - <seq:(4:2)>
-  #       (5:2):Pepper - <seq:(4:2)>
+  #    (2:1):Burgers - <map:(1:1)>
+  #     (3:1):Psych::Nodes::Mapping - <Burgers:(2:1)>
+  #      (4:1):Classic - <map:(3:1)>
+  #       (5:1):Psych::Nodes::Mapping - <Classic:(4:1)>
+  #        (6:1):Sauce - <map:(5:1)>
+  #         (7:1):Psych::Nodes::Sequence - <Sauce:(6:1)>
+  #          (8:1):Ketchup - <seq:(7:1)>
+  #          (8:2):Mustard - <seq:(7:1)>
+  #        (6:2):Cheese - <map:(5:1)>
+  #         (7:1):American - <Cheese:(6:2)>
+  #        (6:3):Bun - <map:(5:1)>
+  #         (7:1):Sesame Seed - <Bun:(6:3)>
+  #      (4:2):BBQ - <map:(3:1)>
+  #       (5:1):Psych::Nodes::Mapping - <BBQ:(4:2)>
+  #        (6:1):Sauce - <map:(5:1)>
+  #         (7:1):Honey BBQ - <Sauce:(6:1)>
+  #        (6:2):Cheese - <map:(5:1)>
+  #         (7:1):Cheddar - <Cheese:(6:2)>
+  #        (6:3):Bun - <map:(5:1)>
+  #         (7:1):Kaiser - <Bun:(6:3)>
+  #      (4:3):Fancy - <map:(3:1)>
+  #       (5:1):Psych::Nodes::Mapping - <Fancy:(4:3)>
+  #        (6:1):Sauce - <map:(5:1)>
+  #         (7:1):Spicy Wasabi - <Sauce:(6:1)>
+  #        (6:2):Cheese - <map:(5:1)>
+  #         (7:1):Smoked Gouda - <Cheese:(6:2)>
+  #        (6:3):Bun - <map:(5:1)>
+  #         (7:1):Hawaiian - <Bun:(6:3)>
+  #    (2:2):Toppings - <map:(1:1)>
+  #     (3:1):Psych::Nodes::Sequence - <Toppings:(2:2)>
+  #      (4:1):Mushrooms - <seq:(3:1)>
+  #      (4:2):Psych::Nodes::Sequence - <seq:(3:1)>
+  #       (5:1):Lettuce - <seq:(4:2)>
+  #       (5:2):Onions - <seq:(4:2)>
+  #       (5:3):Pickles - <seq:(4:2)>
+  #       (5:4):Tomatoes - <seq:(4:2)>
+  #      (4:3):Psych::Nodes::Sequence - <seq:(3:1)>
+  #       (5:1):Psych::Nodes::Sequence - <seq:(4:3)>
+  #        (6:1):Ketchup - <seq:(5:1)>
+  #        (6:2):Mustard - <seq:(5:1)>
+  #       (5:2):Psych::Nodes::Sequence - <seq:(4:3)>
+  #        (6:1):Salt - <seq:(5:2)>
+  #        (6:2):Pepper - <seq:(5:2)>
+  # 
+  # The "Super Sniffer" is the nickname for Gus's nose from the TV show Psych
+  # because he has a very refined sense of smell.
   # 
   # @note You should never call the methods that are not readers, like {#add_alias}, {#start_mapping}, etc.
+  #       unless you are extending this class (creating a subclass).
   # 
   # @author Jonathan Bradley Whited (@esotericpig)
   # @since  1.0.0
@@ -145,6 +149,7 @@ module Psychgus
     attr_reader :scalars
     attr_reader :sequences
     
+    # Initialize this class for sniffing.
     def initialize()
       @aliases = []
       @level = 1
@@ -157,29 +162,49 @@ module Psychgus
       @sequences = []
     end
     
+    # Add a Psych::Nodes::Alias to this class only (not to the YAML).
+    # 
+    # A {Styler} should probably never call this.
+    # 
+    # @param node [Psych::Nodes::Alias] the alias to add
     def add_alias(node)
       add_child(node)
       @aliases.push(node)
     end
     
+    # Add a Psych::Nodes::Scalar to this class only (not to the YAML).
+    # 
+    # A {Styler} should probably never call this.
+    # 
+    # @param node [Psych::Nodes::Scalar] the scalar to add
     def add_scalar(node)
       add_child(node)
       @scalars.push(node)
     end
     
+    # End a Psych::Nodes::Mapping started with {#start_mapping}.
+    # 
+    # Pops off a parent from {#parents} and sets {#parent} to the last one.
+    # {level} and {position} are reset according to the last parent.
+    # 
+    # A {Styler} should probably never call this.
     def end_mapping()
+      end_parent()
+      
       if !@parent.nil?() && !@parent.child_type.nil?()
         # add_child() will not be called again, so end the fake "parent" manually with a fake "value"
         end_mapping_value()
       end
-      
-      end_parent()
     end
     
+    # End a Psych::Nodes::Sequence started with {#start_sequence}.
+    # 
+    # Pops off a parent from {#parents} and sets {#parent} to the last one.
+    # {level} and {position} are reset according to the last parent.
+    # 
+    # A {Styler} should probably never call this.
     def end_sequence()
       end_parent()
-      
-      @level -= 1
       
       if !@parent.nil?() && !@parent.child_type.nil?()
         # If a sequence is the value of a map's key, then this is necessary
@@ -188,21 +213,12 @@ module Psychgus
     end
     
     def start_mapping(node)
-      start_parent(node,child_type: :key,debug_tag: :map)
-      
-      # Do not increment @level; the first child (key) will
-      # - See add_child() and start_mapping_key()
-      @position = 1
-      
+      start_parent(node,debug_tag: :map,child_type: :key)
       @mappings.push(node)
     end
     
     def start_sequence(node)
       start_parent(node,debug_tag: :seq)
-      
-      @level += 1
-      @position = 1
-      
       @sequences.push(node)
     end
     
@@ -231,13 +247,14 @@ module Psychgus
     def end_mapping_value()
       end_parent()
       
-      @level -= 1
       @parent.child_type = :key unless @parent.nil?()
     end
     
     def end_parent()
       @parents.pop()
       @parent = @parents.last
+      
+      @level -= 1
       
       if !@parent.nil?()
         @parent.child_position += 1
@@ -257,17 +274,17 @@ module Psychgus
       
       debug_tag = :noface if debug_tag.nil?()
       
-      start_parent(node,child_type: :value,debug_tag: debug_tag)
-      
-      @level += 1
-      @position = 1
+      start_parent(node,debug_tag: debug_tag,child_type: :value)
     end
     
     def start_parent(node,**extra)
-      @parent = Parent.new(self,node,extra)
+      @parent = Parent.new(self,node,**extra)
       
       @parents.push(@parent)
       @nodes.push(node)
+      
+      @level += 1
+      @position = 1
     end
   end
 end
