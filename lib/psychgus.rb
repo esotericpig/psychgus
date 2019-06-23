@@ -164,30 +164,47 @@ module Psychgus
   # Because extend is used, do not prefix methods with "self."
   ###
   module PsychDropIn
+    # @see Psych.add_builtin_type
     def add_builtin_type(*args,&block)
       Psych.add_builtin_type(*args,&block)
     end
     
+    # @see Psych.add_domain_type
     def add_domain_type(*args,&block)
       Psych.add_domain_type(*args,&block)
     end
     
+    # @see Psych.add_tag
     def add_tag(*args)
       Psych.add_tag(*args)
     end
     
+    # @see Psych.load
+    def load(*args,**kargs)
+      Psych.load(*args,**kargs)
+    end
+    
+    # @see Psych.load_file
     def load_file(*args,**kargs)
       Psych.load_file(*args,**kargs)
     end
     
+    # @see Psych.load_stream
     def load_stream(*args,**kargs)
       Psych.load_stream(*args,**kargs)
     end
     
+    # @see Psych.remove_type
     def remove_type(*args)
       Psych.remove_type(*args)
     end
     
+    # @see Psych.safe_load
+    def safe_load(*args,**kargs)
+      Psych.safe_load(*args,**kargs)
+    end
+    
+    # @see Psych.to_json
     def to_json(*args)
       Psych.to_json(*args)
     end
