@@ -25,7 +25,31 @@ require 'psychgus/styled_tree_builder'
 
 module Psychgus
   module Ext
+    ###
+    # Extensions to Psych::Visitors::YAMLTree.
+    # 
+    # @author Jonathan Bradley Whited (@esotericpig)
+    # @since  1.0.0
+    ###
     module YAMLTreeExt
+      # Accepts a new Object to convert to YAML.
+      # 
+      # This is roughly the same place where Psych checks if +target+ responds to :encode_with.
+      # 
+      # This will check if @emitter is a {StyledTreeBuilder} and if +target+ is a {Blueberry}.
+      # 1. If the above is true, get the {Styler}(s) and add them to @emitter.
+      # 2. Call super.
+      # 3. If the above is true, remove the {Styler}(s) from @emitter.
+      # 4. Return the result of super.
+      # 
+      # @param target [Object] the Object to pass to super
+      # 
+      # @return the result of super
+      # 
+      # @see Psych::Visitors::YAMLTree
+      # @see Blueberry
+      # @see Styler
+      # @see StyledTreeBuilder
       def accept(target)
         styler_count = 0
         
