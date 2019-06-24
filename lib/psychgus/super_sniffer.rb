@@ -49,7 +49,7 @@ module Psychgus
   # {#parent} is the current {SuperSniffer::Parent} of the node being processed,
   # which is nil for the first node.
   # 
-  # {#parents} are all of the {SuperSniffer::Parent}(s) processed so far,
+  # {#parents} are all of the (grand){SuperSniffer::Parent}(s) for the current node,
   # which is empty for the first node.
   # 
   # A parent is a Mapping or Sequence, or a Key (Scalar) in a Mapping.
@@ -167,6 +167,8 @@ module Psychgus
     # A {Styler} should probably never call this.
     # 
     # @param node [Psych::Nodes::Alias] the alias to add
+    # 
+    # @see add_child
     def add_alias(node)
       add_child(node)
       @aliases.push(node)
@@ -177,6 +179,8 @@ module Psychgus
     # A {Styler} should probably never call this.
     # 
     # @param node [Psych::Nodes::Scalar] the scalar to add
+    # 
+    # @see add_child
     def add_scalar(node)
       add_child(node)
       @scalars.push(node)
@@ -185,9 +189,11 @@ module Psychgus
     # End a Psych::Nodes::Mapping started with {#start_mapping}.
     # 
     # Pops off a parent from {#parents} and sets {#parent} to the last one.
-    # {level} and {position} are reset according to the last parent.
+    # {#level} and {#position} are reset according to the last parent.
     # 
     # A {Styler} should probably never call this.
+    # 
+    # @see end_parent
     def end_mapping()
       end_parent()
       
@@ -200,9 +206,11 @@ module Psychgus
     # End a Psych::Nodes::Sequence started with {#start_sequence}.
     # 
     # Pops off a parent from {#parents} and sets {#parent} to the last one.
-    # {level} and {position} are reset according to the last parent.
+    # {#level} and {#position} are reset according to the last parent.
     # 
     # A {Styler} should probably never call this.
+    # 
+    # @see end_parent
     def end_sequence()
       end_parent()
       
@@ -212,11 +220,31 @@ module Psychgus
       end
     end
     
+    # Start a Psych::Nodes::Mapping.
+    # 
+    # Creates a {SuperSniffer::Parent}, sets {#parent} to it, and adds it to {#parents}.
+    # {#level} and {#position} are incremented/set accordingly.
+    # 
+    # A {Styler} should probably never call this.
+    # 
+    # @param node [Psych::Nodes::Mapping] the Mapping to start
+    # 
+    # @see start_parent
     def start_mapping(node)
       start_parent(node,debug_tag: :map,child_type: :key)
       @mappings.push(node)
     end
     
+    # Start a Psych::Nodes::Sequence.
+    # 
+    # Creates a {SuperSniffer::Parent}, sets {#parent} to it, and adds it to {#parents}.
+    # {#level} and {#position} are incremented/set accordingly.
+    # 
+    # A {Styler} should probably never call this.
+    # 
+    # @param node [Psych::Nodes::Sequence] the Sequence to start
+    # 
+    # @see start_parent
     def start_sequence(node)
       start_parent(node,debug_tag: :seq)
       @sequences.push(node)
@@ -224,9 +252,17 @@ module Psychgus
     
     protected
     
+    # Add a non-parent node.
+    # 
+    # This will increment {#position} accordingly, and if the child is a Key to a Mapping,
+    # create a fake "{SuperSniffer::Parent}".
+    # 
+    # @param node [Psych::Nodes::Node] the non-parent Node to add
+    # 
+    # @see end_mapping_value
     def add_child(node)
       if !@parent.nil?()
-        # Fake a "parent"
+        # Fake a "parent" if necessary
         case @parent.child_type
         when :key
           start_mapping_key(node)
@@ -244,12 +280,19 @@ module Psychgus
       @nodes.push(node)
     end
     
+    # End a fake "{SuperSniffer::Parent}" that is a Key/Value to a Mapping.
+    # 
+    # @see add_child
     def end_mapping_value()
       end_parent()
       
       @parent.child_type = :key unless @parent.nil?()
     end
     
+    # End a {SuperSniffer::Parent}.
+    # 
+    # Pops off a parent from {#parents} and sets {#parent} to the last one.
+    # {#level} and {#position} are reset according to the last parent.
     def end_parent()
       @parents.pop()
       @parent = @parents.last
@@ -262,6 +305,14 @@ module Psychgus
       end
     end
     
+    # Start a fake "{SuperSniffer::Parent}" that is a Key/Value to a Mapping.
+    # 
+    # Creates a {SuperSniffer::Parent}, sets {#parent} to it, and adds it to {#parents}.
+    # {#level} and {#position} are incremented/set accordingly.
+    # 
+    # @param node [Psych::Nodes::Node] the Node to start
+    # 
+    # @see start_parent
     def start_mapping_key(node)
       debug_tag = nil
       
@@ -277,6 +328,15 @@ module Psychgus
       start_parent(node,debug_tag: debug_tag,child_type: :value)
     end
     
+    # Start a {SuperSniffer::Parent}.
+    # 
+    # Creates a {SuperSniffer::Parent}, sets {#parent} to it, and adds it to {#parents}.
+    # {#level} and {#position} are incremented/set accordingly.
+    # 
+    # @param node [Psych::Nodes::Node] the parent Node to start
+    # @param extra [Hash] the extra keyword args to pass to {SuperSniffer::Parent#initialize}
+    # 
+    # @see SuperSniffer::Parent#initialize
     def start_parent(node,**extra)
       @parent = Parent.new(self,node,**extra)
       
