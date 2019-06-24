@@ -22,6 +22,7 @@
 require 'psych'
 
 require 'psychgus/blueberry'
+require 'psychgus/ext'
 require 'psychgus/styled_document_stream'
 require 'psychgus/styled_tree_builder'
 require 'psychgus/styler'
