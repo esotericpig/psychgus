@@ -21,8 +21,48 @@
 
 module Psychgus
   module Ext
+    ###
+    # Core extensions to Object.
+    # 
+    # @author Jonathan Bradley Whited (@esotericpig)
+    # @since  1.0.0
+    # 
+    # @see https://github.com/ruby/psych/blob/master/lib/psych/core_ext.rb
+    ###
     module ObjectExt
-      # Don't use keyword args for options so can be a drop-in-replacement for Psych
+      # Convert an Object to YAML.
+      # 
+      # +options+ does not use keyword args in order to mimic Psych, so can be a drop-in-replacement.
+      # 
+      # @example
+      #   class MyStyler
+      #     include Psychgus::Styler
+      #     
+      #     def style_sequence(sniffer,node)
+      #       node.style = Psychgus::SEQUENCE_FLOW
+      #     end
+      #   end
+      #   
+      #   my_obj = {
+      #     :Foods => {
+      #       :Fruits  => %w(Apple Banana Blueberry Pear),
+      #       :Veggies => %w(Bean Carrot Celery Pea)
+      #   }}
+      #   
+      #   puts my_obj.to_yaml({:indentation=>5},stylers: MyStyler.new)
+      #   
+      #   # Output:
+      #   # ---
+      #   # :Foods:
+      #   #      :Fruits: [Apple, Banana, Blueberry, Pear]
+      #   #      :Veggies: [Bean, Carrot, Celery, Pea]
+      # 
+      # @param options [Hash] the options to pass to {Psychgus.dump}
+      # @param kargs [Hash] the keyword args to pass to {Psychgus.dump}
+      # 
+      # @return [String] the YAML generated from this Object
+      # 
+      # @see Psychgus.dump
       def to_yaml(options={},**kargs)
         # Do not use Psych.dump() if no Stylers, because a class might be a Blueberry
         return Psychgus.dump(self,options,**kargs)
