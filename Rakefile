@@ -61,7 +61,9 @@ desc 'Run all tests (including writing to temp files, etc.)'
 task :test_all do |task|
   ENV['PSYCHGUS_TEST'] = 'all'
   
-  Rake::Task[:test].invoke()
+  test_task = Rake::Task[:test]
+  test_task.reenable()
+  test_task.invoke()
 end
 
 # Execute "rake clobber yard" for pristine docs
