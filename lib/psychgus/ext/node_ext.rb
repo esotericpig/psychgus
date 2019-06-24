@@ -23,9 +23,34 @@ require 'psych'
 
 module Psychgus
   module Ext
+    ###
+    # Extensions to Psych::Nodes::Node.
+    # 
+    # @author Jonathan Bradley Whited (@esotericpig)
+    # @since  1.0.0
+    ###
     module NodeExt
-      # Old versions of Psych didn't have alias?(), mapping?(), etc.
-      # name can be a symbol or a string
+      # Check if this Node is of a certain type (Alias, Mapping, Scalar, Sequence, etc.).
+      # 
+      # New versions of Psych have alias?(), mapping?(), etc., so this is for old versions.
+      # 
+      # This is equivalent to the following (with less typing):
+      #   node.is_a?(Psych::Nodes::Alias)
+      #   node.is_a?(Psych::Nodes::Mapping)
+      #   node.is_a?(Psych::Nodes::Scalar)
+      #   node.is_a?(Psych::Nodes::Sequence)
+      # 
+      # @example
+      #   node.node_of?(:alias)
+      #   node.node_of?(:mapping)
+      #   node.node_of?(:scalar)
+      #   node.node_of?(:sequence)
+      # 
+      # @param name [Symbol,String] the type to check
+      # 
+      # @return [true,false] true if this Node is of type +name+, else false
+      # 
+      # @see Psychgus.node_class
       def node_of?(name)
         return is_a?(Psychgus.node_class(name))
       end
