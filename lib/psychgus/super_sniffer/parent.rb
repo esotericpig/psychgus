@@ -21,13 +21,48 @@
 
 module Psychgus
   class SuperSniffer
+    ###
+    # A container for the parent of a Psych::Nodes::Node.
+    # 
+    # A parent is a Mapping, Sequence, or a Key (Scalar) of a Mapping.
+    # 
+    # You can use the getters in this class in {Styler} to filter what to change.
+    # 
+    # If a Node method has not been exposed, you can use {#node}:
+    #   if parent.node_of?(:scalar)
+    #     parent.value = 'FUBAR'
+    #     parent.node.value = 'FUBAR' # Same as above
+    #     
+    #     parent.fubar = true      # NoMethodError
+    #     parent.node.fubar = true # Use some new Psych::Nodes::Node method not in this version
+    #                              #   of Psychgus or that is not exposed by Parent
+    #   end
+    # 
+    # @author Jonathan Bradley Whited (@esotericpig)
+    # @since  1.0.0
+    # 
+    # @see SuperSniffer
+    # @see SuperSniffer#start_parent SuperSniffer#start_parent
+    # @see SuperSniffer#end_parent SuperSniffer#end_parent
+    # @see Styler
+    ###
     class Parent
-      attr_accessor :child_position # For next child's position
-      attr_accessor :child_type # For next child's mapping: nil, :key, or :value
+      # Calling the getter is fine; calling the setter is *not* and could cause weird results.
+      # 
+      # @return [Integer] the next child's position
+      attr_accessor :child_position
+      
+      # Calling the getter is fine; calling the setter is *not* and could cause weird results.
+      # 
+      # @return [nil,:key,:value] the next child's Mapping type
+      attr_accessor :child_type
+      
+      # @return [:noface,Symbol,String] a tag (class name, value) for debugging; also used in {#to_s}
       attr_reader :debug_tag
-      attr_reader :level
-      attr_reader :node
-      attr_reader :position
+      
+      attr_reader :level # @return [Integer] the level of this Node in the YAML
+      attr_reader :node # @return [Psych::Nodes::Node] the Node of this parent
+      attr_reader :position # @return [Integer] the position of this Node in the YAML
       
       def initialize(sniffer,node,child_type: nil,debug_tag: nil)
         @child_position = 1
@@ -38,94 +73,131 @@ module Psychgus
         @position = sniffer.position
       end
       
+      # @see Psych::Nodes::Alias#anchor=
+      # @see Psych::Nodes::Mapping#anchor=
+      # @see Psych::Nodes::Scalar#anchor=
+      # @see Psych::Nodes::Sequence#anchor=
       def anchor=(anchor)
         node.anchor = anchor
       end
       
+      # @see Psych::Nodes::Scalar#plain=
       def plain=(plain)
         node.plain = plain
       end
       
+      # @see Psych::Nodes::Scalar#quoted=
       def quoted=(quoted)
         node.quoted = quoted
       end
       
+      # @see Psych::Nodes::Mapping#style=
+      # @see Psych::Nodes::Scalar#style=
+      # @see Psych::Nodes::Sequence#style=
       def style=(style)
         node.style = style
       end
       
+      # @see Psych::Nodes::Node#tag=
       def tag=(tag)
         node.tag = tag
       end
       
+      # @see Psych::Nodes::Scalar#value=
       def value=(value)
         node.value = value
       end
       
+      # @see Psych::Nodes::Alias#anchor
+      # @see Psych::Nodes::Mapping#anchor
+      # @see Psych::Nodes::Scalar#anchor
+      # @see Psych::Nodes::Sequence#anchor
       def anchor()
         return node.anchor
       end
       
+      # @see Psych::Nodes::Stream#encoding
       def encoding()
         return node.encoding
       end
       
+      # @see Psych::Nodes::Node#end_column
       def end_column()
         return node.end_column
       end
       
+      # @see Psych::Nodes::Node#end_line
       def end_line()
         return node.end_line
       end
       
+      # @see Psych::Nodes::Document#implicit
+      # @see Psych::Nodes::Mapping#implicit
+      # @see Psych::Nodes::Sequence#implicit
       def implicit?()
         return node.implicit
       end
       
+      # @see Psych::Nodes::Document#implicit_end
       def implicit_end?()
         return node.implicit_end
       end
       
+      # (see Ext::NodeExt#node_of?)
       def node_of?(name)
         return node.node_of?(name)
       end
       
+      # @see Psych::Nodes::Scalar#plain
       def plain?()
         return node.plain
       end
       
+      # @see Psych::Nodes::Scalar#quoted
       def quoted?()
         return node.quoted
       end
       
+      # @see Psych::Nodes::Node#start_column
       def start_column()
         return node.start_column
       end
       
+      # @see Psych::Nodes::Node#start_line
       def start_line()
         return node.start_line
       end
       
+      # @see Psych::Nodes::Mapping#style
+      # @see Psych::Nodes::Scalar#style
+      # @see Psych::Nodes::Sequence#style
       def style()
         return node.style
       end
       
+      # @see Psych::Nodes::Node#tag
       def tag()
         return node.tag
       end
       
+      # @see Psych::Nodes::Document#tag_directives
       def tag_directives()
         return node.tag_directives
       end
       
+      # @see Psych::Nodes::Scalar#value
       def value()
         return node.value
       end
       
+      # @see Psych::Nodes::Document#version
       def version()
         return node.version
       end
       
+      # @note If this method is modified, then tests will fail
+      # 
+      # @return [String] a String representation of this class for debugging and testing
       def to_s()
         return "<#{@debug_tag}:(#{@level}:#{@position}):#{@child_type}:(:#{@child_position})>"
       end
