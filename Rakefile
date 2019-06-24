@@ -33,31 +33,45 @@ task default: [:test]
 CLEAN.exclude('.git/','stock/')
 CLOBBER.include('doc/')
 
-# Exec "rake ghp_doc" for a dry run
-# Exec "rake ghp_doc[true]" for actually deploying
-desc %q(Rsync 'doc/' to my GitHub Page's repo; not useful for others)
+# Execute "rake ghp_doc" for a dry run
+# Execute "rake ghp_doc[true]" for actually deploying
+desc %q(Rsync "doc/" to my GitHub Page's repo; not useful for others)
 task :ghp_doc,[:deploy] do |task,args|
   dry_run = args.deploy ? '' : '--dry-run'
-  rsync_cmd = %Q(rsync -ahv --delete-after --progress #{dry_run} 'doc/' '../esotericpig.github.io/docs/yard/psychgus')
+  rsync_cmd = "rsync -ahv --delete-after --progress #{dry_run} 'doc/' '../esotericpig.github.io/docs/yard/psychgus'"
   
   sh rsync_cmd
+  
+  if dry_run
+    puts
+    puts 'Execute "rake ghp_doc[true]" for actually deploying (non-dry-run)'
+  end
 end
 
 Rake::TestTask.new() do |task|
   task.libs = ['lib','test']
   task.pattern = 'test/**/*_test.rb'
+  task.description += " ('#{task.pattern}')"
+  #task.options = '--verbose' # Execute "rake test TESTOPT=-v" instead
   task.verbose = true
   task.warning = true
 end
 
-# Exec "rake clobber yard" for pristine docs
+desc 'Run all tests (including writing to temp files, etc.)'
+task :test_all do |task|
+  ENV['PSYCHGUS_TEST'] = 'all'
+  
+  Rake::Task[:test].invoke()
+end
+
+# Execute "rake clobber yard" for pristine docs
 YARD::Rake::YardocTask.new() do |task|
-  task.files += ['lib/**/*.rb']
+  task.files = ['lib/**/*.rb']
   
   task.options += ['--files','LICENSE']
   task.options += ['--readme','README.md']
   
-  task.options += ['--protected'] # Show protected methods
+  task.options << '--protected' # Show protected methods
   task.options += ['--template-path','yard/templates/']
   task.options += ['--title',"Psychgus v#{Psychgus::VERSION} Doc"]
 end

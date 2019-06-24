@@ -58,10 +58,13 @@ class PsychgusTest < Minitest::Test
     assert_equal @expected_out,PsychgusTester::BURGERS_DATA.to_yaml(stylers: @flow_styler)
   end
   
-  # I don't like creating a temp file every time I run tests (which is a lot).
-  # Remove "do_not_" if you update Psychgus.dump_file()/load_file().
-  def do_not_test_file()
-  #def test_file()
+  # Execute "rake test_all" if you update Psychgus.dump_file()/load_file()
+  def test_file()
+    if !PsychgusTester::TEST_ALL
+      skip(PsychgusTester::TEST_ALL_SKIP_MSG)
+      return # Justin Case
+    end
+    
     Tempfile.create(['Psychgus','.yaml']) do |file|
       puts "Testing #{self.class.name} w/ temp file: #{file.path}"
       
@@ -72,7 +75,8 @@ class PsychgusTest < Minitest::Test
       assert_equal @expected_out,lines
       
       file.rewind()
-      Psych.load_file(file)
+      data = Psych.load_file(file)
+      refute_equal false,data
     end
   end
   
