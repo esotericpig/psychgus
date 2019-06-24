@@ -23,6 +23,12 @@ require 'psychgus/super_sniffer/parent'
 
 module Psychgus
   class SuperSniffer
+    ###
+    # An empty {SuperSniffer} used for speed when you don't need sniffing in {StyledTreeBuilder}.
+    # 
+    # @author Jonathan Bradley Whited (@esotericpig)
+    # @since  1.0.0
+    ###
     class Empty < SuperSniffer
       def initialize(*) end
       def add_alias(*) end

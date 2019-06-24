@@ -23,6 +23,12 @@ require 'psychgus/super_sniffer'
 
 module Psychgus
   module Styler
+    ###
+    # An empty {Styler} as a class.
+    # 
+    # @author Jonathan Bradley Whited (@esotericpig)
+    # @since  1.0.0
+    ###
     class Empty
       include Styler
     end
