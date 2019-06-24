@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
 
-###
+#--
 # This file is part of Psychgus.
 # Copyright (c) 2019 Jonathan Bradley Whited (@esotericpig)
 # 
@@ -17,7 +17,8 @@
 # 
 # You should have received a copy of the GNU Lesser General Public License
 # along with Psychgus.  If not, see <http://www.gnu.org/licenses/>.
-###
+#++
+
 
 module Psychgus
   module Ext
