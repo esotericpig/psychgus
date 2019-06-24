@@ -54,7 +54,7 @@ module Psychgus
       
       # Calling the getter is fine; calling the setter is *not* and could cause weird results.
       # 
-      # @return [nil,:key,:value] the next child's Mapping type
+      # @return [nil,:key,:value] the next child's Mapping type, if {#node} is a Mapping
       attr_accessor :child_type
       
       # @return [:noface,Symbol,String] a tag (class name, value) for debugging; also used in {#to_s}
@@ -64,7 +64,13 @@ module Psychgus
       attr_reader :node # @return [Psych::Nodes::Node] the Node of this parent
       attr_reader :position # @return [Integer] the position of this Node in the YAML
       
-      def initialize(sniffer,node,child_type: nil,debug_tag: nil)
+      # Initialize this class with parent data.
+      # 
+      # @param sniffer [SuperSniffer] the sniffer that contains this parent (not stored; used for data)
+      # @param node [Psych::Nodes::Node] the node of this parent
+      # @param debug_tag [:noface,Symbol,String] the tag (class name, value) used for debugging and in {#to_s}
+      # @param child_type [nil,:key,:value] the next child's Mapping type, if +node+ is a Mapping
+      def initialize(sniffer,node,debug_tag: nil,child_type: nil)
         @child_position = 1
         @child_type = child_type
         @debug_tag = debug_tag
