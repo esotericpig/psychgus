@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
 
-###
+#--
 # This file is part of Psychgus.
 # Copyright (c) 2017-2019 Jonathan Bradley Whited (@esotericpig)
 # 
@@ -17,7 +17,8 @@
 # 
 # You should have received a copy of the GNU Lesser General Public License
 # along with Psychgus.  If not, see <http://www.gnu.org/licenses/>.
-###
+#++
+
 
 require 'psych'
 
@@ -35,25 +36,48 @@ require 'psychgus/ext/yaml_tree_ext'
 
 require 'psychgus/super_sniffer/parent'
 
+###
+# @author Jonathan Bradley Whited (@esotericpig)
+# @since  1.0.0
+###
 module Psychgus
+  NODE_CLASS_ALIASES = {:Doc => :Document,:Map => :Mapping,:Seq => :Sequence}
+  OPTIONS_ALIASES = {:canon => :canonical,:indent => :indentation}
+  
+  # Get a Class (constant) from Psych::Nodes.
+  # 
+  # Some +name+s have aliases:
+  #   :doc => :document
+  #   :map => :mapping
+  #   :seq => :sequence
+  # 
+  # @param name [Symbol,String] the name of the class from Psych::Nodes
+  # 
+  # @return [Class] a class from Psych::Nodes
+  # 
+  # @see Psych::Nodes
+  # @see NODE_CLASS_ALIASES
   def self.node_class(name)
     name = name.to_sym().capitalize()
     
-    case name
-    when :Doc
-      name = :Document
-    when :Map
-      name = :Mapping
-    when :Seq
-      name = :Sequence
-    end
+    name_alias = NODE_CLASS_ALIASES[name]
+    name = name_alias unless name_alias.nil?()
     
     return Psych::Nodes.const_get(name)
   end
   
+  # Get a constant from a Psych::Nodes class (using {.node_class}).
+  # 
+  # @param class_name [Symbol,String] the name of the class to get using {.node_class}
+  # @param const_name [Symbol,String] the constant to get from the class
+  # @param lenient [true,false] if true, will return 0 if not const_defined?(), else raise an error
+  # 
+  # @return [Integer,Object] the constant value from the class (usually an int)
+  # 
+  # @see .node_class
   def self.node_const(class_name,const_name,lenient=true)
     node_class = node_class(class_name)
-    const_name = const_name.upcase()
+    const_name = const_name.to_sym().upcase()
     
     return 0 if lenient && !node_class.const_defined?(const_name,true)
     return node_class.const_get(const_name,true)
@@ -85,24 +109,88 @@ module Psychgus
   STREAM_UTF16LE = node_const(:stream,:utf16le)
   STREAM_UTF16BE = node_const(:stream,:utf16be)
   
-  # Don't use keyword args for io & options so can be a drop-in-replacement for Psych
+  # Convert +object+ to YAML and dump to +io+.
+  # 
+  # +object+, +io+, and +options+ are used like in Psych.dump so can be a drop-in replacement for Psych.
+  # 
+  # @param object [Object] the Object to convert to YAML and dump
+  # @param io [nil,IO,Hash] the IO to dump the YAML to or the +options+ Hash; if nil, will use StringIO
+  # @param options [Hash] the options to use; see {.dump_stream}
+  # @param kargs [Hash] the keyword args to use; see {.dump_stream}
+  # 
+  # @return [String,Object] the result of converting +object+ to YAML using the params
+  # 
+  # @see .dump_stream
+  # @see Psych.dump_stream
   def self.dump(object,io=nil,options={},**kargs)
     return dump_stream(object,io: io,options: options,**kargs)
   end
   
-  # Mode can be 'w:UTF-8', 'a:UTF-16', etc.
-  # stylers: MyStyler.new
-  # stylers: [...]
+  # Convert +objects+ to YAML and dump to a file.
+  # 
+  # @example
+  #   Psychgus.dump_file('my_dir/my_file.yaml',my_object1,my_object2,mode: 'w:UTF-16',
+  #                      stylers: MyStyler.new())
+  #   Psychgus.dump_file('my_file.yaml',my_object,stylers: [MyStyler1.new(),MyStyler2.new()])
+  # 
+  # @param filename [String] the name of the file (and path) to dump to
+  # @param objects [Object,Array<Object>] the Object(s) to convert to YAML and dump
+  # @param mode [String,Integer] the IO open mode to use; examples:
+  #                              [+'w:UTF-8'+]  create a new file or truncate an existing file
+  #                                             and use UTF-8 encoding;
+  #                              [+'a:UTF-16'+] create a new file or append to an existing file
+  #                                             and use UTF-16 encoding
+  # @param perm [Integer] the permission bits to use (platform dependent)
+  # @param opt [Symbol] the option(s) to use, more readable alternative to +mode+;
+  #                     examples: :textmode, :autoclose
+  # @param kargs [Hash] the keyword args to use; see {.dump_stream}
+  # 
+  # @see .dump_stream
+  # @see File.open
+  # @see IO.new
+  # @see https://ruby-doc.org/core/IO.html#method-c-new
   def self.dump_file(filename,*objects,mode: 'w',perm: nil,opt: nil,**kargs)
     File.open(filename,mode,perm,opt) do |file|
       file.write(dump_stream(*objects,**kargs))
     end
   end
   
+  # Convert +objects+ to YAML and dump to +io+.
+  # 
+  # +io+ and +options+ are used like in Psych.dump so can be a drop-in replacement for Psych.
+  # 
+  # @param objects [Object,Array<Object>] the Object(s) to convert to YAML and dump
+  # @param io [nil,IO,Hash] the IO to dump the YAML to or the +options+ Hash; if nil, will use StringIO
+  # @param options [Hash] the options to use when converting to YAML:
+  #                       [+:indent+]      Alias for +:indentation+. +:indentation+ will override this.
+  #                       [+:indentation+] Default: +2+.
+  #                                        Number of space characters used to indent.
+  #                                        Acceptable value should be in +0..9+ range, else ignored.
+  #                       [+:line_width+]  Default: +0+ (meaning "wrap at 81").
+  #                                        Max character to wrap line at.
+  #                       [+:canon+]       Alias for +:canonical+. +:canonical+ will override this.
+  #                       [+:canonical+]   Default: +false+.
+  #                                        Write "canonical" YAML form (very verbose, yet strictly formal).
+  #                       [+:header+]      Default: +false+.
+  #                                        Write +%YAML [version]+ at the beginning of document.
+  # @param stylers [nil,Styler,Array<Styler>] the Styler(s) to use when converting to YAML
+  # 
+  # @return [String,Object] the result of converting +object+ to YAML using the params
+  # 
+  # @see Psych.dump_stream
+  # @see OPTIONS_ALIASES
   def self.dump_stream(*objects,io: nil,options: {},stylers: nil)
     if Hash === io
       options = io
       io = nil
+    end
+    
+    if !options.nil?()
+      OPTIONS_ALIASES.each do |option_alias,option|
+        if options.key?(option_alias) && !options.key?(option)
+          options[option] = options[option_alias]
+        end
+      end
     end
     
     visitor = Psych::Visitors::YAMLTree.create(options,StyledTreeBuilder.new(*stylers))
