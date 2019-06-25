@@ -142,7 +142,7 @@ module Psychgus
   #                                             and use UTF-16 encoding
   # @param perm [Integer] the permission bits to use (platform dependent)
   # @param opt [Symbol] the option(s) to use, more readable alternative to +mode+;
-  #                     examples: :textmode, :autoclose
+  #                     examples: +:textmode+, +:autoclose+
   # @param kargs [Hash] the keyword args to use; see {.dump_stream}
   # 
   # @see .dump_stream
@@ -202,7 +202,19 @@ module Psychgus
     return visitor.tree.yaml(io,options)
   end
   
-  # You don't need to pass in stylers, if you're just going to call to_ruby()
+  # Parse +yaml+ into a Psych::Nodes::Document.
+  # 
+  # If you're just going to call to_ruby(), then using this method is unnecessary,
+  # and the styler(s) will do nothing for you.
+  # 
+  # @param yaml [String] the YAML to parse
+  # @param kargs [Hash] the keyword args to use; see {.parse_stream}
+  # 
+  # @return [Psych::Nodes::Document] the parsed Document node
+  # 
+  # @see .parse_stream
+  # @see Psych.parse
+  # @see Psych::Nodes::Document
   def self.parse(yaml,**kargs)
     parse_stream(yaml,**kargs) do |node|
       return node
@@ -211,16 +223,79 @@ module Psychgus
     return false
   end
   
-  # You don't need to pass in stylers, if you're just going to call to_ruby()
-  def self.parse_file(filename,fallback: false,**kargs)
-    result = File.open(filename,'r:BOM|UTF-8') do |file|
+  # Parse a YAML file into a Psych::Nodes::Document.
+  # 
+  # If you're just going to call to_ruby(), then using this method is unnecessary,
+  # and the styler(s) will do nothing for you.
+  # 
+  # @param filename [String] the name of the YAML file (and path) to parse
+  # @param fallback [Object] the return value when nothing is parsed
+  # @param mode [String,Integer] the IO open mode to use; example: +'r:BOM|UTF-8'+
+  # @param kargs [Hash] the keyword args to use; see {.parse_stream}
+  # 
+  # @return [Psych::Nodes::Document] the parsed Document node
+  # 
+  # @see .parse_stream
+  # @see Psych.parse_file
+  # @see Psych::Nodes::Document
+  # @see File.open
+  # @see IO.new
+  def self.parse_file(filename,fallback: false,mode: 'r:BOM|UTF-8',**kargs)
+    result = File.open(filename,mode) do |file|
       parse(file,filename: filename,**kargs)
     end
     
     return result || fallback
   end
   
-  # You don't need to pass in stylers, if you're just going to call to_ruby()
+  # Parse +yaml+ into a Psych::Nodes::Stream for one document or for multiple documents in one YAML.
+  # 
+  # If you're just going to call to_ruby(), then using this method is unnecessary,
+  # and the styler(s) will do nothing for you.
+  # 
+  # @example
+  #   burgers = <<EOY
+  #   ---
+  #   Burgers:
+  #     Classic:
+  #       BBQ: {Sauce: Honey BBQ, Cheese: Cheddar, Bun: Kaiser}
+  #   ---
+  #   Toppings:
+  #   - [Mushrooms, Mustard]
+  #   - [Salt, Pepper, Pickles]
+  #   ---
+  #   `Invalid`
+  #   EOY
+  #   
+  #   i = 0
+  #   
+  #   begin
+  #     Psychgus.parse_stream(burgers,filename: 'burgers.yaml') do |document|
+  #       puts "Document ##{i += 1}"
+  #       puts document.to_ruby
+  #     end
+  #   rescue Psych::SyntaxError => err
+  #     puts "File: #{err.file}"
+  #   end
+  #   
+  #   # Output:
+  #   #   Document #1
+  #   #   {"Burgers"=>{"Classic"=>{"BBQ"=>{"Sauce"=>"Honey BBQ", "Cheese"=>"Cheddar", "Bun"=>"Kaiser"}}}}
+  #   #   Document #2
+  #   #   {"Toppings"=>[["Mushrooms", "Mustard"], ["Salt", "Pepper", "Pickles"]]}
+  #   #   File: burgers.yaml
+  # 
+  # @param yaml [String] the YAML to parse
+  # @param filename [String] the filename to pass as +file+ to the Error potentially raised
+  # @param stylers [nil,Styler,Array<Styler>] the Styler(s) to use when parsing the YAML
+  # @param block [Proc] an optional block for parsing multiple documents
+  # 
+  # @return [Psych::Nodes::Stream] the parsed Stream node
+  # 
+  # @see StyledDocumentStream
+  # @see Psych.parse_stream
+  # @see Psych::Nodes::Stream
+  # @see Psych::SyntaxError
   def self.parse_stream(yaml,filename: nil,stylers: nil,&block)
     if block_given?()
       parser = Psych::Parser.new(StyledDocumentStream.new(*stylers,&block))
@@ -234,6 +309,17 @@ module Psychgus
     end
   end
   
+  # Create a new styled Psych::Parser for parsing YAML.
+  # 
+  # @example
+  #   TODO: add
+  # 
+  # @param stylers [nil,Styler,Array<Styler>] the Styler(s) to use when parsing the YAML
+  # 
+  # @return [Psych::Parser] the new styled Parser
+  # 
+  # @see StyledTreeBuilder
+  # @see Psych.parser
   def self.parser(stylers: nil)
     return Psych::Parser.new(StyledTreeBuilder.new(*stylers))
   end
