@@ -312,7 +312,34 @@ module Psychgus
   # Create a new styled Psych::Parser for parsing YAML.
   # 
   # @example
-  #   TODO: add
+  #   class CoffeeStyler
+  #     include Psychgus::Styler
+  #     
+  #     def style_sequence(sniffer,node)
+  #       node.style = Psychgus::SEQUENCE_FLOW
+  #     end
+  #   end
+  #   
+  #   coffee = <<EOY
+  #   Coffee:
+  #     Roast:
+  #       - Light
+  #       - Medium
+  #       - Dark
+  #     Style:
+  #       - Cappuccino
+  #       - Latte
+  #       - Mocha
+  #   EOY
+  #   
+  #   parser = Psychgus.parser(stylers: CoffeeStyler.new)
+  #   parser.parse(coffee)
+  #   puts parser.handler.root.to_yaml
+  #   
+  #   # Output:
+  #   #   Coffee:
+  #   #     Roast: [Light, Medium, Dark]
+  #   #     Style: [Cappuccino, Latte, Mocha]
   # 
   # @param stylers [nil,Styler,Array<Styler>] the Styler(s) to use when parsing the YAML
   # 
@@ -337,6 +364,9 @@ module Psychgus
   # Private methods of Psych are not defined.
   # 
   # Because extend is used, do not prefix methods with "self."
+  # 
+  # @author Jonathan Bradley Whited (@esotericpig)
+  # @since  1.0.0
   ###
   module PsychDropIn
     # @see Psych.add_builtin_type
