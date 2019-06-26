@@ -46,14 +46,20 @@ module Psychgus
       #   node.node_of?(:mapping)
       #   node.node_of?(:scalar)
       #   node.node_of?(:sequence)
+      #   node.node_of?(:alias,:mapping,:scalar,:sequence) # OR
+      #   node.node_of?(:doc,:map,:seq) # OR
       # 
-      # @param name [Symbol,String] the type to check
+      # @param names [Symbol,String] the type(s) to check using OR
       # 
-      # @return [true,false] true if this Node is of type +name+, else false
+      # @return [true,false] true if this Node is one of the +names+ type, else false
       # 
       # @see Psychgus.node_class
-      def node_of?(name)
-        return is_a?(Psychgus.node_class(name))
+      def node_of?(*names)
+        names.each do |name|
+          return true if is_a?(Psychgus.node_class(name))
+        end
+        
+        return false
       end
     end
   end

@@ -151,8 +151,8 @@ module Psychgus
       end
       
       # (see Ext::NodeExt#node_of?)
-      def node_of?(name)
-        return node.node_of?(name)
+      def node_of?(*names)
+        return node.node_of?(*names)
       end
       
       # @see Psych::Nodes::Scalar#plain
