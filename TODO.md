@@ -7,8 +7,10 @@
     - [Getting Started](https://blog.codeship.com/getting-started-with-minitest/)
     - [Minitest GitHub](https://github.com/seattlerb/minitest)
     - [Minitest Docs](http://docs.seattlerb.org/minitest/)
-- [ ] Add Doc w/ YARD
+- [x] Add Doc w/ YARD
 - [ ] Flesh out [README](README.md)
+- [ ] Test and fix aliases (write tests)
+- [ ] Add Document & Stream nodes to Styling
 - [ ] Deploy Doc to my GitHub Page
 - [ ] Release Gem
 - [ ] Add project to [RubyDoc.info](https://www.rubydoc.info)
