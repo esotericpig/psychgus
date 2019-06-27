@@ -27,6 +27,21 @@ require 'psychgus/styled_tree_builder'
 module Psychgus
   module Ext
     ###
+    # Extensions to Psych::Visitors::YAMLTree::Registrar.
+    # 
+    # @author Jonathan Bradley Whited (@esotericpig)
+    # @since  1.0.0
+    ###
+    module RegistrarExt
+      # Remove +target+ from this Registrar to prevent it becoming an alias.
+      # 
+      # @param target [Object] the Object to remove from this Registrar
+      def remove_alias(target)
+        @obj_to_node.delete(target.object_id)
+      end
+    end
+    
+    ###
     # Extensions to Psych::Visitors::YAMLTree.
     # 
     # @author Jonathan Bradley Whited (@esotericpig)
@@ -54,13 +69,21 @@ module Psychgus
       def accept(target)
         styler_count = 0
         
-        if @emitter.is_a?(StyledTreeBuilder) && target.respond_to?(:psychgus_stylers)
-          stylers = target.psychgus_stylers(@emitter.sniffer)
-          stylers_old_len = @emitter.stylers.length
+        if @emitter.is_a?(StyledTreeBuilder)
+          # Blueberry?
+          if target.respond_to?(:psychgus_stylers)
+            stylers = target.psychgus_stylers(@emitter.sniffer)
+            stylers_old_len = @emitter.stylers.length
+            
+            @emitter.add_styler(*stylers)
+            
+            styler_count = @emitter.stylers.length - stylers_old_len
+          end
           
-          @emitter.add_styler(*stylers)
-          
-          styler_count = @emitter.stylers.length - stylers_old_len
+          # Dereference aliases?
+          if @emitter.deref_aliases?()
+            @st.remove_alias(target) if target.respond_to?(:object_id) && @st.key?(target)
+          end
         end
         
         result = super(target)
@@ -75,3 +98,4 @@ module Psychgus
 end
 
 Psych::Visitors::YAMLTree.prepend(Psychgus::Ext::YAMLTreeExt)
+Psych::Visitors::YAMLTree::Registrar.prepend(Psychgus::Ext::RegistrarExt)

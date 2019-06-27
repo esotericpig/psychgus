@@ -37,6 +37,10 @@ module Psychgus
   # @see Psych::TreeBuilder
   ###
   class StyledTreeBuilder < Psych::TreeBuilder
+    # @return [true,false] whether to dereference aliases; output the actual value instead of the alias
+    attr_accessor :deref_aliases
+    alias_method :deref_aliases?,:deref_aliases
+    
     # @return [SuperSniffer] the {SuperSniffer} being used to sniff the YAML nodes, level, etc.
     attr_reader :sniffer
     
@@ -46,9 +50,12 @@ module Psychgus
     # Initialize this class with {Styler}(s).
     # 
     # @param stylers [Styler] {Styler}(s) to use for styling this TreeBuilder
-    def initialize(*stylers)
+    # @param deref_aliases [true,false] whether to dereference aliases; output the actual value
+    #                                   instead of the alias
+    def initialize(*stylers,deref_aliases: false)
       super()
       
+      @deref_aliases = deref_aliases
       @sniffer = SuperSniffer.new()
       @stylers = []
       

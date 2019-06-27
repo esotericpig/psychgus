@@ -38,9 +38,11 @@ module Psychgus
     # Initialize this class with {Styler}(s) and a block.
     # 
     # @param stylers [Styler] {Styler}(s) to use for styling this DocumentStream
+    # @param deref_aliases [true,false] whether to dereference aliases; output the actual value
+    #                                   instead of the alias
     # @param block [Proc] a block to call in {#end_document} to denote a new YAML document
-    def initialize(*stylers,&block)
-      super(*stylers)
+    def initialize(*stylers,deref_aliases: false,&block)
+      super(*stylers,deref_aliases: deref_aliases)
       
       @block = block
     end
