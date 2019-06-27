@@ -37,6 +37,273 @@ require 'psychgus/ext/yaml_tree_ext'
 require 'psychgus/super_sniffer/parent'
 
 ###
+# Psychgus uses the core standard library {https://github.com/ruby/psych Psych} for working with YAML
+# and extends it so that developers can easily style the YAML according to their needs.
+# Thank you to the people that worked and continue to work hard on that project.
+# 
+# The name comes from the well-styled character Gus from the TV show Psych.
+# 
+# == Create a Styler
+# 
+# First, we will create a {Styler}.
+# 
+# All you need to do is add +include Psychgus::Styler+ to a class.
+# 
+# Here is a complex {Styler} for the examples below:
+#   require 'psychgus'
+#   
+#   class BurgerStyler
+#     # Mix in methods needed for styling
+#     include Psychgus::Styler
+#     
+#     def initialize(sniffer=nil)
+#       if sniffer.nil?()
+#         @class_level = 0
+#         @class_position = 0
+#       else
+#         # For the Class Example
+#         @class_level = sniffer.level
+#         @class_position = sniffer.position
+#       end
+#     end
+#     
+#     # Style all nodes (Psych::Nodes::Node)
+#     def style(sniffer,node)
+#       # Remove "!ruby/object:..." for classes
+#       node.tag = nil if node.node_of?(:mapping,:scalar,:sequence)
+#       
+#       # This is another way to do the above
+#       #node.tag = nil if node.respond_to?(:tag=)
+#     end
+#     
+#     # Style aliases (Psych::Nodes::Alias)
+#     def style_alias(sniffer,node)
+#     end
+#     
+#     # Style maps (Psych::Nodes::Mapping)
+#     # - Hashes (key/value pairs)
+#     # - Example: "Burgers: Classic {}"
+#     def style_mapping(sniffer,node)
+#       parent = sniffer.parent
+#       
+#       if !parent.nil?()
+#         # BBQ
+#         node.style = Psychgus::MAPPING_FLOW if parent.respond_to?(:value) &&
+#                                                parent.value.casecmp('BBQ') == 0
+#       end
+#     end
+#     
+#     # Style scalars (Psych::Nodes::Scalar)
+#     # - Any text (non-alias)
+#     def style_scalar(sniffer,node)
+#       parent = sniffer.parent
+#       
+#       # Single quote scalars that are not keys to a map
+#       node.style = Psychgus::SCALAR_SINGLE_QUOTED if !parent.nil?() && 
+#                                                      parent.child_type != :key
+#       
+#       # Remove colon (change symbols into strings)
+#       node.value = node.value.sub(':','')
+#       
+#       # Change lettuce to spinach
+#       node.value = 'Spinach' if node.value.casecmp('Lettuce') == 0
+#       
+#       # Capitalize each word
+#       node.value = node.value.split(' ').map do |v|
+#         if v.casecmp('BBQ') == 0
+#           v.upcase()
+#         else
+#           v.capitalize()
+#         end
+#       end.join(' ')
+#     end
+#     
+#     # Style sequences (Psych::Nodes::Sequence)
+#     # - Arrays
+#     # - Example: "[Lettuce, Onions, Pickles, Tomatoes]"
+#     def style_sequence(sniffer,node)
+#       relative_level = (sniffer.level - @class_level) + 1
+#       
+#       node.style = Psychgus::SEQUENCE_FLOW if sniffer.level >= 4
+#       
+#       # Make "[Ketchup, Mustard]" a block for the Class Example
+#       node.style = Psychgus::SEQUENCE_BLOCK if relative_level == 7
+#     end
+#   end
+# 
+# @example Hash example
+#   require 'psychgus'
+#   
+#   burgers = {
+#     :Burgers => {
+#       :Classic => {
+#         :Sauce  => %w(Ketchup Mustard),
+#         :Cheese => 'American',
+#         :Bun    => 'Sesame Seed'
+#       },
+#       :BBQ => {
+#         :Sauce  => 'Honey BBQ',
+#         :Cheese => 'Cheddar',
+#         :Bun    => 'Kaiser'
+#       },
+#       :Fancy => {
+#         :Sauce  => 'Spicy Wasabi',
+#         :Cheese => 'Smoked Gouda',
+#         :Bun    => 'Hawaiian'
+#       }
+#     },
+#     :Toppings => [
+#       'Mushrooms',
+#       %w(Lettuce Onions Pickles Tomatoes),
+#       [%w(Ketchup Mustard), %w(Salt Pepper)]
+#     ]
+#   }
+#   burgers[:Favorite] = burgers[:Burgers][:BBQ] # Alias
+#   
+#   puts burgers.to_yaml({:indent=>3},stylers: BurgerStyler.new,deref_aliases: true)
+#   
+#   # Output:
+#   # ---
+#   # Burgers:
+#   #    Classic:
+#   #       Sauce: ['Ketchup', 'Mustard']
+#   #       Cheese: 'American'
+#   #       Bun: 'Sesame Seed'
+#   #    BBQ: {Sauce: 'Honey BBQ', Cheese: 'Cheddar', Bun: 'Kaiser'}
+#   #    Fancy:
+#   #       Sauce: 'Spicy Wasabi'
+#   #       Cheese: 'Smoked Gouda'
+#   #       Bun: 'Hawaiian'
+#   # Toppings:
+#   # - 'Mushrooms'
+#   # - ['Spinach', 'Onions', 'Pickles', 'Tomatoes']
+#   # - [['Ketchup', 'Mustard'], ['Salt', 'Pepper']]
+#   # Favorite:
+#   #    Sauce: 'Honey BBQ'
+#   #    Cheese: 'Cheddar'
+#   #    Bun: 'Kaiser'
+# 
+# @example Class example
+#   require 'psychgus'
+#   
+#   class Burger
+#     attr_accessor :bun
+#     attr_accessor :cheese
+#     attr_accessor :sauce
+#     
+#     def initialize(sauce,cheese,bun)
+#       @bun = bun
+#       @cheese = cheese
+#       @sauce = sauce
+#     end
+#     
+#     # You can still use Psych's encode_with(), no problem
+#     #def encode_with(coder)
+#     #  coder['Bun'] = @bun
+#     #  coder['Cheese'] = @cheese
+#     #  coder['Sauce'] = @sauce
+#     #end
+#   end
+#   
+#   class Burgers
+#     include Psychgus::Blueberry
+#     
+#     attr_accessor :burgers
+#     attr_accessor :toppings
+#     attr_accessor :favorite
+#     
+#     def initialize()
+#       @burgers = {
+#         'Classic' => Burger.new(['Ketchup','Mustard'],'American','Sesame Seed'),
+#         'BBQ'     => Burger.new('Honey BBQ','Cheddar','Kaiser'),
+#         'Fancy'   => Burger.new('Spicy Wasabi','Smoked Gouda','Hawaiian')
+#       }
+#       
+#       @toppings = [
+#         'Mushrooms',
+#         %w(Lettuce Onions Pickles Tomatoes),
+#         [%w(Ketchup Mustard),%w(Salt Pepper)]
+#       ]
+#       
+#       @favorite = @burgers['BBQ'] # Alias
+#     end
+#     
+#     def psychgus_stylers(sniffer)
+#       return BurgerStyler.new(sniffer)
+#     end
+#     
+#     # You can still use Psych's encode_with(), no problem
+#     #def encode_with(coder)
+#     #  coder['Burgers'] = @burgers
+#     #  coder['Toppings'] = @toppings
+#     #  coder['Favorite'] = @favorite
+#     #end
+#   end
+#   
+#   burgers = Burgers.new
+#   puts burgers.to_yaml({:indent=>3},stylers: BurgerStyler.new,deref_aliases: true)
+#   
+#   # Output:
+#   # ---
+#   # Burgers:
+#   #    Classic:
+#   #       Bun: 'Sesame Seed'
+#   #       Cheese: 'American'
+#   #       Sauce:
+#   #       - 'Ketchup'
+#   #       - 'Mustard'
+#   #    BBQ: {Bun: 'Kaiser', Cheese: 'Cheddar', Sauce: 'Honey BBQ'}
+#   #    Fancy:
+#   #       Bun: 'Hawaiian'
+#   #       Cheese: 'Smoked Gouda'
+#   #       Sauce: 'Spicy Wasabi'
+#   # Toppings:
+#   # - 'Mushrooms'
+#   # - ['Spinach', 'Onions', 'Pickles', 'Tomatoes']
+#   # - [['Ketchup', 'Mustard'], ['Salt', 'Pepper']]
+#   # Favorite:
+#   #    Bun: 'Kaiser'
+#   #    Cheese: 'Cheddar'
+#   #    Sauce: 'Honey BBQ'
+# 
+# @example Emitting / Parsing examples
+#   options = {:indentation=>3}
+#   styler = BurgerStyler.new()
+#   yaml = burgers.to_yaml(options,stylers: styler,deref_aliases: true)
+#   
+#   # High-level emitting
+#   Psychgus.dump(burgers,options,stylers: styler,deref_aliases: true)
+#   Psychgus.dump_file('burgers.yaml',burgers,stylers: styler,deref_aliases: true,options: options)
+#   burgers.to_yaml(options,stylers: styler,deref_aliases: true)
+#   
+#   # High-level parsing
+#   # - Because to_ruby() will be called, just use Psych:
+#   #   - load(), load_file(), load_stream(), safe_load()
+#   
+#   # Mid-level emitting
+#   stream = Psychgus.parse_stream(yaml,stylers: styler,deref_aliases: true)
+#   
+#   stream.to_yaml()
+#   
+#   # Mid-level parsing
+#   Psychgus.parse(yaml,stylers: styler,deref_aliases: true)
+#   Psychgus.parse_file('burgers.yaml',stylers: styler,deref_aliases: true)
+#   Psychgus.parse_stream(yaml,stylers: styler,deref_aliases: true)
+#   
+#   # Low-level emitting
+#   tree_builder = Psychgus::StyledTreeBuilder.new(styler,deref_aliases: true)
+#   visitor = Psych::Visitors::YAMLTree.create(options,tree_builder)
+#   
+#   visitor << burgers
+#   visitor.tree.to_yaml(nil,options)
+#   
+#   # Low-level parsing
+#   parser = Psychgus.parser(stylers: styler,deref_aliases: true)
+#   
+#   parser.parse(yaml)
+#   parser.handler
+#   parser.handler.root
+# 
 # @author Jonathan Bradley Whited (@esotericpig)
 # @since  1.0.0
 ###
@@ -174,12 +441,14 @@ module Psychgus
   #                       [+:header+]      Default: +false+.
   #                                        Write +%YAML [version]+ at the beginning of document.
   # @param stylers [nil,Styler,Array<Styler>] the Styler(s) to use when converting to YAML
+  # @param deref_aliases [true,false] whether to dereference aliases; output the actual value
+  #                                   instead of the alias
   # 
   # @return [String,Object] the result of converting +object+ to YAML using the params
   # 
   # @see Psych.dump_stream
   # @see OPTIONS_ALIASES
-  def self.dump_stream(*objects,io: nil,options: {},stylers: nil)
+  def self.dump_stream(*objects,io: nil,options: {},stylers: nil,deref_aliases: false)
     if Hash === io
       options = io
       io = nil
@@ -193,7 +462,8 @@ module Psychgus
       end
     end
     
-    visitor = Psych::Visitors::YAMLTree.create(options,StyledTreeBuilder.new(*stylers))
+    visitor = Psych::Visitors::YAMLTree.create(options,StyledTreeBuilder.new(*stylers,
+      deref_aliases: deref_aliases))
     
     objects.each do |object|
       visitor << object
@@ -288,6 +558,8 @@ module Psychgus
   # @param yaml [String] the YAML to parse
   # @param filename [String] the filename to pass as +file+ to the Error potentially raised
   # @param stylers [nil,Styler,Array<Styler>] the Styler(s) to use when parsing the YAML
+  # @param deref_aliases [true,false] whether to dereference aliases; output the actual value
+  #                                   instead of the alias
   # @param block [Proc] an optional block for parsing multiple documents
   # 
   # @return [Psych::Nodes::Stream] the parsed Stream node
@@ -296,13 +568,13 @@ module Psychgus
   # @see Psych.parse_stream
   # @see Psych::Nodes::Stream
   # @see Psych::SyntaxError
-  def self.parse_stream(yaml,filename: nil,stylers: nil,&block)
+  def self.parse_stream(yaml,filename: nil,stylers: nil,deref_aliases: false,&block)
     if block_given?()
-      parser = Psych::Parser.new(StyledDocumentStream.new(*stylers,&block))
+      parser = Psych::Parser.new(StyledDocumentStream.new(*stylers,deref_aliases: deref_aliases,&block))
       
       return parser.parse(yaml,filename)
     else
-      parser = self.parser(stylers: stylers)
+      parser = self.parser(stylers: stylers,deref_aliases: deref_aliases)
       parser.parse(yaml,filename)
       
       return parser.handler.root
@@ -342,13 +614,15 @@ module Psychgus
   #   #     Style: [Cappuccino, Latte, Mocha]
   # 
   # @param stylers [nil,Styler,Array<Styler>] the Styler(s) to use when parsing the YAML
+  # @param deref_aliases [true,false] whether to dereference aliases; output the actual value
+  #                                   instead of the alias
   # 
   # @return [Psych::Parser] the new styled Parser
   # 
   # @see StyledTreeBuilder
   # @see Psych.parser
-  def self.parser(stylers: nil)
-    return Psych::Parser.new(StyledTreeBuilder.new(*stylers))
+  def self.parser(stylers: nil,deref_aliases: false)
+    return Psych::Parser.new(StyledTreeBuilder.new(*stylers,deref_aliases: deref_aliases))
   end
   
   ###
