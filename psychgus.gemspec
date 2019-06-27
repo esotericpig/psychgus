@@ -1,7 +1,7 @@
 # encoding: UTF-8
 # frozen_string_literal: true
 
-###
+#--
 # This file is part of Psychgus.
 # Copyright (c) 2017-2019 Jonathan Bradley Whited (@esotericpig)
 # 
@@ -17,7 +17,8 @@
 # 
 # You should have received a copy of the GNU Lesser General Public License
 # along with Psychgus.  If not, see <http://www.gnu.org/licenses/>.
-###
+#++
+
 
 lib = File.expand_path('../lib',__FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
@@ -93,21 +94,22 @@ The produced YAML without Psychgus styling (i.e., without CoffeeStyler):
   
   spec.files         = Dir.glob("{lib,test,yard}/**/*") + %w(
                          Gemfile
-                         LICENSE
+                         LICENSE.txt
                          psychgus.gemspec
                          Rakefile
                          README.md
                        )
   spec.require_paths = ['lib']
   
+  # TODO: use rvm with v2.0.0 and test, see what version of psych
   spec.required_ruby_version = '>= 2.2.0'
   
   spec.add_runtime_dependency 'psych','>= 2.2.2'
   
-  spec.add_development_dependency 'bundler'  ,'~> 1.16.1'
-  spec.add_development_dependency 'minitest' ,'~> 5.11.3' # For testing
-  spec.add_development_dependency 'rake'     ,'~> 12.3.1'
-  spec.add_development_dependency 'rdoc'     ,'~> 6.1.1'  # For RDoc for YARD (*.rb)
-  spec.add_development_dependency 'redcarpet','~> 3.4.0'  # For Markdown for YARD (README.md)
-  spec.add_development_dependency 'yard'     ,'~> 0.9.12' # For documentation
+  spec.add_development_dependency 'bundler'  ,'~> 1.16'
+  spec.add_development_dependency 'minitest' ,'~> 5.11' # For testing
+  spec.add_development_dependency 'rake'     ,'~> 12.3'
+  spec.add_development_dependency 'rdoc'     ,'~> 6.1'  # For RDoc for YARD (*.rb)
+  spec.add_development_dependency 'redcarpet','~> 3.4'  # For Markdown for YARD (*.md)
+  spec.add_development_dependency 'yard'     ,'~> 0.9'  # For documentation
 end

@@ -71,7 +71,7 @@ end
 YARD::Rake::YardocTask.new() do |task|
   task.files = ['lib/**/*.rb']
   
-  task.options += ['--files','LICENSE']
+  task.options += ['--files','LICENSE.txt']
   task.options += ['--readme','README.md']
   
   task.options << '--protected' # Show protected methods
