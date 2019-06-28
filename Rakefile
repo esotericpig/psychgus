@@ -39,7 +39,7 @@ CLOBBER.include('doc/')
 desc %q(Rsync "doc/" to my GitHub Page's repo; not useful for others)
 task :ghp_doc,[:deploy] do |task,args|
   dry_run = args.deploy ? '' : '--dry-run'
-  rsync_cmd = "rsync -ahv --delete-after --progress #{dry_run} 'doc/' '../esotericpig.github.io/docs/yard/psychgus'"
+  rsync_cmd = "rsync -ahv --delete-after --progress #{dry_run} 'doc/' '../esotericpig.github.io/docs/psychgus/yardoc/'"
   
   sh rsync_cmd
   
