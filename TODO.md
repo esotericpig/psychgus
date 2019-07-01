@@ -9,8 +9,7 @@
     - [Minitest Docs](http://docs.seattlerb.org/minitest/)
 - [x] Add Doc w/ YARD
 - [ ] Flesh out [README](README.md)
-- [ ] Test and fix aliases (write tests)
-- [ ] Add Document & Stream nodes to Styling
+- [x] Add Document & Stream nodes to Styling
 - [ ] Deploy Doc to my GitHub Page
 - [ ] Release Gem
 - [ ] Add project to [RubyDoc.info](https://www.rubydoc.info)
