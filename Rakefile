@@ -1,5 +1,4 @@
 # encoding: UTF-8
-# frozen_string_literal: true
 
 #--
 # This file is part of Psychgus.
@@ -90,7 +89,7 @@ YARD::Rake::YardocTask.new() do |task|
 end
 
 desc 'Fix (find & replace) text in the YARD files for GitHub differences'
-task :yard_fix do |task|
+task :yard_fix,[:dev] do |task,args|
   # Delete this file as its never used (index.html is an exact copy)
   PsychgusRake.rm_exist('doc/file.README.html')
   
@@ -103,15 +102,36 @@ task :yard_fix do |task|
     File.open(filename,'r') do |file|
       file.each_line do |line|
         out = false
-        tag = 'href="#'
         
+        # CSS
+        if line =~ /^\s*\<\/head\>\s*$/i
+          line = '<link href="'
+          line << (args.dev ? '../../esotericpig.github.io/' : '../../../')
+          line << 'css/prism.css" rel="stylesheet" /> </head>'
+          
+          out = true
+        end
+        
+        # JS
+        if line =~ /^\s*\<\/body\>\s*$/i
+          line = '<script src="'
+          line << (args.dev ? '../../esotericpig.github.io/' : '../../../')
+          line << 'js/prism.js"></script> </body>'
+          
+          out = true
+        end
+        
+        # Contents relative links
+        tag = 'href="#'
         if !(i = line.index(Regexp.new(Regexp.quote(tag) + '[a-z]'))).nil?()
           i += tag.length
           line[i] = line[i].upcase()
+          
           out = true
         end
         
         out ||= !line.gsub!('href="LICENSE.txt"','href="file.LICENSE.html"').nil?()
+        out ||= !line.gsub!('code class="Ruby"','code class="language-ruby"').nil?()
         
         if out
           puts "  #{line}"
@@ -130,6 +150,6 @@ task :yard_fix do |task|
   end
 end
 
-desc 'Generate pristine YARD docs'
+desc 'Generate pristine YARDoc'
 task :yard_fresh => [:clobber,:yard,:yard_fix] do |task|
 end
