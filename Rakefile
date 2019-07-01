@@ -125,7 +125,10 @@ task :yard_fix,[:dev] do |task,args|
         tag = 'href="#'
         if !(i = line.index(Regexp.new(Regexp.quote(tag) + '[a-z]'))).nil?()
           i += tag.length
-          line[i] = line[i].upcase()
+          j = line.index('"',i)
+          
+          href = line[i...j].split('-').map(&:capitalize).join('_')
+          line = "#{line[0...i]}#{href}#{line[j..-1]}"
           
           out = true
         end
