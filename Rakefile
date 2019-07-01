@@ -34,6 +34,16 @@ task default: [:test]
 CLEAN.exclude('.git/','stock/')
 CLOBBER.include('doc/')
 
+module PsychgusRake
+  # Remove if exists
+  def self.rm_exist(filename,output=true)
+    if File.exist?(filename)
+      puts "Delete [#{filename}]" if output
+      File.delete(filename)
+    end
+  end
+end
+
 # Execute "rake ghp_doc" for a dry run
 # Execute "rake ghp_doc[true]" for actually deploying
 desc %q(Rsync "doc/" to my GitHub Page's repo; not useful for others)
@@ -77,4 +87,49 @@ YARD::Rake::YardocTask.new() do |task|
   task.options << '--protected' # Show protected methods
   task.options += ['--template-path','yard/templates/']
   task.options += ['--title',"Psychgus v#{Psychgus::VERSION} Doc"]
+end
+
+desc 'Fix (find & replace) text in the YARD files for GitHub differences'
+task :yard_fix do |task|
+  # Delete this file as its never used (index.html is an exact copy)
+  PsychgusRake.rm_exist('doc/file.README.html')
+  
+  ['doc/index.html'].each do |filename|
+    puts "File [#{filename}]:"
+    
+    lines = []
+    write = false
+    
+    File.open(filename,'r') do |file|
+      file.each_line do |line|
+        out = false
+        tag = 'href="#'
+        
+        if !(i = line.index(Regexp.new(Regexp.quote(tag) + '[a-z]'))).nil?()
+          i += tag.length
+          line[i] = line[i].upcase()
+          out = true
+        end
+        
+        out ||= !line.gsub!('href="LICENSE.txt"','href="file.LICENSE.html"').nil?()
+        
+        if out
+          puts "  #{line}"
+          write = true
+        end
+        
+        lines << line
+      end
+    end
+    
+    if write
+      File.open(filename,'w') do |file|
+        file.puts lines
+      end
+    end
+  end
+end
+
+desc 'Generate pristine YARD docs'
+task :yard_fresh => [:clobber,:yard,:yard_fix] do |task|
 end
