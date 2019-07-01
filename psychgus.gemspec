@@ -101,10 +101,9 @@ The produced YAML without Psychgus styling (i.e., without CoffeeStyler):
                        )
   spec.require_paths = ['lib']
   
-  # TODO: use rvm with v2.0.0 and test, see what version of psych
-  spec.required_ruby_version = '>= 2.2.0'
+  spec.required_ruby_version = '>= 2.1.10'
   
-  spec.add_runtime_dependency 'psych','>= 2.2.2'
+  spec.add_runtime_dependency 'psych','>= 2.0.5'
   
   spec.add_development_dependency 'bundler'  ,'~> 1.16'
   spec.add_development_dependency 'minitest' ,'~> 5.11' # For testing
