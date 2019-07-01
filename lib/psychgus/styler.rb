@@ -94,6 +94,12 @@ module Psychgus
     # @param node [Psych::Nodes::Alias] of type Alias passed in from {StyledTreeBuilder}
     def style_alias(sniffer,node) end
     
+    # Style a node guaranteed to be of type Psych::Nodes::Document, to avoid if statements.
+    # 
+    # @param sniffer [SuperSniffer] passed in from {StyledTreeBuilder}
+    # @param node [Psych::Nodes::Document] of type Document passed in from {StyledTreeBuilder}
+    def style_document(sniffer,node) end
+    
     # Style a node guaranteed to be of type Psych::Nodes::Mapping, to avoid if statements.
     # 
     # @param sniffer [SuperSniffer] passed in from {StyledTreeBuilder}
@@ -111,5 +117,11 @@ module Psychgus
     # @param sniffer [SuperSniffer] passed in from {StyledTreeBuilder}
     # @param node [Psych::Nodes::Sequence] of type Sequence passed in from {StyledTreeBuilder}
     def style_sequence(sniffer,node) end
+    
+    # Style a node guaranteed to be of type Psych::Nodes::Stream, to avoid if statements.
+    # 
+    # @param sniffer [SuperSniffer] passed in from {StyledTreeBuilder}
+    # @param node [Psych::Nodes::Stream] of type Stream passed in from {StyledTreeBuilder}
+    def style_stream(sniffer,node) end
   end
 end

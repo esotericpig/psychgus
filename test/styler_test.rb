@@ -56,13 +56,13 @@ class MyStyler
   end
 end
 
-class StylerTest < Minitest::Test
+class StylerTest < PsychgusTester
   def setup()
     @styler = MyStyler.new()
   end
   
   def test_styler()
-    expected_out = <<-EOS
+    expected = <<-EOY
     |---
     |Burgers:
     |  Classic:
@@ -77,9 +77,9 @@ class StylerTest < Minitest::Test
     |- 'Mushrooms'
     |- [Spinach, Onions, Pickles, Tomatoes]
     |- [[Ketchup, Mustard], [Salt, Pepper]]
-    EOS
-    expected_out = PsychgusTester.lstrip_pipe(expected_out)
+    EOY
+    expected = self.class.lstrip_pipe(expected)
     
-    assert_equal expected_out,PsychgusTester::BURGERS_DATA.to_yaml(stylers: @styler)
+    assert_equal expected,BURGERS_DATA.to_yaml(stylers: @styler)
   end
 end

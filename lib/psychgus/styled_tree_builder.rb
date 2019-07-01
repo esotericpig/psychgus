@@ -96,6 +96,18 @@ module Psychgus
     
     # Calls super and sniffer.
     # 
+    # @see Psych::TreeBuilder#end_document
+    # @see SuperSniffer#end_document
+    def end_document(*)
+      result = super
+      
+      @sniffer.end_document()
+      
+      return result
+    end
+    
+    # Calls super and sniffer.
+    # 
     # @see Psych::TreeBuilder#end_mapping
     # @see SuperSniffer#end_mapping
     def end_mapping(*)
@@ -114,6 +126,18 @@ module Psychgus
       result = super
       
       @sniffer.end_sequence()
+      
+      return result
+    end
+    
+    # Calls super and sniffer.
+    # 
+    # @see Psych::TreeBuilder#end_stream
+    # @see SuperSniffer#end_stream
+    def end_stream(*)
+      result = super
+      
+      @sniffer.end_stream()
       
       return result
     end
@@ -185,6 +209,27 @@ module Psychgus
     
     # Calls super, styler(s), and sniffer.
     # 
+    # @see Psych::TreeBuilder#start_document
+    # @see Styler#style
+    # @see Styler#style_document
+    # @see SuperSniffer#start_document
+    # 
+    # @return [Psych::Nodes::Document] the document node created
+    def start_document(*)
+      node = super
+      
+      @stylers.each do |styler|
+        styler.style(sniffer,node)
+        styler.style_document(sniffer,node)
+      end
+      
+      @sniffer.start_document(node)
+      
+      return node
+    end
+    
+    # Calls super, styler(s), and sniffer.
+    # 
     # @see Psych::TreeBuilder#start_mapping
     # @see Styler#style
     # @see Styler#style_mapping
@@ -221,6 +266,27 @@ module Psychgus
       end
       
       @sniffer.start_sequence(node)
+      
+      return node
+    end
+    
+    # Calls super, styler(s), and sniffer.
+    # 
+    # @see Psych::TreeBuilder#start_stream
+    # @see Styler#style
+    # @see Styler#style_stream
+    # @see SuperSniffer#start_stream
+    # 
+    # @return [Psych::Nodes::Stream] the stream node created
+    def start_stream(*)
+      node = super
+      
+      @stylers.each do |styler|
+        styler.style(sniffer,node)
+        styler.style_stream(sniffer,node)
+      end
+      
+      @sniffer.start_stream(node)
       
       return node
     end

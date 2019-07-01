@@ -36,44 +36,61 @@ class FlowStyler
   end
 end
 
-class PsychgusTest < Minitest::Test
+class PsychgusTest < PsychgusTester
+  EXPECTED_BURGERS = <<-EOY
+---
+Burgers:
+  Classic: {Sauce: [Ketchup, Mustard], Cheese: American, Bun: Sesame Seed}
+  BBQ: {Sauce: Honey BBQ, Cheese: Cheddar, Bun: Kaiser}
+  Fancy: {Sauce: Spicy Wasabi, Cheese: Smoked Gouda, Bun: Hawaiian}
+Toppings:
+- Mushrooms
+- [Lettuce, Onions, Pickles, Tomatoes]
+- [[Ketchup, Mustard], [Salt, Pepper]]
+  EOY
+  
   def setup()
     @flow_styler = FlowStyler.new()
-    @expected_out = <<-EOS
+  end
+  
+  def test_alias()
+    expected = <<-EOY
     |---
-    |Burgers:
-    |  Classic: {Sauce: [Ketchup, Mustard], Cheese: American, Bun: Sesame Seed}
-    |  BBQ: {Sauce: Honey BBQ, Cheese: Cheddar, Bun: Kaiser}
-    |  Fancy: {Sauce: Spicy Wasabi, Cheese: Smoked Gouda, Bun: Hawaiian}
-    |Toppings:
-    |- Mushrooms
-    |- [Lettuce, Onions, Pickles, Tomatoes]
-    |- [[Ketchup, Mustard], [Salt, Pepper]]
-    EOS
-    @expected_out = PsychgusTester.lstrip_pipe(@expected_out)
+    |Dolphins:
+    |  Common: {Length: "~2.5m", Weight: "~235kg"}
+    |  Bottlenose: {Length: "~4m", Weight: "~300kg"}
+    |  Dusky: {Length: "~1.7m", Weight: "~78kg"}
+    |  Orca: {Length: "~7m", Weight: "~3600kg"}
+    |Popular:
+    |- {Length: "~4m", Weight: "~300kg"}
+    |- {Length: "~7m", Weight: "~3600kg"}
+    EOY
+    expected = self.class.lstrip_pipe(expected)
+    
+    assert_equal expected,DOLPHINS_DATA.to_yaml(deref_aliases: true,stylers: @flow_styler)
   end
   
   def test_dump()
-    assert_equal @expected_out,Psychgus.dump(PsychgusTester::BURGERS_DATA,stylers: @flow_styler)
-    assert_equal @expected_out,Psychgus.dump_stream(PsychgusTester::BURGERS_DATA,stylers: @flow_styler)
-    assert_equal @expected_out,PsychgusTester::BURGERS_DATA.to_yaml(stylers: @flow_styler)
+    assert_equal EXPECTED_BURGERS,Psychgus.dump(BURGERS_DATA,stylers: @flow_styler)
+    assert_equal EXPECTED_BURGERS,Psychgus.dump_stream(BURGERS_DATA,stylers: @flow_styler)
+    assert_equal EXPECTED_BURGERS,BURGERS_DATA.to_yaml(stylers: @flow_styler)
   end
   
   # Execute "rake test_all" if you update Psychgus.dump_file()/load_file()
   def test_file()
-    if !PsychgusTester::TEST_ALL
-      skip(PsychgusTester::TEST_ALL_SKIP_MSG)
+    if !TEST_ALL
+      skip(TEST_ALL_SKIP_MSG)
       return # Justin Case
     end
     
     Tempfile.create(['Psychgus','.yaml']) do |file|
       puts "Testing #{self.class.name} w/ temp file: #{file.path}"
       
-      Psychgus.dump_file(file,PsychgusTester::BURGERS_DATA,stylers: @flow_styler)
+      Psychgus.dump_file(file,BURGERS_DATA,stylers: @flow_styler)
       
       file.rewind()
       lines = file.readlines().join()
-      assert_equal @expected_out,lines
+      assert_equal EXPECTED_BURGERS,lines
       
       file.rewind()
       data = Psych.load_file(file)
@@ -90,15 +107,15 @@ class PsychgusTest < Minitest::Test
   
   def test_parse()
     parser = Psychgus.parser(stylers: @flow_styler)
-    parser.parse(PsychgusTester::BURGERS_YAML)
+    parser.parse(BURGERS_YAML)
     yaml = "---\n" + parser.handler.root.to_yaml()
-    assert_equal @expected_out,yaml
+    assert_equal EXPECTED_BURGERS,yaml
     
-    node = Psychgus.parse(PsychgusTester::BURGERS_YAML,stylers: @flow_styler)
+    node = Psychgus.parse(BURGERS_YAML,stylers: @flow_styler)
     refute_equal false,node
     
-    yaml = Psychgus.parse_stream(PsychgusTester::BURGERS_YAML,stylers: @flow_styler).to_yaml()
+    yaml = Psychgus.parse_stream(BURGERS_YAML,stylers: @flow_styler).to_yaml()
     yaml = "---\n#{yaml}"
-    assert_equal @expected_out,yaml
+    assert_equal EXPECTED_BURGERS,yaml
   end
 end

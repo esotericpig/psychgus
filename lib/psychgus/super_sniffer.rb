@@ -34,10 +34,14 @@ module Psychgus
       def initialize(*) end
       def add_alias(*) end
       def add_scalar(*) end
+      def end_document(*) end
       def end_mapping(*) end
       def end_sequence(*) end
+      def end_stream(*) end
+      def start_document(*) end
       def start_mapping(*) end
       def start_sequence(*) end
+      def start_stream(*) end
     end
   end
   
@@ -85,7 +89,9 @@ module Psychgus
   # Then the levels and positions will be as follows:
   #   # (level:position):current_node - <parent:(parent_level:parent_position)>
   #   
-  #   (1:1):Psych::Nodes::Mapping - <nil>
+  #   (1:1):Psych::Nodes::Stream - <nil>
+  #   (1:1):Psych::Nodes::Document - <stream:(1:1)>
+  #   (1:1):Psych::Nodes::Mapping - <doc:(1:1)>
   #    (2:1):Burgers - <map:(1:1)>
   #     (3:1):Psych::Nodes::Mapping - <Burgers:(2:1)>
   #      (4:1):Classic - <map:(3:1)>
@@ -147,6 +153,7 @@ module Psychgus
     EMPTY = Empty.new().freeze()
     
     attr_reader :aliases
+    attr_reader :documents
     attr_reader :level
     attr_reader :mappings
     attr_reader :nodes
@@ -155,10 +162,12 @@ module Psychgus
     attr_reader :position
     attr_reader :scalars
     attr_reader :sequences
+    attr_reader :streams
     
     # Initialize this class for sniffing.
     def initialize()
       @aliases = []
+      @documents = []
       @level = 1
       @mappings = []
       @nodes = []
@@ -167,6 +176,7 @@ module Psychgus
       @position = 1
       @scalars = []
       @sequences = []
+      @streams = []
     end
     
     # Add a Psych::Nodes::Alias to this class only (not to the YAML).
@@ -193,6 +203,16 @@ module Psychgus
       @scalars.push(node)
     end
     
+    # End a Psych::Nodes::Document started with {#start_document}.
+    # 
+    # Pops off a parent from {#parents} and sets {#parent} to the last one.
+    # {#level} and {#position} are reset according to the last parent.
+    # 
+    # A {Styler} should probably never call this.
+    def end_document()
+      end_parent(top_level: true)
+    end
+    
     # End a Psych::Nodes::Mapping started with {#start_mapping}.
     # 
     # Pops off a parent from {#parents} and sets {#parent} to the last one.
@@ -202,12 +222,7 @@ module Psychgus
     # 
     # @see end_parent
     def end_mapping()
-      end_parent()
-      
-      if !@parent.nil?() && !@parent.child_type.nil?()
-        # add_child() will not be called again, so end the fake "parent" manually with a fake "value"
-        end_mapping_value()
-      end
+      end_parent(mapping_value: true)
     end
     
     # End a Psych::Nodes::Sequence started with {#start_sequence}.
@@ -219,12 +234,32 @@ module Psychgus
     # 
     # @see end_parent
     def end_sequence()
-      end_parent()
-      
-      if !@parent.nil?() && !@parent.child_type.nil?()
-        # If a sequence is the value of a map's key, then this is necessary
-        end_mapping_value()
-      end
+      end_parent(mapping_value: true)
+    end
+    
+    # End a Psych::Nodes::Stream started with {#start_stream}.
+    # 
+    # Pops off a parent from {#parents} and sets {#parent} to the last one.
+    # {#level} and {#position} are reset according to the last parent.
+    # 
+    # A {Styler} should probably never call this.
+    def end_stream()
+      end_parent(top_level: true)
+    end
+    
+    # Start a Psych::Nodes::Document.
+    # 
+    # Creates a {SuperSniffer::Parent}, sets {#parent} to it, and adds it to {#parents}.
+    # {#level} and {#position} are incremented/set accordingly.
+    # 
+    # A {Styler} should probably never call this.
+    # 
+    # @param node [Psych::Nodes::Document] the Document to start
+    # 
+    # @see start_parent
+    def start_document(node)
+      start_parent(node,debug_tag: :doc,top_level: true)
+      @documents.push(node)
     end
     
     # Start a Psych::Nodes::Mapping.
@@ -255,6 +290,21 @@ module Psychgus
     def start_sequence(node)
       start_parent(node,debug_tag: :seq)
       @sequences.push(node)
+    end
+    
+    # Start a Psych::Nodes::Stream.
+    # 
+    # Creates a {SuperSniffer::Parent}, sets {#parent} to it, and adds it to {#parents}.
+    # {#level} and {#position} are incremented/set accordingly.
+    # 
+    # A {Styler} should probably never call this.
+    # 
+    # @param node [Psych::Nodes::Stream] the Stream to start
+    # 
+    # @see start_parent
+    def start_stream(node)
+      start_parent(node,debug_tag: :stream,top_level: true)
+      @streams.push(node)
     end
     
     protected
@@ -291,7 +341,7 @@ module Psychgus
     # 
     # @see add_child
     def end_mapping_value()
-      end_parent()
+      end_parent() # Do not pass in "mapping_value: true" and/or "top_level: true"
       
       @parent.child_type = :key unless @parent.nil?()
     end
@@ -300,15 +350,22 @@ module Psychgus
     # 
     # Pops off a parent from {#parents} and sets {#parent} to the last one.
     # {#level} and {#position} are reset according to the last parent.
-    def end_parent()
+    # 
+    # @param mapping_value [true,false] true if parent can be the value of a Mapping's key
+    # @param top_level [true,false] true if a top-level parent (i.e., encapsulating the main data)
+    def end_parent(mapping_value: false,top_level: false)
       @parents.pop()
       @parent = @parents.last
       
-      @level -= 1
+      @level = top_level ? 1 : (@level - 1)
       
       if !@parent.nil?()
         @parent.child_position += 1
         @position = @parent.child_position
+        
+        # add_child() will not be called again, so end a fake "parent" manually with a fake "value"
+        # - This is necessary for any parents that can be the value of a map's key (e.g., Sequence)
+        end_mapping_value() if mapping_value && !@parent.child_type.nil?()
       end
     end
     
@@ -341,17 +398,23 @@ module Psychgus
     # {#level} and {#position} are incremented/set accordingly.
     # 
     # @param node [Psych::Nodes::Node] the parent Node to start
+    # @param top_level [true,false] true if a top-level parent (i.e., encapsulating the main data)
     # @param extra [Hash] the extra keyword args to pass to {SuperSniffer::Parent#initialize}
     # 
     # @see SuperSniffer::Parent#initialize
-    def start_parent(node,**extra)
+    def start_parent(node,top_level: false,**extra)
       @parent = Parent.new(self,node,**extra)
       
       @parents.push(@parent)
       @nodes.push(node)
       
-      @level += 1
-      @position = 1
+      if top_level
+        @level = 1
+        @position = @parent.position
+      else
+        @level += 1
+        @position = 1
+      end
     end
   end
 end

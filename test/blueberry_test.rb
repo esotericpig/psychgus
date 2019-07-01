@@ -105,13 +105,13 @@ class BurgerStyler
   end
 end
 
-class BlueberryTest < Minitest::Test
+class BlueberryTest < PsychgusTester
   def setup()
     @burgers = Burgers.new()
   end
   
   def test_blueberry()
-    expected_out = <<-EOS
+    expected = <<-EOY
     |--- !ruby/object:Burgers
     |Burgers:
     |  Classic:
@@ -133,9 +133,9 @@ class BlueberryTest < Minitest::Test
     |    - Mustard
     |  - - Salt
     |    - Pepper
-    EOS
-    expected_out = PsychgusTester.lstrip_pipe(expected_out)
+    EOY
+    expected = self.class.lstrip_pipe(expected)
     
-    assert_equal expected_out,@burgers.to_yaml()
+    assert_equal expected,@burgers.to_yaml()
   end
 end
