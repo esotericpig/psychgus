@@ -90,7 +90,7 @@ end
 
 desc 'Fix (find & replace) text in the YARD files for GitHub differences'
 task :yard_fix,[:dev] do |task,args|
-  # Delete this file as its never used (index.html is an exact copy)
+  # Delete this file as it's never used (index.html is an exact copy)
   PsychgusRake.rm_exist('doc/file.README.html')
   
   ['doc/index.html'].each do |filename|

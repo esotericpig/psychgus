@@ -160,7 +160,7 @@ require 'psychgus/super_sniffer/parent'
 #   }
 #   burgers[:Favorite] = burgers[:Burgers][:BBQ] # Alias
 #   
-#   puts burgers.to_yaml({:indent=>3},stylers: BurgerStyler.new,deref_aliases: true)
+#   puts burgers.to_yaml(indent: 3,stylers: BurgerStyler.new,deref_aliases: true)
 #   
 #   # Output:
 #   # ---
@@ -241,7 +241,7 @@ require 'psychgus/super_sniffer/parent'
 #   end
 #   
 #   burgers = Burgers.new
-#   puts burgers.to_yaml({:indent=>3},stylers: BurgerStyler.new,deref_aliases: true)
+#   puts burgers.to_yaml(indent: 3,deref_aliases: true)
 #   
 #   # Output:
 #   # ---
@@ -267,14 +267,14 @@ require 'psychgus/super_sniffer/parent'
 #   #    Sauce: 'Honey BBQ'
 # 
 # @example Emitting / Parsing examples
-#   options = {:indentation=>3}
 #   styler = BurgerStyler.new()
-#   yaml = burgers.to_yaml(options,stylers: styler,deref_aliases: true)
+#   options = {:indentation=>3,:stylers=>styler,:deref_aliases=>true}
+#   yaml = burgers.to_yaml(options)
 #   
 #   # High-level emitting
-#   Psychgus.dump(burgers,options,stylers: styler,deref_aliases: true)
-#   Psychgus.dump_file('burgers.yaml',burgers,stylers: styler,deref_aliases: true,options: options)
-#   burgers.to_yaml(options,stylers: styler,deref_aliases: true)
+#   Psychgus.dump(burgers,options)
+#   Psychgus.dump_file('burgers.yaml',burgers,options)
+#   burgers.to_yaml(options)
 #   
 #   # High-level parsing
 #   # - Because to_ruby() will be called, just use Psych:
@@ -295,7 +295,7 @@ require 'psychgus/super_sniffer/parent'
 #   visitor = Psych::Visitors::YAMLTree.create(options,tree_builder)
 #   
 #   visitor << burgers
-#   visitor.tree.to_yaml(nil,options)
+#   visitor.tree.to_yaml(options)
 #   
 #   # Low-level parsing
 #   parser = Psychgus.parser(stylers: styler,deref_aliases: true)
@@ -382,15 +382,14 @@ module Psychgus
   # 
   # @param object [Object] the Object to convert to YAML and dump
   # @param io [nil,IO,Hash] the IO to dump the YAML to or the +options+ Hash; if nil, will use StringIO
-  # @param options [Hash] the options to use; see {.dump_stream}
-  # @param kargs [Hash] the keyword args to use; see {.dump_stream}
+  # @param options [Hash] the options (or keyword args) to use; see {.dump_stream}
   # 
   # @return [String,Object] the result of converting +object+ to YAML using the params
   # 
   # @see .dump_stream
   # @see Psych.dump_stream
-  def self.dump(object,io=nil,options={},**kargs)
-    return dump_stream(object,io: io,options: options,**kargs)
+  def self.dump(object,io=nil,**options)
+    return dump_stream(object,io: io,**options)
   end
   
   # Convert +objects+ to YAML and dump to a file.
@@ -410,15 +409,15 @@ module Psychgus
   # @param perm [Integer] the permission bits to use (platform dependent)
   # @param opt [Symbol] the option(s) to use, more readable alternative to +mode+;
   #                     examples: +:textmode+, +:autoclose+
-  # @param kargs [Hash] the keyword args to use; see {.dump_stream}
+  # @param options [Hash] the options (or keyword args) to use; see {.dump_stream}
   # 
   # @see .dump_stream
   # @see File.open
   # @see IO.new
   # @see https://ruby-doc.org/core/IO.html#method-c-new
-  def self.dump_file(filename,*objects,mode: 'w',perm: nil,opt: nil,**kargs)
+  def self.dump_file(filename,*objects,mode: 'w',perm: nil,opt: nil,**options)
     File.open(filename,mode,perm,opt) do |file|
-      file.write(dump_stream(*objects,**kargs))
+      file.write(dump_stream(*objects,**options))
     end
   end
   
@@ -428,7 +427,10 @@ module Psychgus
   # 
   # @param objects [Object,Array<Object>] the Object(s) to convert to YAML and dump
   # @param io [nil,IO,Hash] the IO to dump the YAML to or the +options+ Hash; if nil, will use StringIO
-  # @param options [Hash] the options to use when converting to YAML:
+  # @param stylers [nil,Styler,Array<Styler>] the Styler(s) to use when converting to YAML
+  # @param deref_aliases [true,false] whether to dereference aliases; output the actual value
+  #                                   instead of the alias
+  # @param options [Hash] the options (or keyword args) to use when converting to YAML:
   #                       [+:indent+]      Alias for +:indentation+. +:indentation+ will override this.
   #                       [+:indentation+] Default: +2+.
   #                                        Number of space characters used to indent.
@@ -440,15 +442,12 @@ module Psychgus
   #                                        Write "canonical" YAML form (very verbose, yet strictly formal).
   #                       [+:header+]      Default: +false+.
   #                                        Write +%YAML [version]+ at the beginning of document.
-  # @param stylers [nil,Styler,Array<Styler>] the Styler(s) to use when converting to YAML
-  # @param deref_aliases [true,false] whether to dereference aliases; output the actual value
-  #                                   instead of the alias
   # 
   # @return [String,Object] the result of converting +object+ to YAML using the params
   # 
   # @see Psych.dump_stream
   # @see OPTIONS_ALIASES
-  def self.dump_stream(*objects,io: nil,options: {},stylers: nil,deref_aliases: false)
+  def self.dump_stream(*objects,io: nil,stylers: nil,deref_aliases: false,**options)
     if Hash === io
       options = io
       io = nil

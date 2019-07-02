@@ -98,6 +98,27 @@ Toppings:
     end
   end
   
+  def test_indent()
+    # Indent of 3 spaces
+    expected = <<-EOY
+    |---
+    |Burgers:
+    |   Classic: {Sauce: [Ketchup, Mustard], Cheese: American, Bun: Sesame Seed}
+    |   BBQ: {Sauce: Honey BBQ, Cheese: Cheddar, Bun: Kaiser}
+    |   Fancy: {Sauce: Spicy Wasabi, Cheese: Smoked Gouda, Bun: Hawaiian}
+    |Toppings:
+    |- Mushrooms
+    |- [Lettuce, Onions, Pickles, Tomatoes]
+    |- [[Ketchup, Mustard], [Salt, Pepper]]
+    EOY
+    expected = self.class.lstrip_pipe(expected)
+    
+    assert_equal expected,BURGERS_DATA.to_yaml(indent: 3,stylers: @flow_styler)
+    assert_equal expected,BURGERS_DATA.to_yaml({:indent=>3,:stylers=>@flow_styler})
+    assert_equal expected,BURGERS_DATA.to_yaml(indentation: 3,stylers: @flow_styler)
+    assert_equal expected,BURGERS_DATA.to_yaml({:indentation=>3,:stylers=>@flow_styler})
+  end
+  
   def test_node_consts()
     assert_equal Psych::Nodes::Mapping::FLOW,Psychgus::MAPPING_FLOW
     assert_equal Psych::Nodes::Scalar::FOLDED,Psychgus::SCALAR_FOLDED

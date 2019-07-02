@@ -33,7 +33,7 @@ module Psychgus
     module ObjectExt
       # Convert an Object to YAML.
       # 
-      # +options+ does not use keyword args in order to mimic Psych, so can be a drop-in-replacement.
+      # +options+ can also be a Hash, so can be a drop-in-replacement for Psych.
       # 
       # @example
       #   class MyStyler
@@ -50,7 +50,10 @@ module Psychgus
       #       :Veggies => %w(Bean Carrot Celery Pea)
       #   }}
       #   
-      #   puts my_obj.to_yaml({:indentation=>5},stylers: MyStyler.new)
+      #   puts my_obj.to_yaml(indentation: 5,stylers: MyStyler.new)
+      #   
+      #   # Or, pass in a Hash:
+      #   #puts my_obj.to_yaml({:indentation=>5,:stylers=>MyStyler.new})
       #   
       #   # Output:
       #   # ---
@@ -58,15 +61,14 @@ module Psychgus
       #   #      :Fruits: [Apple, Banana, Blueberry, Pear]
       #   #      :Veggies: [Bean, Carrot, Celery, Pea]
       # 
-      # @param options [Hash] the options to pass to {Psychgus.dump}
-      # @param kargs [Hash] the keyword args to pass to {Psychgus.dump}
+      # @param options [Hash] the options (or keyword args) to pass to {Psychgus.dump}
       # 
       # @return [String] the YAML generated from this Object
       # 
       # @see Psychgus.dump
-      def to_yaml(options={},**kargs)
+      def to_yaml(**options)
         # Do not use Psych.dump() if no Stylers, because a class might be a Blueberry
-        return Psychgus.dump(self,options,**kargs)
+        return Psychgus.dump(self,**options)
       end
     end
   end
