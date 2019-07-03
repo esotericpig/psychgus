@@ -26,11 +26,18 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'psychgus/version'
 
 Gem::Specification.new do |spec|
-  spec.name    = 'psychgus'
-  spec.version = Psychgus::VERSION
-  spec.authors = ['Jonathan Bradley Whited (@esotericpig)']
-  spec.email   = ['']
-  spec.license = 'LGPL-3.0-or-later'
+  spec.name     = 'psychgus'
+  spec.version  = Psychgus::VERSION
+  spec.authors  = ['Jonathan Bradley Whited (@esotericpig)']
+  spec.email    = ['bradley@esotericpig.com']
+  spec.licenses = ['LGPL-3.0-or-later']
+  
+  spec.metadata = {
+    'bug_tracker_uri'   => 'https://github.com/esotericpig/psychgus/issues',
+    'documentation_uri' => 'https://esotericpig.github.io/docs/psychgus/yardoc/index.html',
+    'homepage_uri'      => 'https://github.com/esotericpig/psychgus',
+    'source_code_uri'   => 'https://github.com/esotericpig/psychgus'
+  }
   
   spec.homepage    = 'https://github.com/esotericpig/psychgus'
   spec.summary     = %q(Easily style YAML files using Psych, like Sequence/Mapping Flow style.)
@@ -47,8 +54,8 @@ Simple example:
   end
   
   coffee = {
-    'Roast'=>['Light','Medium','Dark','Extra Dark'],
-    'Style'=>['Cappuccino','Espresso','Latte','Mocha']}
+    'Roast'=>['Light', 'Medium', 'Dark', 'Extra Dark'],
+    'Style'=>['Cappuccino', 'Espresso', 'Latte', 'Mocha']}
   
   puts coffee.to_yaml(stylers: CoffeeStyler.new)
   
@@ -62,8 +69,8 @@ Class example:
     include Psychgus::Blueberry
     
     def initialize
-      @roast = ['Light','Medium','Dark','Extra Dark']
-      @style = ['Cappuccino','Espresso','Latte','Mocha']
+      @roast = ['Light', 'Medium', 'Dark', 'Extra Dark']
+      @style = ['Cappuccino', 'Espresso', 'Latte', 'Mocha']
     end
     
     def psychgus_stylers(sniffer)
