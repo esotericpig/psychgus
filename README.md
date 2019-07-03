@@ -1,5 +1,7 @@
 # Psychgus
 
+[![Gem Version](https://badge.fury.io/rb/psychgus.svg)](https://badge.fury.io/rb/psychgus)
+
 Psychgus uses the core standard library [Psych](https://github.com/ruby/psych) for working with [YAML](https://yaml.org) and extends it so that developers can easily style the YAML according to their needs.
 
 Thank you to the people that worked and continue to work hard on the Psych project.
