@@ -52,7 +52,7 @@ task :ghp_doc,[:deploy] do |task,args|
   
   sh rsync_cmd
   
-  if dry_run
+  if !args.deploy
     puts
     puts 'Execute "rake ghp_doc[true]" for actually deploying (non-dry-run)'
   end
