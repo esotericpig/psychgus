@@ -8,8 +8,8 @@
     - [Minitest GitHub](https://github.com/seattlerb/minitest)
     - [Minitest Docs](http://docs.seattlerb.org/minitest/)
 - [x] Add Doc w/ YARD
-- [ ] Flesh out [README](README.md)
+- [x] Flesh out [README](README.md)
 - [x] Add Document & Stream nodes to Styling
-- [ ] Deploy Doc to my GitHub Page
-- [ ] Release Gem
-- [ ] Add project to [RubyDoc.info](https://www.rubydoc.info)
+- [x] Deploy Doc to my GitHub Page
+- [x] Release Gem
+- [x] Add project to [RubyDoc.info](https://www.rubydoc.info)
