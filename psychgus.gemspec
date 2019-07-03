@@ -41,63 +41,7 @@ Gem::Specification.new do |spec|
   
   spec.homepage    = 'https://github.com/esotericpig/psychgus'
   spec.summary     = %q(Easily style YAML files using Psych, like Sequence/Mapping Flow style.)
-  spec.description = <<-EOS
-Easily style YAML files using Psych, like Sequence/Mapping Flow style.
-
-Simple example:
-  class CoffeeStyler
-    include Psychgus::Styler
-    
-    def style_sequence(sniffer,node)
-      node.style = Psychgus::SEQUENCE_FLOW
-    end
-  end
-  
-  coffee = {
-    'Roast'=>['Light', 'Medium', 'Dark', 'Extra Dark'],
-    'Style'=>['Cappuccino', 'Espresso', 'Latte', 'Mocha']}
-  
-  puts coffee.to_yaml(stylers: CoffeeStyler.new)
-  
-  # Output:
-  # ---
-  # Roast: [Light, Medium, Dark, Extra Dark]
-  # Style: [Cappuccino, Espresso, Latte, Mocha]
-
-Class example:
-  class Coffee
-    include Psychgus::Blueberry
-    
-    def initialize
-      @roast = ['Light', 'Medium', 'Dark', 'Extra Dark']
-      @style = ['Cappuccino', 'Espresso', 'Latte', 'Mocha']
-    end
-    
-    def psychgus_stylers(sniffer)
-      CoffeeStyler.new
-    end
-  end
-  
-  puts Coffee.new.to_yaml
-  
-  # Output:
-  # --- !ruby/object:Coffee
-  # roast: [Light, Medium, Dark, Extra Dark]
-  # style: [Cappuccino, Espresso, Latte, Mocha]
-
-The produced YAML without Psychgus styling (i.e., without CoffeeStyler):
-  # ---
-  # Roast:
-  # - Light
-  # - Medium
-  # - Dark
-  # - Extra Dark
-  # Style:
-  # - Cappuccino
-  # - Espresso
-  # - Latte
-  # - Mocha
-  EOS
+  spec.description = %q(Easily style YAML files using Psych, like Sequence/Mapping Flow style.)
   
   spec.files         = Dir.glob("{lib,test,yard}/**/*") + %w(
                          Gemfile
