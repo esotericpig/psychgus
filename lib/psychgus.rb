@@ -295,7 +295,7 @@ require 'psychgus/super_sniffer/parent'
 #   visitor = Psych::Visitors::YAMLTree.create(options,tree_builder)
 #   
 #   visitor << burgers
-#   visitor.tree.to_yaml(options)
+#   visitor.tree.to_yaml
 #   
 #   # Low-level parsing
 #   parser = Psychgus.parser(stylers: styler,deref_aliases: true)
@@ -567,13 +567,14 @@ module Psychgus
   # @see Psych.parse_stream
   # @see Psych::Nodes::Stream
   # @see Psych::SyntaxError
-  def self.parse_stream(yaml,filename: nil,stylers: nil,deref_aliases: false,&block)
+  def self.parse_stream(yaml,filename: nil,stylers: nil,deref_aliases: false,**options,&block)
     if block_given?()
-      parser = Psych::Parser.new(StyledDocumentStream.new(*stylers,deref_aliases: deref_aliases,&block))
+      parser = Psych::Parser.new(StyledDocumentStream.new(*stylers,deref_aliases: deref_aliases,**options,
+        &block))
       
       return parser.parse(yaml,filename)
     else
-      parser = self.parser(stylers: stylers,deref_aliases: deref_aliases)
+      parser = self.parser(stylers: stylers,deref_aliases: deref_aliases,**options)
       parser.parse(yaml,filename)
       
       return parser.handler.root
@@ -620,8 +621,8 @@ module Psychgus
   # 
   # @see StyledTreeBuilder
   # @see Psych.parser
-  def self.parser(stylers: nil,deref_aliases: false)
-    return Psych::Parser.new(StyledTreeBuilder.new(*stylers,deref_aliases: deref_aliases))
+  def self.parser(stylers: nil,deref_aliases: false,**options)
+    return Psych::Parser.new(StyledTreeBuilder.new(*stylers,deref_aliases: deref_aliases,**options))
   end
   
   ###

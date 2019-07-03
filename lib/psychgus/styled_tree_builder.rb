@@ -52,7 +52,7 @@ module Psychgus
     # @param stylers [Styler] {Styler}(s) to use for styling this TreeBuilder
     # @param deref_aliases [true,false] whether to dereference aliases; output the actual value
     #                                   instead of the alias
-    def initialize(*stylers,deref_aliases: false)
+    def initialize(*stylers,deref_aliases: false,**options)
       super()
       
       @deref_aliases = deref_aliases

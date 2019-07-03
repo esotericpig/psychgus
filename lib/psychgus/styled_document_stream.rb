@@ -41,8 +41,8 @@ module Psychgus
     # @param deref_aliases [true,false] whether to dereference aliases; output the actual value
     #                                   instead of the alias
     # @param block [Proc] a block to call in {#end_document} to denote a new YAML document
-    def initialize(*stylers,deref_aliases: false,&block)
-      super(*stylers,deref_aliases: deref_aliases)
+    def initialize(*stylers,deref_aliases: false,**options,&block)
+      super(*stylers,deref_aliases: deref_aliases,**options)
       
       @block = block
     end
