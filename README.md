@@ -10,9 +10,10 @@ The Psychgus name comes from the well-styled character Gus from the TV show Psyc
 
 - [Setup](#setup)
 - [Using](#using)
+    - [Simple Example](#simple-example)
     - [Hash Example](#hash-example)
     - [Class Example](#class-example)
-    - []()
+    - [Advanced Usage](#advanced-usage)
 - [Hacking](#hacking)
     - [Testing](#testing)
     - [Generating Doc](#generating-doc)
@@ -40,11 +41,57 @@ Pick your poison...
 
 ## [Using](#contents)
 
-To begin styling, simply create a class and mix in (include) `Psychgus::Styler`.
+Documentation (YARDoc) is available on my [GitHub Page](https://esotericpig.github.io/docs/psychgus/yardoc/index.html) and RubyDoc.info ([[/gems]](https://www.rubydoc.info/gems/psychgus) or [[/github]](https://www.rubydoc.info/github/esotericpig/psychgus/master)).
 
-Then pass it in as a keyword arg (`stylers: MyStyler.new` or `stylers: [MyStyler1.new,MyStyler2.new]`) into one of the Psychgus methods.
+To begin styling, create a class and mix in (include) `Psychgus::Styler`. Then pass it in as a keyword arg (`stylers: MyStyler.new` or `stylers: [MyStyler1.new,MyStyler2.new]`) into one of the Psychgus methods.
 
 For classes, you can optionally include `Psychgus::Blueberry` and return the styler(s) for the class by defining the `psychgus_stylers(sniffer)` method.
+
+### [Simple Example](#contents)
+
+```Ruby
+require 'psychgus'
+
+class CoffeeStyler
+  include Psychgus::Styler
+  
+  def style_sequence(sniffer,node)
+    node.style = Psychgus::SEQUENCE_FLOW
+  end
+end
+
+coffee = {
+  'Roast'=>['Light', 'Medium', 'Dark', 'Extra Dark'],
+  'Style'=>['Cappuccino', 'Espresso', 'Latte', 'Mocha']
+}
+
+puts coffee.to_yaml(stylers: CoffeeStyler.new)
+
+# Output:
+# ---
+# Roast: [Light, Medium, Dark, Extra Dark]
+# Style: [Cappuccino, Espresso, Latte, Mocha]
+
+class Coffee
+  include Psychgus::Blueberry
+  
+  def initialize
+    @roast = ['Light', 'Medium', 'Dark', 'Extra Dark']
+    @style = ['Cappuccino', 'Espresso', 'Latte', 'Mocha']
+  end
+  
+  def psychgus_stylers(sniffer)
+    CoffeeStyler.new
+  end
+end
+
+puts Coffee.new.to_yaml
+
+# Output:
+# --- !ruby/object:Coffee
+# roast: [Light, Medium, Dark, Extra Dark]
+# style: [Cappuccino, Espresso, Latte, Mocha]
+```
 
 ### [Hash Example](#contents)
 
@@ -312,7 +359,96 @@ puts burgers.to_yaml({:indent => 3,:deref_aliases => true})
 #    Sauce: 'Honey BBQ'
 ```
 
-### [](#contents)
+### [Advanced Usage](#contents)
+
+```Ruby
+require 'psychgus'
+
+class MyStyler
+  include Psychgus::Styler
+  
+  def style_sequence(sniffer,node)
+    node.style = Psychgus::SEQUENCE_FLOW
+  end
+end
+
+coffee = {
+  'Coffee' => {
+    'Roast'=>['Light', 'Medium', 'Dark', 'Extra Dark'],
+    'Style'=>['Cappuccino', 'Espresso', 'Latte', 'Mocha']
+  }
+}
+eggs = {
+  'Eggs' => {
+    'Color'=>['Brown', 'White', 'Blue', 'Olive'],
+    'Style'=>['Fried', 'Scrambled', 'Omelette', 'Poached']
+  }
+}
+
+filename = 'coffee-and-eggs.yaml'
+styler = MyStyler.new
+options = {:indentation=>3, :stylers=>styler, :deref_aliases=>true}
+
+coffee_yaml = coffee.to_yaml(options)
+coffee_and_eggs_yaml = Psychgus.dump_stream(coffee,eggs,options)
+
+
+# High-level emitting
+puts Psychgus.dump(coffee,options)
+puts
+
+Psychgus.dump_file(filename,coffee,eggs,options)
+puts File.readlines(filename)
+puts
+
+puts Psychgus.dump_stream(coffee,eggs,options)
+puts
+
+puts coffee.to_yaml(options)
+puts
+
+# High-level parsing
+# - Because to_ruby() will be called, just use Psych:
+#   - load(), load_file(), load_stream(), safe_load()
+
+# Mid-level emitting
+stream = Psychgus.parse_stream(coffee_and_eggs_yaml,options)
+
+puts stream.to_yaml()
+puts
+
+# Mid-level parsing
+puts Psychgus.parse(coffee_yaml,options).to_ruby
+puts
+
+puts Psychgus.parse_file(filename,options).to_ruby
+puts
+
+i = 0
+Psychgus.parse_stream(coffee_and_eggs_yaml,options) do |doc|
+  puts "Doc ##{i += 1}:"
+  puts "  #{doc.to_ruby}"
+end
+puts
+
+# Low-level emitting
+tree_builder = Psychgus::StyledTreeBuilder.new(styler,options)
+visitor = Psych::Visitors::YAMLTree.create(options,tree_builder)
+
+visitor << coffee
+visitor << eggs
+
+puts visitor.tree.to_yaml
+puts
+
+# Low-level parsing
+parser = Psychgus.parser(options)
+
+parser.parse(coffee_yaml)
+
+puts parser.handler.root.to_ruby
+puts
+```
 
 ## [Hacking](#contents)
 
