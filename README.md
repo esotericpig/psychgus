@@ -171,7 +171,7 @@ class BurgerStyler
     
     if !parent.nil?()
       # BBQ
-      node.style = Psychgus::MAPPING_FLOW if parent.respond_to?(:value) &&
+      node.style = Psychgus::MAPPING_FLOW if parent.node_of?(:scalar) &&
                                              parent.value.casecmp('BBQ') == 0
     end
   end
