@@ -27,6 +27,7 @@ require 'psychgus/ext'
 require 'psychgus/styled_document_stream'
 require 'psychgus/styled_tree_builder'
 require 'psychgus/styler'
+require 'psychgus/stylers'
 require 'psychgus/super_sniffer'
 require 'psychgus/version'
 
@@ -448,6 +449,21 @@ module Psychgus
   # @see Psych.dump_stream
   # @see OPTIONS_ALIASES
   def self.dump_stream(*objects,io: nil,stylers: nil,deref_aliases: false,**options)
+    # If you call this method with only a Hash that uses symbols as keys,
+    # then options will be set to the Hash, instead of objects.
+    # 
+    # For example, the below will be stored in options, not objects:
+    # - dump_stream({:coffee => {:roast => [],:style => []}})
+    # 
+    # This if-statement is guaranteed because dump_stream([]) and dump_stream(nil)
+    # will produce [[]] and [nil], which are not empty.
+    # 
+    # dump_stream() w/o any args is the only problem, but resolved w/ [nil].
+    if objects.empty?()
+      objects = options.empty?() ? [nil] : [options]
+      options = {}
+    end
+    
     if Hash === io
       options = io
       io = nil
@@ -464,11 +480,115 @@ module Psychgus
     visitor = Psych::Visitors::YAMLTree.create(options,StyledTreeBuilder.new(*stylers,
       deref_aliases: deref_aliases))
     
-    objects.each do |object|
-      visitor << object
+    if objects.empty?()
+      # Else, will throw a cryptic NoMethodError:
+      # - "psych/tree_builder.rb:in `set_end_location': undefined method `end_line=' for nil:NilClass (NoMethodError)"
+      # 
+      # This should never occur because of the if-statement at the top of this method.
+      visitor << nil
+    else
+      objects.each do |object|
+        visitor << object
+      end
     end
     
     return visitor.tree.yaml(io,options)
+  end
+  
+  # Get a visual hierarchy of the levels as a String.
+  # 
+  # This is useful for determining the correct level/position when writing a {Styler}.
+  # 
+  # @example
+  #   require 'psychgus'
+  #   
+  #   burgers = {
+  #     :burgers => {
+  #       :classic => {:sauce  => %w(Ketchup Mustard),
+  #                    :cheese => 'American',
+  #                    :bun    => 'Sesame Seed'},
+  #       :bbq     => {:sauce  => 'Honey BBQ',
+  #                    :cheese => 'Cheddar',
+  #                    :bun    => 'Kaiser'},
+  #       :fancy   => {:sauce  => 'Spicy Wasabi',
+  #                    :cheese => 'Smoked Gouda',
+  #                    :bun    => 'Hawaiian'}
+  #     },
+  #     :toppings => [
+  #       'Mushrooms',
+  #       %w(Lettuce Onions Pickles Tomatoes),
+  #       [%w(Ketchup Mustard), %w(Salt Pepper)]
+  #     ]
+  #   }
+  #   
+  #   puts Psychgus.hierarchy(burgers)
+  #   
+  #   # Output:
+  #   # ---
+  #   # (level:position):current_node - <parent:(parent_level:parent_position)>
+  #   # ---
+  #   # (1:1):Psych::Nodes::Stream - <root:(0:0)>
+  #   # (1:1):Psych::Nodes::Document - <stream:(1:1)>
+  #   # (1:1):Psych::Nodes::Mapping - <doc:(1:1)>
+  #   #  (2:1)::burgers - <map:(1:1)>
+  #   #   (3:1):Psych::Nodes::Mapping - <:burgers:(2:1)>
+  #   #    (4:1)::classic - <map:(3:1)>
+  #   #     (5:1):Psych::Nodes::Mapping - <:classic:(4:1)>
+  #   #      (6:1)::sauce - <map:(5:1)>
+  #   #       (7:1):Psych::Nodes::Sequence - <:sauce:(6:1)>
+  #   #        (8:1):Ketchup - <seq:(7:1)>
+  #   #        (8:2):Mustard - <seq:(7:1)>
+  #   #      (6:2)::cheese - <map:(5:1)>
+  #   #       (7:1):American - <:cheese:(6:2)>
+  #   #      (6:3)::bun - <map:(5:1)>
+  #   #       (7:1):Sesame Seed - <:bun:(6:3)>
+  #   #    (4:2)::bbq - <map:(3:1)>
+  #   #     (5:1):Psych::Nodes::Mapping - <:bbq:(4:2)>
+  #   #      (6:1)::sauce - <map:(5:1)>
+  #   #       (7:1):Honey BBQ - <:sauce:(6:1)>
+  #   #      (6:2)::cheese - <map:(5:1)>
+  #   #       (7:1):Cheddar - <:cheese:(6:2)>
+  #   #      (6:3)::bun - <map:(5:1)>
+  #   #       (7:1):Kaiser - <:bun:(6:3)>
+  #   #    (4:3)::fancy - <map:(3:1)>
+  #   #     (5:1):Psych::Nodes::Mapping - <:fancy:(4:3)>
+  #   #      (6:1)::sauce - <map:(5:1)>
+  #   #       (7:1):Spicy Wasabi - <:sauce:(6:1)>
+  #   #      (6:2)::cheese - <map:(5:1)>
+  #   #       (7:1):Smoked Gouda - <:cheese:(6:2)>
+  #   #      (6:3)::bun - <map:(5:1)>
+  #   #       (7:1):Hawaiian - <:bun:(6:3)>
+  #   #  (2:2)::toppings - <map:(1:1)>
+  #   #   (3:1):Psych::Nodes::Sequence - <:toppings:(2:2)>
+  #   #    (4:1):Mushrooms - <seq:(3:1)>
+  #   #    (4:2):Psych::Nodes::Sequence - <seq:(3:1)>
+  #   #     (5:1):Lettuce - <seq:(4:2)>
+  #   #     (5:2):Onions - <seq:(4:2)>
+  #   #     (5:3):Pickles - <seq:(4:2)>
+  #   #     (5:4):Tomatoes - <seq:(4:2)>
+  #   #    (4:3):Psych::Nodes::Sequence - <seq:(3:1)>
+  #   #     (5:1):Psych::Nodes::Sequence - <seq:(4:3)>
+  #   #      (6:1):Ketchup - <seq:(5:1)>
+  #   #      (6:2):Mustard - <seq:(5:1)>
+  #   #     (5:2):Psych::Nodes::Sequence - <seq:(4:3)>
+  #   #      (6:1):Salt - <seq:(5:2)>
+  #   #      (6:2):Pepper - <seq:(5:2)>
+  # 
+  # @param objects [Object,Array<Object>] the Object(s) to get a visual hierarchy of
+  # @param kargs [Hash] the keyword args to pass to {Stylers::HierarchyStyler} and to {dump_stream}
+  # 
+  # @return [String] the visual hierarchy of levels
+  # 
+  # @see Stylers::HierarchyStyler
+  # @see dump_stream
+  # 
+  # @since 1.2.0
+  def self.hierarchy(*objects,**kargs)
+    styler = Stylers::HierarchyStyler.new(**kargs)
+    
+    dump_stream(*objects,stylers: styler,**kargs)
+    
+    return styler.to_s()
   end
   
   # Parse +yaml+ into a Psych::Nodes::Document.
@@ -637,7 +757,7 @@ module Psychgus
   # 
   # Private methods of Psych are not defined.
   # 
-  # Because extend is used, do not prefix methods with "self."
+  # @note For devs/hacking: because extend is used, do not prefix methods with "self."
   # 
   # @author Jonathan Bradley Whited (@esotericpig)
   # @since  1.0.0

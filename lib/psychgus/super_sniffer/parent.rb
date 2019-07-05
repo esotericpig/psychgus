@@ -85,34 +85,34 @@ module Psychgus
       # @see Psych::Nodes::Scalar#anchor=
       # @see Psych::Nodes::Sequence#anchor=
       def anchor=(anchor)
-        node.anchor = anchor
+        @node.anchor = anchor
       end
       
       # @see Psych::Nodes::Scalar#plain=
       def plain=(plain)
-        node.plain = plain
+        @node.plain = plain
       end
       
       # @see Psych::Nodes::Scalar#quoted=
       def quoted=(quoted)
-        node.quoted = quoted
+        @node.quoted = quoted
       end
       
       # @see Psych::Nodes::Mapping#style=
       # @see Psych::Nodes::Scalar#style=
       # @see Psych::Nodes::Sequence#style=
       def style=(style)
-        node.style = style
+        @node.style = style
       end
       
       # @see Psych::Nodes::Node#tag=
       def tag=(tag)
-        node.tag = tag
+        @node.tag = tag
       end
       
       # @see Psych::Nodes::Scalar#value=
       def value=(value)
-        node.value = value
+        @node.value = value
       end
       
       # @see Psych::Nodes::Alias#anchor
@@ -120,86 +120,94 @@ module Psychgus
       # @see Psych::Nodes::Scalar#anchor
       # @see Psych::Nodes::Sequence#anchor
       def anchor()
-        return node.anchor
+        return @node.anchor
+      end
+      
+      def child_key?()
+        return @child_type == :key
+      end
+      
+      def child_value?()
+        return @child_type == :value
       end
       
       # @see Psych::Nodes::Stream#encoding
       def encoding()
-        return node.encoding
+        return @node.encoding
       end
       
       # @see Psych::Nodes::Node#end_column
       def end_column()
-        return node.end_column
+        return @node.end_column
       end
       
       # @see Psych::Nodes::Node#end_line
       def end_line()
-        return node.end_line
+        return @node.end_line
       end
       
       # @see Psych::Nodes::Document#implicit
       # @see Psych::Nodes::Mapping#implicit
       # @see Psych::Nodes::Sequence#implicit
       def implicit?()
-        return node.implicit
+        return @node.implicit
       end
       
       # @see Psych::Nodes::Document#implicit_end
       def implicit_end?()
-        return node.implicit_end
+        return @node.implicit_end
       end
       
       # (see Ext::NodeExt#node_of?)
       def node_of?(*names)
-        return node.node_of?(*names)
+        return @node.node_of?(*names)
       end
       
       # @see Psych::Nodes::Scalar#plain
       def plain?()
-        return node.plain
+        return @node.plain
       end
       
       # @see Psych::Nodes::Scalar#quoted
       def quoted?()
-        return node.quoted
+        return @node.quoted
       end
       
       # @see Psych::Nodes::Node#start_column
       def start_column()
-        return node.start_column
+        return @node.start_column
       end
       
       # @see Psych::Nodes::Node#start_line
       def start_line()
-        return node.start_line
+        return @node.start_line
       end
       
       # @see Psych::Nodes::Mapping#style
       # @see Psych::Nodes::Scalar#style
       # @see Psych::Nodes::Sequence#style
       def style()
-        return node.style
+        return @node.style
       end
       
       # @see Psych::Nodes::Node#tag
       def tag()
-        return node.tag
+        return @node.tag
       end
       
       # @see Psych::Nodes::Document#tag_directives
       def tag_directives()
-        return node.tag_directives
+        return @node.tag_directives
       end
       
       # @see Psych::Nodes::Scalar#value
       def value()
-        return node.value
+        return @node.value
       end
       
       # @see Psych::Nodes::Document#version
       def version()
-        return node.version
+        return @node.version
       end
       
       # @note If this method is modified, then tests will fail

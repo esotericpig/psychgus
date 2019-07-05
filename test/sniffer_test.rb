@@ -24,46 +24,20 @@ require 'psychgus_tester'
 
 require 'stringio'
 
-class IOStyler
-  include Psychgus::Styler
-  
-  attr_reader :io
-  
-  def initialize(io=StringIO.new())
-    @io = io
-  end
-  
-  def style(sniffer,node)
-    (1...sniffer.level).each do
-      @io.print ' '
-    end
-    
-    name = node.node_of?(:scalar) ? node.value : node.class.name
-    parent = sniffer.parent
-    
-    @io.print "(#{sniffer.level}:#{sniffer.position}):#{name} - "
-    @io.print parent.nil?() ? '<nil>' : parent
-    @io.puts
-  end
-end
-
 class SnifferTest < PsychgusTester
   def setup()
   end
   
-  def assert_hierarchy(data,expected)
+  def assert_hierarchy(*data,expected)
     expected = self.class.lstrip_pipe(expected)
-    io_styler = IOStyler.new()
-    
-    data.to_yaml(stylers: io_styler)
-    hierarchy = io_styler.io.string
+    hierarchy = Psychgus.hierarchy(*data,verbose: true).to_s()
     
     assert_equal expected,hierarchy
   end
   
   def test_multi_doc()
-    expected = <<-EOH
-    |(1:1):Psych::Nodes::Stream - <nil>
+    assert_hierarchy(BURGERS_DATA,COURSES_DATA,DOLPHINS_DATA,<<-EOH
+    |(1:1):Psych::Nodes::Stream - <root:(0:0)::(:1)>
     |(1:1):Psych::Nodes::Document - <stream:(1:1)::(:1)>
     |(1:1):Psych::Nodes::Mapping - <doc:(1:1)::(:1)>
     | (2:1):Burgers - <map:(1:1):key:(:1)>
@@ -180,19 +154,12 @@ class SnifferTest < PsychgusTester
     |   (4:1):Psych::Nodes::Alias - <seq:(3:1)::(:1)>
     |   (4:2):Psych::Nodes::Alias - <seq:(3:1)::(:2)>
     EOH
-    
-    expected = self.class.lstrip_pipe(expected)
-    io_styler = IOStyler.new()
-    
-    Psychgus.dump_stream(BURGERS_DATA,COURSES_DATA,DOLPHINS_DATA,stylers: io_styler)
-    hierarchy = io_styler.io.string
-    
-    assert_equal expected,hierarchy
+    )
   end
   
   def test_single_docs()
     assert_hierarchy(BURGERS_DATA,<<-EOH
-    |(1:1):Psych::Nodes::Stream - <nil>
+    |(1:1):Psych::Nodes::Stream - <root:(0:0)::(:1)>
     |(1:1):Psych::Nodes::Document - <stream:(1:1)::(:1)>
     |(1:1):Psych::Nodes::Mapping - <doc:(1:1)::(:1)>
     | (2:1):Burgers - <map:(1:1):key:(:1)>
@@ -242,7 +209,7 @@ class SnifferTest < PsychgusTester
     )
     
     assert_hierarchy(COURSES_DATA,<<-EOH
-    |(1:1):Psych::Nodes::Stream - <nil>
+    |(1:1):Psych::Nodes::Stream - <root:(0:0)::(:1)>
     |(1:1):Psych::Nodes::Document - <stream:(1:1)::(:1)>
     |(1:1):Psych::Nodes::Mapping - <doc:(1:1)::(:1)>
     | (2:1):Courses - <map:(1:1):key:(:1)>

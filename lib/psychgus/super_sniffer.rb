@@ -89,7 +89,7 @@ module Psychgus
   # Then the levels and positions will be as follows:
   #   # (level:position):current_node - <parent:(parent_level:parent_position)>
   #   
-  #   (1:1):Psych::Nodes::Stream - <nil>
+  #   (1:1):Psych::Nodes::Stream - <root:(0:0)>
   #   (1:1):Psych::Nodes::Document - <stream:(1:1)>
   #   (1:1):Psych::Nodes::Mapping - <doc:(1:1)>
   #    (2:1):Burgers - <map:(1:1)>
@@ -168,15 +168,18 @@ module Psychgus
     def initialize()
       @aliases = []
       @documents = []
-      @level = 1
+      @level = 0
       @mappings = []
       @nodes = []
       @parent = nil
       @parents = []
-      @position = 1
+      @position = 0
       @scalars = []
       @sequences = []
       @streams = []
+      
+      # Do not pass in "top_level: true"
+      start_parent(nil,debug_tag: :root)
     end
     
     # Add a Psych::Nodes::Alias to this class only (not to the YAML).
@@ -406,7 +409,7 @@ module Psychgus
       @parent = Parent.new(self,node,**extra)
       
       @parents.push(@parent)
-      @nodes.push(node)
+      @nodes.push(node) unless node.nil?()
       
       if top_level
         @level = 1
