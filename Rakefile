@@ -80,7 +80,7 @@ end
 YARD::Rake::YardocTask.new() do |task|
   task.files = ['lib/**/*.rb']
   
-  task.options += ['--files','LICENSE.txt']
+  task.options += ['--files','CHANGELOG.md,LICENSE.txt']
   task.options += ['--readme','README.md']
   
   task.options << '--protected' # Show protected methods
@@ -133,6 +133,7 @@ task :yard_fix,[:dev] do |task,args|
           out = true
         end
         
+        out ||= !line.gsub!('href="CHANGELOG.md"','href="file.CHANGELOG.html"').nil?()
         out ||= !line.gsub!('href="LICENSE.txt"','href="file.LICENSE.html"').nil?()
         out ||= !line.gsub!('code class="Ruby"','code class="language-ruby"').nil?()
         

@@ -45,6 +45,7 @@ Gem::Specification.new do |spec|
   spec.description = %q(Easily style YAML files using Psych, like Sequence/Mapping Flow style.)
   
   spec.files         = Dir.glob("{lib,test,yard}/**/*") + %w(
+                         CHANGELOG.md
                          Gemfile
                          LICENSE.txt
                          psychgus.gemspec
