@@ -50,13 +50,14 @@ module Psychgus
     module YAMLTreeExt
       # Accepts a new Object to convert to YAML.
       # 
-      # This is roughly the same place where Psych checks if +target+ responds to :encode_with.
+      # This is roughly the same place where Psych checks if +target+ responds to +:encode_with+.
       # 
-      # This will check if @emitter is a {StyledTreeBuilder} and if +target+ is a {Blueberry}.
-      # 1. If the above is true, get the {Styler}(s) and add them to @emitter.
-      # 2. Call super.
-      # 3. If the above is true, remove the {Styler}(s) from @emitter.
-      # 4. Return the result of super.
+      # 1. Check if +@emitter+ is a {StyledTreeBuilder}.
+      # 2. If #1 and +target+ is a {Blueberry}, get the {Styler}(s) from +target+ and add them to +@emitter+.
+      # 3. If #1 and +@emitter.deref_aliases?+, prevent +target+ from becoming an alias.
+      # 4. Call +super+ and store the result.
+      # 5. If #2, remove the {Styler}(s) from +@emitter+.
+      # 6. Return the result of +super+.
       # 
       # @param target [Object] the Object to pass to super
       # 
@@ -64,6 +65,7 @@ module Psychgus
       # 
       # @see Psych::Visitors::YAMLTree
       # @see Blueberry
+      # @see Blueberry#psychgus_stylers
       # @see Styler
       # @see StyledTreeBuilder
       def accept(target)
