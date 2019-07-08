@@ -225,9 +225,9 @@ module Psychgus
     #       :colors => ['Brown', 'White', ['Blue', 'Green']]
     #   }}
     #   
-    #   seq_flow = Psychgus::FlowStyler.new(4)
+    #   flow = Psychgus::FlowStyler.new(4)
     #   
-    #   puts data.to_yaml(stylers: [Psychgus::NoSymStyler.new,seq_flow])
+    #   puts data.to_yaml(stylers: [Psychgus::NoSymStyler.new,flow])
     #   
     #   # Output:
     #   # ---
@@ -235,7 +235,7 @@ module Psychgus
     #   #   Styles: [Fried, Scrambled, [BBQ, Ketchup]]
     #   #   Colors: [Brown, White, [Blue, Green]]
     #   
-    #   puts data.to_yaml(stylers: [Psychgus::NoSymStyler.new(cap: false),seq_flow])
+    #   puts data.to_yaml(stylers: [Psychgus::NoSymStyler.new(cap: false),flow])
     #   
     #   # ---
     #   # eggs:
