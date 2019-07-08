@@ -4,6 +4,35 @@
 
 Psychgus uses the core standard library [Psych](https://github.com/ruby/psych) for working with [YAML](https://yaml.org) and extends it so that developers can easily style the YAML according to their needs.
 
+Turn this YAML...
+
+```YAML
+---
+Psych Gus:
+  Aliases:
+  - Longbranch Pennywhistle
+  - Squirts Macintosh
+  - Clementine Woolysocks
+  - Lavender Gooms
+  - Big Baby Burton
+  - Chocolate Einstein
+  - MC Clap Yo Handz
+  Skills:
+  - The Blueberry
+  - The Super Sniffer
+  - Positive Work Attitude
+```
+
+Into this:
+
+```YAML
+---
+Psych Gus:
+  Aliases: [Longbranch Pennywhistle, Squirts Macintosh, Clementine Woolysocks, Lavender
+      Gooms, Big Baby Burton, Chocolate Einstein, MC Clap Yo Handz]
+  Skills: [The Blueberry, The Super Sniffer, Positive Work Attitude]
+```
+
 Thank you to the people that worked and continue to work hard on the Psych project.
 
 The Psychgus name comes from the well-styled character Gus from the TV show Psych.
@@ -25,21 +54,35 @@ The Psychgus name comes from the well-styled character Gus from the TV show Psyc
 
 Pick your poison...
 
-- With the RubyGems CLI package manager:
-    - `$ gem install psychgus`
-- In your *Gemspec* (*&lt;project&gt;.gemspec*):
-    - `spec.add_runtime_dependency 'psychgus','~> x.x.x'`
-    - Or, if you only need Psychgus in development (e.g., tests, rake, documentation):
-        - `spec.add_development_dependency 'psychgus','~> x.x.x'`
-- In your *Gemfile*:
-    - `gem 'psychgus','~> x.x.x'`
-    - Or, with GitHub:
-        - `gem 'psychgus',:git=>'https://github.com/esotericpig/psychgus.git'`
-- Manually:
-    - `$ git clone 'https://github.com/esotericpig/psychgus.git'`
-    - `$ cd psychgus`
-    - `$ bundle install`
-    - `$ bundle exec rake install:local`
+With the RubyGems CLI package manager:
+
+`$ gem install psychgus`
+
+In your *Gemspec* (*&lt;project&gt;.gemspec*):
+
+```Ruby
+# Pick one...
+spec.add_runtime_dependency 'psychgus', '~> X.X.X'
+spec.add_development_dependency 'psychgus', '~> X.X.X'
+```
+
+In your *Gemfile*:
+
+```Ruby
+# Pick one...
+gem 'psychgus', '~> X.X.X'
+gem 'psychgus', '~> X.X.X', :group => :development
+gem 'psychgus', :git => 'https://github.com/esotericpig/psychgus.git', :tag => 'vX.X.X'
+```
+
+Manually:
+
+```
+$ git clone 'https://github.com/esotericpig/psychgus.git'
+$ cd psychgus
+$ bundle install
+$ bundle exec rake install:local
+```
 
 ## [Using](#contents)
 
