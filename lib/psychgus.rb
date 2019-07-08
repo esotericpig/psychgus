@@ -335,8 +335,8 @@ module Psychgus
   def self.node_class(name)
     name = name.to_sym().capitalize()
     
-    name_alias = NODE_CLASS_ALIASES[name]
-    name = name_alias unless name_alias.nil?()
+    actual_name = NODE_CLASS_ALIASES[name]
+    name = actual_name unless actual_name.nil?()
     
     return Psych::Nodes.const_get(name)
   end
@@ -476,10 +476,10 @@ module Psychgus
       io = nil
     end
     
-    if !options.nil?()
-      OPTIONS_ALIASES.each do |option_alias,option|
-        if options.key?(option_alias) && !options.key?(option)
-          options[option] = options[option_alias]
+    if !options.empty?()
+      OPTIONS_ALIASES.each do |option_alias,actual_option|
+        if options.key?(option_alias) && !options.key?(actual_option)
+          options[actual_option] = options[option_alias]
         end
       end
     end
