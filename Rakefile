@@ -136,6 +136,7 @@ task :yard_fix,[:dev] do |task,args|
         out ||= !line.gsub!('href="CHANGELOG.md"','href="file.CHANGELOG.html"').nil?()
         out ||= !line.gsub!('href="LICENSE.txt"','href="file.LICENSE.html"').nil?()
         out ||= !line.gsub!('code class="Ruby"','code class="language-ruby"').nil?()
+        out ||= !line.gsub!('code class="YAML"','code class="language-yaml"').nil?()
         
         if out
           puts "  #{line}"
