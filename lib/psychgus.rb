@@ -24,6 +24,7 @@ require 'psych'
 
 require 'psychgus/blueberry'
 require 'psychgus/ext'
+require 'psychgus/stylables'
 require 'psychgus/styled_document_stream'
 require 'psychgus/styled_tree_builder'
 require 'psychgus/styler'
@@ -309,6 +310,12 @@ require 'psychgus/super_sniffer/parent'
 # @since  1.0.0
 ###
 module Psychgus
+  # Include these in the top namespace for convenience (i.e., less typing).
+  # 
+  # @since 1.2.0
+  include Stylables
+  include Stylers
+  
   NODE_CLASS_ALIASES = {:Doc => :Document,:Map => :Mapping,:Seq => :Sequence}
   OPTIONS_ALIASES = {:canon => :canonical,:indent => :indentation}
   
