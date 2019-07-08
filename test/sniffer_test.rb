@@ -30,7 +30,7 @@ class SnifferTest < PsychgusTester
   
   def assert_hierarchy(*data,expected)
     expected = self.class.lstrip_pipe(expected)
-    hierarchy = Psychgus.hierarchy(*data,verbose: true).to_s()
+    hierarchy = Psychgus.hierarchy(*data,verbose: true)
     
     assert_equal expected,hierarchy
   end
