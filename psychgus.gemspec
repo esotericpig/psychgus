@@ -26,11 +26,14 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'psychgus/version'
 
 Gem::Specification.new do |spec|
-  spec.name     = 'psychgus'
-  spec.version  = Psychgus::VERSION
-  spec.authors  = ['Jonathan Bradley Whited (@esotericpig)']
-  spec.email    = ['bradley@esotericpig.com']
-  spec.licenses = ['LGPL-3.0-or-later']
+  spec.name        = 'psychgus'
+  spec.version     = Psychgus::VERSION
+  spec.authors     = ['Jonathan Bradley Whited (@esotericpig)']
+  spec.email       = ['bradley@esotericpig.com']
+  spec.licenses    = ['LGPL-3.0-or-later']
+  spec.homepage    = 'https://github.com/esotericpig/psychgus'
+  spec.summary     = %q(Easily style YAML files using Psych, like Sequence/Mapping Flow style.)
+  spec.description = %q(Easily style YAML files using Psych, like Sequence/Mapping Flow style.)
   
   spec.metadata = {
     'bug_tracker_uri'   => 'https://github.com/esotericpig/psychgus/issues',
@@ -40,18 +43,15 @@ Gem::Specification.new do |spec|
     'source_code_uri'   => 'https://github.com/esotericpig/psychgus'
   }
   
-  spec.homepage    = 'https://github.com/esotericpig/psychgus'
-  spec.summary     = %q(Easily style YAML files using Psych, like Sequence/Mapping Flow style.)
-  spec.description = %q(Easily style YAML files using Psych, like Sequence/Mapping Flow style.)
-  
-  spec.files         = Dir.glob("{lib,test,yard}/**/*") + %w(
-                         CHANGELOG.md
-                         Gemfile
-                         LICENSE.txt
-                         psychgus.gemspec
-                         Rakefile
-                         README.md
-                       )
+  spec.files = Dir.glob(File.join('{lib,test,yard}','**','*.{erb,rb}')) +
+               %w(
+                 CHANGELOG.md
+                 Gemfile
+                 LICENSE.txt
+                 psychgus.gemspec
+                 Rakefile
+                 README.md
+               )
   spec.require_paths = ['lib']
   
   spec.required_ruby_version = '>= 2.1.10'
