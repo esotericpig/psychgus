@@ -10,6 +10,7 @@ Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Commonly-used Stylers and Stylables
 - Changelog
 - Psychgus.hierarchy()
+- SuperSniffer::Parent#child_key?() & #child_value?()
 
 ### Changed
 - SuperSniffer's parent will never be nil, so don't have to check for nil in Stylers
