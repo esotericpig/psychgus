@@ -60,6 +60,8 @@ module Psychgus
       
       # Change the style of +node+ to {new_style} if it is >= {min_level}.
       def change_style(sniffer,node)
+        return unless node.respond_to?(:style=)
+        
         node.style = @new_style if sniffer.level >= @min_level
       end
     end
