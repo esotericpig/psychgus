@@ -1,6 +1,6 @@
 # Psychgus
 
-[![Gem Version](https://badge.fury.io/rb/psychgus.svg)](https://badge.fury.io/rb/psychgus) | [Changelog](CHANGELOG.md)
+[![Gem Version](https://badge.fury.io/rb/psychgus.svg)](https://badge.fury.io/rb/psychgus) [![Changelog](https://img.shields.io/badge/changelog-yes-%23A0522D.svg)](CHANGELOG.md)
 
 Psychgus uses the core standard library [Psych](https://github.com/ruby/psych) for working with [YAML](https://yaml.org) and extends it so that developers can easily style the YAML according to their needs.
 
@@ -45,6 +45,7 @@ The Psychgus name comes from the well-styled character Gus from the TV show Psyc
     - [Hash Example](#hash-example)
     - [Class Example](#class-example)
     - [Advanced Usage](#advanced-usage)
+    - [Common Stylers](#common-stylers)
 - [Hacking](#hacking)
     - [Testing](#testing)
     - [Generating Doc](#generating-doc)
@@ -493,6 +494,63 @@ parser.parse(coffee_yaml)
 
 puts parser.handler.root.to_ruby
 puts
+```
+
+### [Common Stylers](#contents)
+
+A collection of commonly-used [Stylers](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers.html) and [Stylables](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylables.html) are included with Psychgus.
+
+| Styler | Description |
+| --- | --- |
+| [CapStyler](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers/CapStyler.html) | Capitalizer for Scalars |
+| [FlowStyler](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers/FlowStyler.html) | FLOW style changer for Mappings & Sequences |
+| [MapFlowStyler](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers/MapFlowStyler.html) | FLOW style changer for Mappings only |
+| [NoSymStyler](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers/NoSymStyler.html) | Symbol remover for Scalars |
+| [NoTagStyler](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers/NoTagStyler.html) | Tag remover for classes |
+| [SeqFlowStyler](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers/SeqFlowStyler.html) | FLOW style changer for Sequences only |
+
+#### Example
+
+```Ruby
+require 'psychgus'
+
+class EggCarton
+  def initialize
+    @eggs = {
+      :styles => ['fried', 'scrambled', ['BBQ', 'ketchup & mustard']],
+      :colors => ['brown', 'white', ['blue', 'green']]
+    }
+  end
+end
+
+puts EggCarton.new.to_yaml(stylers: [
+  Psychgus::NoSymStyler.new,
+  Psychgus::NoTagStyler.new,
+  Psychgus::CapStyler.new,
+  Psychgus::FlowStyler.new(4)
+])
+
+# Output:
+# ---
+# Eggs:
+#   Styles: [Fried, Scrambled, [BBQ, Ketchup & Mustard]]
+#   Colors: [Brown, White, [Blue, Green]]
+
+puts EggCarton.new.to_yaml
+
+# Output (without Stylers):
+# --- !ruby/object:EggCarton
+# eggs:
+#   :styles:
+#   - fried
+#   - scrambled
+#   - - BBQ
+#     - ketchup & mustard
+#   :colors:
+#   - brown
+#   - white
+#   - - blue
+#     - green
 ```
 
 ## [Hacking](#contents)
