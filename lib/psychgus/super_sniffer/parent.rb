@@ -123,10 +123,20 @@ module Psychgus
         return @node.anchor
       end
       
+      # Check if the children of this parent are keys to a Mapping.
+      # 
+      # @return [true,false] whether the children are keys to a Mapping
+      # 
+      # @since 1.2.0
       def child_key?()
         return @child_type == :key
       end
       
+      # Check if the children of this parent are values to a Mapping (i.e., values to a key).
+      # 
+      # @return [true,false] whether the children are values to a Mapping (i.e., values to a key)
+      # 
+      # @since 1.2.0
       def child_value?()
         return @child_type == :value
       end
