@@ -136,10 +136,10 @@ task :yard_fix,[:dev] do |task,args|
           out = true
         end
         
-        out ||= !line.gsub!('href="CHANGELOG.md"','href="file.CHANGELOG.html"').nil?()
-        out ||= !line.gsub!('href="LICENSE.txt"','href="file.LICENSE.html"').nil?()
-        out ||= !line.gsub!('code class="Ruby"','code class="language-ruby"').nil?()
-        out ||= !line.gsub!('code class="YAML"','code class="language-yaml"').nil?()
+        out = !line.gsub!('href="CHANGELOG.md"','href="file.CHANGELOG.html"').nil?() || out
+        out = !line.gsub!('href="LICENSE.txt"','href="file.LICENSE.html"').nil?() || out
+        out = !line.gsub!('code class="Ruby"','code class="language-ruby"').nil?() || out
+        out = !line.gsub!('code class="YAML"','code class="language-yaml"').nil?() || out
         
         if out
           puts "  #{line}"
