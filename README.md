@@ -568,7 +568,7 @@ $ bundle install
 $ bundle exec rake -T
 ```
 
-### [Testing](#contents)
+### [Testing](#hacking)
 
 Run tests, excluding tests that create temp files:
 
@@ -578,7 +578,7 @@ Run all tests:
 
 `$ bundle exec rake test_all`
 
-### [Generating Doc](#contents)
+### [Generating Doc](#hacking)
 
 Generate basic doc:
 
