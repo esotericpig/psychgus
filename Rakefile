@@ -121,14 +121,17 @@ task :yard_fix,[:dev] do |task,args|
           out = true
         end
         
-        # Contents relative links
+        # Anchor links
         tag = 'href="#'
-        if !(i = line.index(Regexp.new(Regexp.quote(tag) + '[a-z]'))).nil?()
-          i += tag.length
-          j = line.index('"',i)
-          
-          href = line[i...j].split('-').map(&:capitalize).join('_')
-          line = "#{line[0...i]}#{href}#{line[j..-1]}"
+        quoted_tag = Regexp.quote(tag)
+        
+        if !(i = line.index(Regexp.new(quoted_tag + '[a-z]'))).nil?()
+          line = line.gsub(Regexp.new(quoted_tag + '[a-z][^"]*"')) do |href|
+            link = href[tag.length..-2]
+            link = link.split('-').map(&:capitalize).join('_')
+            
+            %Q(#{tag}#{link}")
+          end
           
           out = true
         end
