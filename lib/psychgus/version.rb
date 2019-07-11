@@ -23,5 +23,5 @@
 
 module Psychgus
   # Version of this gem in "#.#.#" format
-  VERSION = '1.0.1'
+  VERSION = '1.2.0'
 end
