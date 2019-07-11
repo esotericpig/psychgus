@@ -46,6 +46,7 @@ The Psychgus name comes from the well-styled character Gus from the TV show Psyc
     - [Class Example](#class-example)
     - [Advanced Usage](#advanced-usage)
     - [Common Stylers](#common-stylers)
+        - [Stylers Example](#stylers-example)
 - [Hacking](#hacking)
     - [Testing](#testing)
     - [Generating Doc](#generating-doc)
@@ -93,7 +94,13 @@ To begin styling, create a class and mix in (include) `Psychgus::Styler`. Then p
 
 For classes, you can optionally include `Psychgus::Blueberry` and return the styler(s) for the class by defining the `psychgus_stylers(sniffer)` method.
 
-### [Simple Example](#contents)
+Instead of making your own styler, you can also use one of the [pre-defined stylers](#common-stylers).
+
+### Contents | Using
+
+[Simple Example](#simple-example) | [Hash Example](#hash-example) | [Class Example](#class-example) | [Advanced Usage](#advanced-usage) | [Common Stylers](#common-stylers)
+
+### [Simple Example](#using)
 
 ```Ruby
 require 'psychgus'
@@ -139,7 +146,7 @@ puts Coffee.new.to_yaml
 # style: [Cappuccino, Espresso, Latte, Mocha]
 ```
 
-### [Hash Example](#contents)
+### [Hash Example](#using)
 
 ```Ruby
 require 'psychgus'
@@ -234,7 +241,7 @@ puts burgers.to_yaml({:indent => 3,:stylers => BurgerStyler.new,:deref_aliases =
 #    Bun: Kaiser
 ```
 
-### [Class Example](#contents)
+### [Class Example](#using)
 
 ```Ruby
 require 'psychgus'
@@ -405,7 +412,7 @@ puts burgers.to_yaml({:indent => 3,:deref_aliases => true})
 #    Sauce: 'Honey BBQ'
 ```
 
-### [Advanced Usage](#contents)
+### [Advanced Usage](#using)
 
 ```Ruby
 require 'psychgus'
@@ -496,7 +503,7 @@ puts parser.handler.root.to_ruby
 puts
 ```
 
-### [Common Stylers](#contents)
+### [Common Stylers](#using)
 
 A collection of commonly-used [Stylers](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers.html) and [Stylables](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylables.html) are included with Psychgus.
 
@@ -509,7 +516,7 @@ A collection of commonly-used [Stylers](https://esotericpig.github.io/docs/psych
 | [NoTagStyler](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers/NoTagStyler.html) | Tag remover for classes |
 | [SeqFlowStyler](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers/SeqFlowStyler.html) | FLOW style changer for Sequences only |
 
-#### Example
+#### [Stylers Example](#common-stylers)
 
 ```Ruby
 require 'psychgus'
