@@ -282,8 +282,8 @@ class BurgerStyler
     parent = sniffer.parent
     
     # Single quote scalars that are not keys to a map
-    node.style = Psychgus::SCALAR_SINGLE_QUOTED if !parent.nil?() &&
-                                                   parent.child_type != :key
+    # - "child_key?" is the same as "child_type == :key"
+    node.style = Psychgus::SCALAR_SINGLE_QUOTED unless parent.child_key?()
   end
   
   # Style sequences (Psych::Nodes::Sequence)
