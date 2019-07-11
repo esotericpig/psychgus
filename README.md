@@ -1,6 +1,10 @@
 # Psychgus
 
-[![Gem Version](https://badge.fury.io/rb/psychgus.svg)](https://badge.fury.io/rb/psychgus) [![Changelog](https://img.shields.io/badge/changelog-yes-%23A0522D.svg)](CHANGELOG.md)
+[![Gem Version](https://badge.fury.io/rb/psychgus.svg)](https://badge.fury.io/rb/psychgus)
+
+[![Documentation](https://img.shields.io/badge/doc-yard-%23A0522D.svg?style=for-the-badge)](https://esotericpig.github.io/docs/psychgus/yardoc/index.html)
+[![Changelog](https://img.shields.io/badge/changelog-md-%23A0522D.svg?style=for-the-badge)](CHANGELOG.md)
+[![License](https://img.shields.io/github/license/esotericpig/psychgus.svg?color=%23A0522D&style=for-the-badge)](LICENSE.txt)
 
 Psychgus uses the core standard library [Psych](https://github.com/ruby/psych) for working with [YAML](https://yaml.org) and extends it so that developers can easily style the YAML according to their needs.
 
@@ -98,7 +102,11 @@ Instead of making your own styler, you can also use one of the [pre-defined styl
 
 ### Contents | Using
 
-[Simple Example](#simple-example) | [Hash Example](#hash-example) | [Class Example](#class-example) | [Advanced Usage](#advanced-usage) | [Common Stylers](#common-stylers)
+[Simple Example](#simple-example)
+| [Hash Example](#hash-example)
+| [Class Example](#class-example)
+| [Advanced Usage](#advanced-usage)
+| [Common Stylers](#common-stylers)
 
 ### [Simple Example](#using)
 
