@@ -52,16 +52,18 @@ module Psychgus
   # 
   # Most information is straightforward:
   # - {#aliases}   # Array of Psych::Nodes::Alias processed so far
+  # - {#documents} # Array of Psych::Nodes::Document processed so far
   # - {#mappings}  # Array of Psych::Nodes::Mapping processed so far
-  # - {#nodes}     # Array of all Psych::Nodes::Node processed so far
+  # - {#nodes}     # Array of Psych::Nodes::Node processed so far
   # - {#scalars}   # Array of Psych::Nodes::Scalar processed so far
   # - {#sequences} # Array of Psych::Nodes::Sequence processed so far
+  # - {#streams}   # Array of Psych::Nodes::Stream processed so far
   # 
   # {#parent} is the current {SuperSniffer::Parent} of the node being processed,
-  # which is nil for the first node.
+  # which is an empty Parent for the first node (not nil).
   # 
   # {#parents} are all of the (grand){SuperSniffer::Parent}(s) for the current node,
-  # which is empty for the first node.
+  # which is an Array that just contains an empty Parent for the first node.
   # 
   # A parent is a Mapping or Sequence, or a Key (Scalar) in a Mapping.
   # 
@@ -136,7 +138,7 @@ module Psychgus
   #        (6:1):Salt - <seq:(5:2)>
   #        (6:2):Pepper - <seq:(5:2)>
   # 
-  # The "Super Sniffer" is the nickname for Gus's nose from the TV show Psych
+  # "The Super Sniffer" is the nickname for Gus's nose from the TV show Psych
   # because he has a very refined sense of smell.
   # 
   # @note You should never call the methods that are not readers, like {#add_alias}, {#start_mapping}, etc.
@@ -152,17 +154,17 @@ module Psychgus
   class SuperSniffer
     EMPTY = Empty.new().freeze()
     
-    attr_reader :aliases
-    attr_reader :documents
-    attr_reader :level
-    attr_reader :mappings
-    attr_reader :nodes
-    attr_reader :parent
-    attr_reader :parents
-    attr_reader :position
-    attr_reader :scalars
-    attr_reader :sequences
-    attr_reader :streams
+    attr_reader :aliases # @return [Array<Psych::Nodes::Alias>] the aliases processed so far
+    attr_reader :documents # @return [Array<Psych::Nodes::Document>] the documents processed so far
+    attr_reader :level # @return [Integer] the current level
+    attr_reader :mappings # @return [Array<Psych::Nodes::Mapping>] the mappings processed so far
+    attr_reader :nodes # @return [Array<Psych::Nodes::Node>] the nodes processed so far
+    attr_reader :parent # @return [Parent] the current parent
+    attr_reader :parents # @return [Array<Parent>] the current (grand)parents
+    attr_reader :position # @return [Integer] the current position
+    attr_reader :scalars # @return [Array<Psych::Nodes::Scalar>] the scalars processed so far
+    attr_reader :sequences # @return [Array<Psych::Nodes::Sequence>] the sequences processed so far
+    attr_reader :streams # @return [Array<Psych::Nodes::Stream>] the streams processed so far
     
     # Initialize this class for sniffing.
     def initialize()
