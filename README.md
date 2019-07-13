@@ -3,6 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/psychgus.svg)](https://badge.fury.io/rb/psychgus)
 
 [![Documentation](https://img.shields.io/badge/doc-yard-%23A0522D.svg?style=for-the-badge)](https://esotericpig.github.io/docs/psychgus/yardoc/index.html)
+[![Source Code](https://img.shields.io/badge/source-github-%23A0522D.svg?style=for-the-badge)](https://github.com/esotericpig/psychgus)
 [![Changelog](https://img.shields.io/badge/changelog-md-%23A0522D.svg?style=for-the-badge)](CHANGELOG.md)
 [![License](https://img.shields.io/github/license/esotericpig/psychgus.svg?color=%23A0522D&style=for-the-badge)](LICENSE.txt)
 
