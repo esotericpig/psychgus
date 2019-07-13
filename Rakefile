@@ -93,6 +93,9 @@ task :yard_fix,[:dev] do |task,args|
   # Delete this file as it's never used (index.html is an exact copy)
   PsychgusRake.rm_exist('doc/file.README.html')
   
+  # Root dir of my GitHub Page for CSS/JS
+  GHP_ROOT = args.dev ? '../../esotericpig.github.io' : '../../..'
+  
   ['doc/index.html'].each do |filename|
     puts "File [#{filename}]:"
     
@@ -105,19 +108,13 @@ task :yard_fix,[:dev] do |task,args|
         
         # CSS
         if line =~ /^\s*\<\/head\>\s*$/i
-          line = '<link href="'
-          line << (args.dev ? '../../esotericpig.github.io/' : '../../../')
-          line << 'css/prism.css" rel="stylesheet" /> </head>'
-          
+          line = %Q(<link href="#{GHP_ROOT}/css/prism.css" rel="stylesheet" /> </head>)
           out = true
         end
         
         # JS
         if line =~ /^\s*\<\/body\>\s*$/i
-          line = '<script src="'
-          line << (args.dev ? '../../esotericpig.github.io/' : '../../../')
-          line << 'js/prism.js"></script> </body>'
-          
+          line = %Q(<script src="#{GHP_ROOT}/js/prism.js"></script> </body>)
           out = true
         end
         
