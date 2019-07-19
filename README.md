@@ -93,7 +93,7 @@ $ bundle exec rake install:local
 
 ## [Using](#contents)
 
-Documentation (YARDoc) is available on my [GitHub Page](https://esotericpig.github.io/docs/psychgus/yardoc/index.html) and RubyDoc.info ([[/gems]](https://www.rubydoc.info/gems/psychgus) or [[/github]](https://www.rubydoc.info/github/esotericpig/psychgus/master)).
+Documentation (YARDoc) is available on my [GitHub Page](https://esotericpig.github.io/docs/psychgus/yardoc/index.html) and on [RubyDoc.info](https://www.rubydoc.info/gems/psychgus).
 
 To begin styling, create a class and mix in (include) `Psychgus::Styler`. Then pass it in as a keyword arg (`stylers: MyStyler.new` or `stylers: [MyStyler1.new,MyStyler2.new]`) into one of the Psychgus methods.
 
