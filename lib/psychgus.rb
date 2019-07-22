@@ -311,10 +311,8 @@ require 'psychgus/super_sniffer/parent'
 ###
 module Psychgus
   # Include these in the top namespace for convenience (i.e., less typing).
-  # 
-  # @since 1.2.0
-  include Stylables
-  include Stylers
+  include Stylables # @since 1.2.0
+  include Stylers # @since 1.2.0
   
   NODE_CLASS_ALIASES = {:Doc => :Document,:Map => :Mapping,:Seq => :Sequence}
   OPTIONS_ALIASES = {:canon => :canonical,:indent => :indentation}
