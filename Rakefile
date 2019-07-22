@@ -15,13 +15,14 @@
 # GNU Lesser General Public License for more details.
 # 
 # You should have received a copy of the GNU Lesser General Public License
-# along with Psychgus.  If not, see <http://www.gnu.org/licenses/>.
+# along with Psychgus.  If not, see <https://www.gnu.org/licenses/>.
 #++
 
 
 require 'bundler/gem_tasks'
 
 require 'yard'
+require 'yard_ghurt'
 
 require 'psychgus/version'
 
@@ -33,34 +34,18 @@ task default: [:test]
 CLEAN.exclude('.git/','stock/')
 CLOBBER.include('doc/')
 
-module PsychgusRake
-  # Remove if exists
-  def self.rm_exist(filename,output=true)
-    if File.exist?(filename)
-      puts "Delete [#{filename}]" if output
-      File.delete(filename)
-    end
-  end
-end
-
 # Execute "rake ghp_doc" for a dry run
 # Execute "rake ghp_doc[true]" for actually deploying
-desc %q(Rsync "doc/" to my GitHub Page's repo; not useful for others)
-task :ghp_doc,[:deploy] do |task,args|
-  dry_run = args.deploy ? '' : '--dry-run'
-  rsync_cmd = "rsync -ahv --delete-after --progress #{dry_run} 'doc/' '../esotericpig.github.io/docs/psychgus/yardoc/'"
+YardGhurt::GHPSyncerTask.new(:ghp_doc) do |task|
+  task.description = %q(Rsync "doc/" to my GitHub Page's repo; not useful for others)
   
-  sh rsync_cmd
-  
-  if !args.deploy
-    puts
-    puts 'Execute "rake ghp_doc[true]" for actually deploying (non-dry-run)'
-  end
+  task.ghp_dir = '../esotericpig.github.io/docs/psychgus/yardoc'
+  task.sync_args << '--delete-after'
 end
 
 Rake::TestTask.new() do |task|
   task.libs = ['lib','test']
-  task.pattern = 'test/**/*_test.rb'
+  task.pattern = File.join('test','**','*_test.rb')
   task.description += " ('#{task.pattern}')"
   #task.options = '--verbose' # Execute "rake test TESTOPT=-v" instead
   task.verbose = true
@@ -78,80 +63,33 @@ end
 
 # Execute "rake clobber yard" for pristine docs
 YARD::Rake::YardocTask.new() do |task|
-  task.files = ['lib/**/*.rb']
+  task.files = [File.join('lib','**','*.rb')]
   
   task.options += ['--files','CHANGELOG.md,LICENSE.txt']
   task.options += ['--readme','README.md']
   
   task.options << '--protected' # Show protected methods
-  task.options += ['--template-path','yard/templates/']
+  task.options += ['--template-path',File.join('yard','templates')]
   task.options += ['--title',"Psychgus v#{Psychgus::VERSION} Doc"]
 end
 
-desc 'Fix (find & replace) text in the YARD files for GitHub differences'
-task :yard_fix,[:dev] do |task,args|
-  # Delete this file as it's never used (index.html is an exact copy)
-  PsychgusRake.rm_exist('doc/file.README.html')
+YardGhurt::GFMFixerTask.new(:yard_fix) do |task|
+  task.description = 'Fix (find & replace) text in the YARD files for GitHub differences'
   
-  # Root dir of my GitHub Page for CSS/JS
-  GHP_ROOT = args.dev ? '../../esotericpig.github.io' : '../../..'
+  task.arg_names = [:dev]
+  task.dry_run = false
+  task.fix_code_langs = true
+  task.md_files = ['index.html']
   
-  ['doc/index.html'].each do |filename|
-    puts "File [#{filename}]:"
+  task.before = Proc.new() do |task,args|
+    # Delete this file as it's never used (index.html is an exact copy)
+    YardGhurt.rm_exist(File.join(task.doc_dir,'file.README.html'))
     
-    lines = []
-    write = false
+    # Root dir of my GitHub Page for CSS/JS
+    GHP_ROOT = YardGhurt.to_bool(args.dev) ? '../../esotericpig.github.io' : '../../..'
     
-    File.open(filename,'r') do |file|
-      file.each_line do |line|
-        out = false
-        
-        # CSS
-        if line =~ /^\s*\<\/head\>\s*$/i
-          line = %Q(<link href="#{GHP_ROOT}/css/prism.css" rel="stylesheet" /> </head>)
-          out = true
-        end
-        
-        # JS
-        if line =~ /^\s*\<\/body\>\s*$/i
-          line = %Q(<script src="#{GHP_ROOT}/js/prism.js"></script> </body>)
-          out = true
-        end
-        
-        # Anchor links
-        tag = 'href="#'
-        quoted_tag = Regexp.quote(tag)
-        
-        if !(i = line.index(Regexp.new(quoted_tag + '[a-z]'))).nil?()
-          line = line.gsub(Regexp.new(quoted_tag + '[a-z][^"]*"')) do |href|
-            link = href[tag.length..-2]
-            link = link.split('-').map(&:capitalize).join('_')
-            
-            %Q(#{tag}#{link}")
-          end
-          
-          out = true
-        end
-        
-        out = !line.gsub!('href="CHANGELOG.md"','href="file.CHANGELOG.html"').nil?() || out
-        out = !line.gsub!('href="LICENSE.txt"','href="file.LICENSE.html"').nil?() || out
-        out = !line.gsub!('code class="Ruby"','code class="language-ruby"').nil?() || out
-        out = !line.gsub!('code class="YAML"','code class="language-yaml"').nil?() || out
-        
-        if out
-          puts "  #{line}"
-          write = true
-        end
-        
-        lines << line
-      end
-    end
-    
-    if write
-      File.open(filename,'w') do |file|
-        file.puts lines
-      end
-    end
+    task.css_styles << %Q(<link rel="stylesheet" type="text/css" href="#{GHP_ROOT}/css/prism.css" />)
+    task.js_scripts << %Q(<script src="#{GHP_ROOT}/js/prism.js"></script>)
   end
 end
 

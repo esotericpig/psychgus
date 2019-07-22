@@ -16,7 +16,7 @@
 # GNU Lesser General Public License for more details.
 # 
 # You should have received a copy of the GNU Lesser General Public License
-# along with Psychgus.  If not, see <http://www.gnu.org/licenses/>.
+# along with Psychgus.  If not, see <https://www.gnu.org/licenses/>.
 #++
 
 
@@ -25,7 +25,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require 'psychgus/version'
 
-Gem::Specification.new do |spec|
+Gem::Specification.new() do |spec|
   spec.name        = 'psychgus'
   spec.version     = Psychgus::VERSION
   spec.authors     = ['Jonathan Bradley Whited (@esotericpig)']
@@ -43,25 +43,21 @@ Gem::Specification.new do |spec|
     'source_code_uri'   => 'https://github.com/esotericpig/psychgus'
   }
   
-  spec.files = Dir.glob(File.join('{lib,test,yard}','**','*.{erb,rb}')) +
-               %w(
-                 CHANGELOG.md
-                 Gemfile
-                 LICENSE.txt
-                 psychgus.gemspec
-                 Rakefile
-                 README.md
-               )
   spec.require_paths = ['lib']
+  
+  spec.files = Dir.glob(File.join("{#{spec.require_paths.join(',')},test,yard}",'**','*.{erb,rb}')) +
+               %W( Gemfile #{spec.name}.gemspec Rakefile ) +
+               %w( CHANGELOG.md LICENSE.txt README.md )
   
   spec.required_ruby_version = '>= 2.1.10'
   
   spec.add_runtime_dependency 'psych','>= 2.0.5'
   
-  spec.add_development_dependency 'bundler'  ,'~> 1.16'
-  spec.add_development_dependency 'minitest' ,'~> 5.11' # For testing
-  spec.add_development_dependency 'rake'     ,'~> 12.3'
-  spec.add_development_dependency 'rdoc'     ,'~> 6.1'  # For RDoc for YARD (*.rb)
-  spec.add_development_dependency 'redcarpet','~> 3.4'  # For Markdown for YARD (*.md)
-  spec.add_development_dependency 'yard'     ,'~> 0.9'  # For documentation
+  spec.add_development_dependency 'bundler'   ,'~> 1.16'
+  spec.add_development_dependency 'minitest'  ,'~> 5.11' # For testing
+  spec.add_development_dependency 'rake'      ,'~> 12.3'
+  spec.add_development_dependency 'rdoc'      ,'~> 6.1'  # For RDoc for YARD (*.rb)
+  spec.add_development_dependency 'redcarpet' ,'~> 3.4'  # For Markdown for YARD (*.md)
+  spec.add_development_dependency 'yard'      ,'~> 0.9'  # For documentation
+  spec.add_development_dependency 'yard_ghurt','~> 1.0'  # For YARD GitHub rake tasks
 end
