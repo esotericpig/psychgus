@@ -120,10 +120,25 @@ Toppings:
   end
   
   def test_node_consts()
+    assert_equal Psych::Nodes::Mapping::ANY,Psychgus::MAPPING_ANY
+    assert_equal Psych::Nodes::Mapping::BLOCK,Psychgus::MAPPING_BLOCK
     assert_equal Psych::Nodes::Mapping::FLOW,Psychgus::MAPPING_FLOW
+    
+    assert_equal Psych::Nodes::Scalar::ANY,Psychgus::SCALAR_ANY
+    assert_equal Psych::Nodes::Scalar::PLAIN,Psychgus::SCALAR_PLAIN
+    assert_equal Psych::Nodes::Scalar::SINGLE_QUOTED,Psychgus::SCALAR_SINGLE_QUOTED
+    assert_equal Psych::Nodes::Scalar::DOUBLE_QUOTED,Psychgus::SCALAR_DOUBLE_QUOTED
+    assert_equal Psych::Nodes::Scalar::LITERAL,Psychgus::SCALAR_LITERAL
     assert_equal Psych::Nodes::Scalar::FOLDED,Psychgus::SCALAR_FOLDED
+    
+    assert_equal Psych::Nodes::Sequence::ANY,Psychgus::SEQUENCE_ANY
+    assert_equal Psych::Nodes::Sequence::BLOCK,Psychgus::SEQUENCE_BLOCK
     assert_equal Psych::Nodes::Sequence::FLOW,Psychgus::SEQUENCE_FLOW
+    
+    assert_equal Psych::Nodes::Stream::ANY,Psychgus::STREAM_ANY
     assert_equal Psych::Nodes::Stream::UTF8,Psychgus::STREAM_UTF8
+    assert_equal Psych::Nodes::Stream::UTF16LE,Psychgus::STREAM_UTF16LE
+    assert_equal Psych::Nodes::Stream::UTF16BE,Psychgus::STREAM_UTF16BE
   end
   
   def test_parse()
