@@ -32,7 +32,7 @@ Gem::Specification.new() do |spec|
   spec.email       = ['bradley@esotericpig.com']
   spec.licenses    = ['LGPL-3.0-or-later']
   spec.homepage    = 'https://github.com/esotericpig/psychgus'
-  spec.summary     = %q(Easily style YAML files using Psych, like Sequence/Mapping Flow style.)
+  spec.summary     = %q(Easily style YAML files using Psych.)
   spec.description = %q(Easily style YAML files using Psych, like Sequence/Mapping Flow style.)
   
   spec.metadata = {
@@ -45,7 +45,8 @@ Gem::Specification.new() do |spec|
   
   spec.require_paths = ['lib']
   
-  spec.files = Dir.glob(File.join("{#{spec.require_paths.join(',')},test,yard}",'**','*.{erb,rb}')) +
+  spec.files = Dir.glob(File.join("{#{spec.require_paths.join(',')}}",'**','*.{erb,rb}')) +
+               Dir.glob(File.join('{test,yard}','**','*.{erb,rb}')) +
                %W( Gemfile #{spec.name}.gemspec Rakefile ) +
                %w( CHANGELOG.md LICENSE.txt README.md )
   
