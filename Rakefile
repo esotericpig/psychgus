@@ -36,7 +36,7 @@ CLOBBER.include('doc/')
 
 # Execute "rake ghp_doc" for a dry run
 # Execute "rake ghp_doc[true]" for actually deploying
-YardGhurt::GHPSyncerTask.new(:ghp_doc) do |task|
+YardGhurt::GHPSyncTask.new(:ghp_doc) do |task|
   task.description = %q(Rsync "doc/" to my GitHub Page's repo; not useful for others)
   
   task.ghp_dir = '../esotericpig.github.io/docs/psychgus/yardoc'
@@ -73,7 +73,7 @@ YARD::Rake::YardocTask.new() do |task|
   task.options += ['--title',"Psychgus v#{Psychgus::VERSION} Doc"]
 end
 
-YardGhurt::GFMFixerTask.new(:yard_fix) do |task|
+YardGhurt::GFMFixTask.new(:yard_fix) do |task|
   task.description = 'Fix (find & replace) text in the YARD files for GitHub differences'
   
   task.arg_names = [:dev]

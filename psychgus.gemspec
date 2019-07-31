@@ -58,7 +58,7 @@ Gem::Specification.new() do |spec|
   spec.add_development_dependency 'minitest'  ,'~> 5.11' # For testing
   spec.add_development_dependency 'rake'      ,'~> 12.3'
   spec.add_development_dependency 'rdoc'      ,'~> 6.1'  # For RDoc for YARD (*.rb)
-  spec.add_development_dependency 'redcarpet' ,'~> 3.4'  # For Markdown for YARD (*.md)
+  spec.add_development_dependency 'redcarpet' ,'~> 3.5'  # For Markdown for YARD (*.md)
   spec.add_development_dependency 'yard'      ,'~> 0.9'  # For documentation
-  spec.add_development_dependency 'yard_ghurt','~> 1.0'  # For YARD GitHub rake tasks
+  spec.add_development_dependency 'yard_ghurt','~> 1.1'  # For YARD GitHub rake tasks
 end
