@@ -2,7 +2,21 @@
 
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [[Unreleased]](https://github.com/esotericpig/psychgus/compare/v1.2.0...master)
+## [[Unreleased]](https://github.com/esotericpig/psychgus/compare/v1.2.1...master)
+
+## [v1.2.1] - 2019-12-18
+
+### Added
+- Use of YardGhurt gem for Rakefile tasks
+
+### Changed
+- Some comments/doc in SuperSniffer, README
+- yard_fix task in Rakefile to be cleaner
+- Test constants in PsychgusTest
+- Summary & files in Gemspec
+
+### Fixed
+- Updated gems
 
 ## [v1.2.0] - 2019-07-11
 
