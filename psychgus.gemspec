@@ -3,7 +3,7 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2017-2019 Jonathan Bradley Whited (@esotericpig)
+# Copyright (c) 2017-2020 Jonathan Bradley Whited (@esotericpig)
 # 
 # Psychgus is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -24,6 +24,7 @@ lib = File.expand_path('../lib',__FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require 'psychgus/version'
+
 
 Gem::Specification.new() do |spec|
   spec.name        = 'psychgus'
@@ -55,10 +56,10 @@ Gem::Specification.new() do |spec|
   spec.add_runtime_dependency 'psych','>= 2.0.5'
   
   spec.add_development_dependency 'bundler'   ,'~> 1.16'
-  spec.add_development_dependency 'minitest'  ,'~> 5.11' # For testing
-  spec.add_development_dependency 'rake'      ,'~> 12.3'
-  spec.add_development_dependency 'rdoc'      ,'~> 6.1'  # For RDoc for YARD (*.rb)
+  spec.add_development_dependency 'minitest'  ,'~> 5.14' # For testing
+  spec.add_development_dependency 'rake'      ,'~> 13.0'
+  spec.add_development_dependency 'rdoc'      ,'~> 6.2'  # For RDoc for YARD (*.rb)
   spec.add_development_dependency 'redcarpet' ,'~> 3.5'  # For Markdown for YARD (*.md)
   spec.add_development_dependency 'yard'      ,'~> 0.9'  # For documentation
-  spec.add_development_dependency 'yard_ghurt','~> 1.1'  # For YARD GitHub rake tasks
+  spec.add_development_dependency 'yard_ghurt','~> 1.2'  # For YARD GitHub rake tasks
 end
