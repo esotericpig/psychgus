@@ -114,9 +114,9 @@ Toppings:
     expected = self.class.lstrip_pipe(expected)
     
     assert_equal expected,BURGERS_DATA.to_yaml(indent: 3,stylers: @flow_styler)
-    assert_equal expected,BURGERS_DATA.to_yaml({:indent=>3,:stylers=>@flow_styler})
+    assert_equal expected,BURGERS_DATA.to_yaml(**{:indent=>3,:stylers=>@flow_styler})
     assert_equal expected,BURGERS_DATA.to_yaml(indentation: 3,stylers: @flow_styler)
-    assert_equal expected,BURGERS_DATA.to_yaml({:indentation=>3,:stylers=>@flow_styler})
+    assert_equal expected,BURGERS_DATA.to_yaml(**{:indentation=>3,:stylers=>@flow_styler})
   end
   
   def test_node_consts()
