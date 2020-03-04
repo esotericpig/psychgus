@@ -573,6 +573,7 @@ puts EggCarton.new.to_yaml
 
 ```
 $ git clone 'https://github.com/esotericpig/psychgus.git'
+$ cd psychgus
 $ bundle install
 $ bundle exec rake -T
 ```
@@ -589,28 +590,20 @@ Run all tests:
 
 ### [Generating Doc](#hacking)
 
-Generate basic doc:
+Generate doc:
 
-`$ bundle exec rake yard`
+`$ bundle exec rake doc`
 
-Fix GitHub-specific differences:
+Clean &amp; generate pristine doc:
 
-`$ bundle exec rake yard_fix`
-
-Clean doc &amp; run all of the above:
-
-`$ bundle exec rake yard_fresh`
-
-Deploy doc to my GitHub Page (not useful for others):
-
-`$ bundle exec rake ghp_doc`
+`$ bundle exec rake clobber doc`
 
 ## [License](#contents)
 
 [GNU LGPL v3+](LICENSE.txt)
 
 > Psychgus (<https://github.com/esotericpig/psychgus>)  
-> Copyright (c) 2017-2019 Jonathan Bradley Whited (@esotericpig)  
+> Copyright (c) 2017-2020 Jonathan Bradley Whited (@esotericpig)  
 > 
 > Psychgus is free software: you can redistribute it and/or modify  
 > it under the terms of the GNU Lesser General Public License as published by  

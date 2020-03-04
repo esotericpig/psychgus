@@ -2,7 +2,7 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2019 Jonathan Bradley Whited (@esotericpig)
+# Copyright (c) 2019-2020 Jonathan Bradley Whited (@esotericpig)
 # 
 # Psychgus is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -29,18 +29,16 @@ require 'psychgus/version'
 require 'rake/clean'
 require 'rake/testtask'
 
+
 task default: [:test]
 
 CLEAN.exclude('.git/','stock/')
 CLOBBER.include('doc/')
 
-# Execute "rake ghp_doc" for a dry run
-# Execute "rake ghp_doc[true]" for actually deploying
-YardGhurt::GHPSyncTask.new(:ghp_doc) do |task|
-  task.description = %q(Rsync "doc/" to my GitHub Page's repo; not useful for others)
-  
-  task.ghp_dir = '../esotericpig.github.io/docs/psychgus/yardoc'
-  task.sync_args << '--delete-after'
+
+# Execute "rake clobber doc" for pristine docs
+desc 'Generate documentation (YARDoc)'
+task :doc => [:yard,:yard_gfm_fix] do |task|
 end
 
 Rake::TestTask.new() do |task|
@@ -57,11 +55,11 @@ task :test_all do |task|
   ENV['PSYCHGUS_TEST'] = 'all'
   
   test_task = Rake::Task[:test]
+  
   test_task.reenable()
   test_task.invoke()
 end
 
-# Execute "rake clobber yard" for pristine docs
 YARD::Rake::YardocTask.new() do |task|
   task.files = [File.join('lib','**','*.rb')]
   
@@ -73,7 +71,7 @@ YARD::Rake::YardocTask.new() do |task|
   task.options += ['--title',"Psychgus v#{Psychgus::VERSION} Doc"]
 end
 
-YardGhurt::GFMFixTask.new(:yard_fix) do |task|
+YardGhurt::GFMFixTask.new() do |task|
   task.description = 'Fix (find & replace) text in the YARD files for GitHub differences'
   
   task.arg_names = [:dev]
@@ -91,8 +89,4 @@ YardGhurt::GFMFixTask.new(:yard_fix) do |task|
     task.css_styles << %Q(<link rel="stylesheet" type="text/css" href="#{GHP_ROOT}/css/prism.css" />)
     task.js_scripts << %Q(<script src="#{GHP_ROOT}/js/prism.js"></script>)
   end
-end
-
-desc 'Generate pristine YARDoc'
-task :yard_fresh => [:clobber,:yard,:yard_fix] do |task|
 end
