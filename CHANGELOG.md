@@ -2,7 +2,15 @@
 
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [[Unreleased]](https://github.com/esotericpig/psychgus/compare/v1.2.1...master)
+## [[Unreleased]](https://github.com/esotericpig/psychgus/compare/v1.2.2...master)
+
+## [v1.2.2] - 2020-03-15
+
+### Fixed
+- Fixed Psych version to be >= 3.0 for `to_yaml/encode_with` warnings
+    - This is mainly for Windows
+    - [Ruby-lang Bug #13115](https://bugs.ruby-lang.org/issues/13115)
+    - [GitHub Psych Commit](https://github.com/ruby/psych/commit/712a65a53f3c15105cd86e8ad3ee3c779050ada4)
 
 ## [v1.2.1] - 2019-12-18
 
