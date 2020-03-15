@@ -1,11 +1,11 @@
 # Psychgus
 
-[![Gem Version](https://badge.fury.io/rb/psychgus.svg)](https://badge.fury.io/rb/psychgus)
+[![Gem Version](https://badge.fury.io/rb/psychgus.svg)](https://badge.fury.io/rb/psychgus) ![ruby tests](https://github.com/esotericpig/psychgus/workflows/ruby%20tests/badge.svg)
 
-[![Documentation](https://img.shields.io/badge/doc-yard-%23A0522D.svg?style=for-the-badge)](https://esotericpig.github.io/docs/psychgus/yardoc/index.html)
-[![Source Code](https://img.shields.io/badge/source-github-%23A0522D.svg?style=for-the-badge)](https://github.com/esotericpig/psychgus)
-[![Changelog](https://img.shields.io/badge/changelog-md-%23A0522D.svg?style=for-the-badge)](CHANGELOG.md)
-[![License](https://img.shields.io/github/license/esotericpig/psychgus.svg?color=%23A0522D&style=for-the-badge)](LICENSE.txt)
+[![Documentation](https://img.shields.io/badge/doc-yard-%23A0522D.svg)](https://esotericpig.github.io/docs/psychgus/yardoc/index.html)
+[![Source Code](https://img.shields.io/badge/source-github-%23211F1F.svg)](https://github.com/esotericpig/psychgus)
+[![Changelog](https://img.shields.io/badge/changelog-md-%23A0522D.svg)](CHANGELOG.md)
+[![License](https://img.shields.io/github/license/esotericpig/psychgus.svg)](LICENSE.txt)
 
 Psychgus uses the core standard library [Psych](https://github.com/ruby/psych) for working with [YAML](https://yaml.org) and extends it so that developers can easily style the YAML according to their needs.
 
