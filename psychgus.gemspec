@@ -58,7 +58,7 @@ Gem::Specification.new() do |spec|
   # - https://github.com/ruby/psych/commit/712a65a53f3c15105cd86e8ad3ee3c779050ada4
   spec.add_runtime_dependency 'psych','>= 3.0'
   
-  spec.add_development_dependency 'bundler'   ,'~> 1.17'
+  spec.add_development_dependency 'bundler'   ,'~> 2.1'
   spec.add_development_dependency 'minitest'  ,'~> 5.14' # For testing
   spec.add_development_dependency 'rake'      ,'~> 13.0'
   spec.add_development_dependency 'rdoc'      ,'~> 6.2'  # For RDoc for YARD (*.rb)
