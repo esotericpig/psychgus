@@ -7,5 +7,8 @@ rvm:
   - 2.6
   - 2.7
   - ruby-head
+before_install:
+  - yes | gem update --force --system
+  - gem install bundler
 script:
   - bundle exec rake test
