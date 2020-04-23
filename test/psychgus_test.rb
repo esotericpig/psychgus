@@ -86,15 +86,28 @@ Toppings:
     Tempfile.create(['Psychgus','.yaml']) do |file|
       puts "Testing #{self.class.name} w/ temp file: #{file.path}"
       
-      Psychgus.dump_file(file,BURGERS_DATA,stylers: @flow_styler)
+      Psychgus.dump_file(file,BURGERS_DATA,
+        mode: File::CREAT | File::RDWR,
+        opt: {textmode: true},
+        #perm: 644, # Unix only
+        stylers: @flow_styler,
+      )
       
       file.rewind()
+      
       lines = file.readlines().join()
       assert_equal EXPECTED_BURGERS,lines
       
       file.rewind()
+      file.close()
+      
       data = Psych.load_file(file)
       refute_equal false,data
+      refute_equal nil,data
+      
+      data = Psychgus.parse_file(file)
+      refute_equal false,data
+      refute_equal nil,data
     end
   end
   

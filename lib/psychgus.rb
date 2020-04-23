@@ -413,8 +413,7 @@ module Psychgus
   #                              [+'a:UTF-16'+] create a new file or append to an existing file
   #                                             and use UTF-16 encoding
   # @param perm [Integer] the permission bits to use (platform dependent)
-  # @param opt [Symbol] the option(s) to use, more readable alternative to +mode+;
-  #                     examples: +:textmode+, +:autoclose+
+  # @param opt [Hash] Hash of keyword args to pass to +File.open()+
   # @param options [Hash] the options (or keyword args) to use; see {.dump_stream}
   # 
   # @see .dump_stream
@@ -422,7 +421,9 @@ module Psychgus
   # @see IO.new
   # @see https://ruby-doc.org/core/IO.html#method-c-new
   def self.dump_file(filename,*objects,mode: 'w',perm: nil,opt: nil,**options)
-    File.open(filename,mode,perm,opt) do |file|
+    opt = Hash(opt)
+    
+    File.open(filename,mode,perm,**opt) do |file|
       file.write(dump_stream(*objects,**options))
     end
   end
@@ -625,6 +626,7 @@ module Psychgus
   # @param filename [String] the name of the YAML file (and path) to parse
   # @param fallback [Object] the return value when nothing is parsed
   # @param mode [String,Integer] the IO open mode to use; example: +'r:BOM|UTF-8'+
+  # @param opt [Hash] Hash of keyword args to pass to +File.open()+
   # @param kargs [Hash] the keyword args to use; see {.parse_stream}
   # 
   # @return [Psych::Nodes::Document] the parsed Document node
@@ -634,8 +636,10 @@ module Psychgus
   # @see Psych::Nodes::Document
   # @see File.open
   # @see IO.new
-  def self.parse_file(filename,fallback: false,mode: 'r:BOM|UTF-8',**kargs)
-    result = File.open(filename,mode) do |file|
+  def self.parse_file(filename,fallback: false,mode: 'r:BOM|UTF-8',opt: nil,**kargs)
+    opt = Hash(opt)
+    
+    result = File.open(filename,mode,**opt) do |file|
       parse(file,filename: filename,**kargs)
     end
     
