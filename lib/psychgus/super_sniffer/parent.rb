@@ -47,7 +47,7 @@ module Psychgus
     # @see SuperSniffer#end_parent SuperSniffer#end_parent
     # @see Styler
     ###
-    class Parent
+    class Parent < Delegator
       # Calling the getter is fine; calling the setter is *not* and could cause weird results.
       # 
       # @return [Integer] the next child's position
@@ -80,47 +80,9 @@ module Psychgus
         @position = sniffer.position
       end
       
-      # @see Psych::Nodes::Alias#anchor=
-      # @see Psych::Nodes::Mapping#anchor=
-      # @see Psych::Nodes::Scalar#anchor=
-      # @see Psych::Nodes::Sequence#anchor=
-      def anchor=(anchor)
-        @node.anchor = anchor
-      end
-      
-      # @see Psych::Nodes::Scalar#plain=
-      def plain=(plain)
-        @node.plain = plain
-      end
-      
-      # @see Psych::Nodes::Scalar#quoted=
-      def quoted=(quoted)
-        @node.quoted = quoted
-      end
-      
-      # @see Psych::Nodes::Mapping#style=
-      # @see Psych::Nodes::Scalar#style=
-      # @see Psych::Nodes::Sequence#style=
-      def style=(style)
-        @node.style = style
-      end
-      
-      # @see Psych::Nodes::Node#tag=
-      def tag=(tag)
-        @node.tag = tag
-      end
-      
-      # @see Psych::Nodes::Scalar#value=
-      def value=(value)
-        @node.value = value
-      end
-      
-      # @see Psych::Nodes::Alias#anchor
-      # @see Psych::Nodes::Mapping#anchor
-      # @see Psych::Nodes::Scalar#anchor
-      # @see Psych::Nodes::Sequence#anchor
-      def anchor()
-        return @node.anchor
+      # @api private
+      def __getobj__
+        return @node
       end
       
       # Check if the children of this parent are keys to a Mapping.
@@ -139,21 +101,6 @@ module Psychgus
       # @since 1.2.0
       def child_value?()
         return @child_type == :value
-      end
-      
-      # @see Psych::Nodes::Stream#encoding
-      def encoding()
-        return @node.encoding
-      end
-      
-      # @see Psych::Nodes::Node#end_column
-      def end_column()
-        return @node.end_column
-      end
-      
-      # @see Psych::Nodes::Node#end_line
-      def end_line()
-        return @node.end_line
       end
       
       # @see Psych::Nodes::Document#implicit
@@ -183,54 +130,12 @@ module Psychgus
         return @node.quoted
       end
       
-      # @see Psych::Nodes::Node#start_column
-      def start_column()
-        return @node.start_column
-      end
-      
-      # @see Psych::Nodes::Node#start_line
-      def start_line()
-        return @node.start_line
-      end
-      
-      # @see Psych::Nodes::Mapping#style
-      # @see Psych::Nodes::Scalar#style
-      # @see Psych::Nodes::Sequence#style
-      def style()
-        return @node.style
-      end
-      
-      # @see Psych::Nodes::Node#tag
-      def tag()
-        return @node.tag
-      end
-      
-      # @see Psych::Nodes::Document#tag_directives
-      def tag_directives()
-        return @node.tag_directives
-      end
-      
-      # @see Psych::Nodes::Scalar#value
-      def value()
-        return @node.value
-      end
-      
-      # @see Psych::Nodes::Document#version
-      def version()
-        return @node.version
-      end
-      
       # @note If this method is modified, then tests will fail
       # 
       # @return [String] a String representation of this class for debugging and testing
       def to_s()
         return "<#{@debug_tag}:(#{@level}:#{@position}):#{@child_type}:(:#{@child_position})>"
       end
-      
-      alias_method :implicit,:implicit?
-      alias_method :implicit_end,:implicit_end?
-      alias_method :plain,:plain?
-      alias_method :quoted,:quoted?
     end
   end
 end
