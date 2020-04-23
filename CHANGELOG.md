@@ -2,7 +2,18 @@
 
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [[Unreleased]](https://github.com/esotericpig/psychgus/compare/v1.2.2...master)
+## [[Unreleased]](https://github.com/esotericpig/psychgus/compare/v1.3.2...master)
+
+## [v1.3.2] - 2020-04-23
+
+### Changed
+- SuperSniffer::Parent
+    - Changed to use Delegator to delegate all methods of `node`
+- Psychgus.dump_file()/parse_file()
+    - Changed `opt` to expect a Hash
+
+### Fixed
+- Fixed some Ruby 2.7 warnings in tests
 
 ## [v1.2.2] - 2020-03-15
 
