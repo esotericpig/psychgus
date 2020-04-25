@@ -2,7 +2,14 @@
 
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [[Unreleased]](https://github.com/esotericpig/psychgus/compare/v1.3.2...master)
+## [[Unreleased]](https://github.com/esotericpig/psychgus/compare/v1.3.3...master)
+
+## [v1.3.3] - 2020-04-25
+
+### Fixed
+- SuperSniffer::Parent
+    - Added require of `delegate` for Delegator
+    - Rake test task didn't catch this (must already include it)
 
 ## [v1.3.2] - 2020-04-23
 
