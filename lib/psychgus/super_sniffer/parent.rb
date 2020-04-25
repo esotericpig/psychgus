@@ -20,6 +20,9 @@
 #++
 
 
+require 'delegate'
+
+
 module Psychgus
   class SuperSniffer
     ###
