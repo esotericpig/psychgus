@@ -1,7 +1,6 @@
 # Psychgus
 
 [![Gem Version](https://badge.fury.io/rb/psychgus.svg)](https://badge.fury.io/rb/psychgus)
-[![Build Status](https://travis-ci.org/esotericpig/psychgus.svg?branch=master)](https://travis-ci.org/esotericpig/psychgus)
 [![Doc Coverage](http://inch-ci.org/github/esotericpig/psychgus.svg?branch=master)](https://inch-ci.org/github/esotericpig/psychgus)
 
 [![Documentation](https://img.shields.io/badge/doc-yard-%23A0522D.svg)](https://esotericpig.github.io/docs/psychgus/yardoc/index.html)
@@ -118,7 +117,7 @@ require 'psychgus'
 
 class CoffeeStyler
   include Psychgus::Styler
-  
+
   def style_sequence(sniffer,node)
     node.style = Psychgus::SEQUENCE_FLOW
   end
@@ -138,12 +137,12 @@ puts coffee.to_yaml(stylers: CoffeeStyler.new)
 
 class Coffee
   include Psychgus::Blueberry
-  
+
   def initialize
     @roast = ['Light', 'Medium', 'Dark', 'Extra Dark']
     @style = ['Cappuccino', 'Espresso', 'Latte', 'Mocha']
   end
-  
+
   def psychgus_stylers(sniffer)
     CoffeeStyler.new
   end
@@ -164,20 +163,20 @@ require 'psychgus'
 
 class BurgerStyler
   include Psychgus::Styler # Mix in methods needed for styling
-  
+
   # Style maps (Psych::Nodes::Mapping)
   # - Hashes (key/value pairs)
   # - Example: "Burgers: Classic {}"
   def style_mapping(sniffer,node)
     node.style = Psychgus::MAPPING_FLOW if sniffer.level >= 4
   end
-  
+
   # Style scalars (Psych::Nodes::Scalar)
   # - Any text (non-alias)
   def style_scalar(sniffer,node)
     # Remove colon (change symbols into strings)
     node.value = node.value.sub(':','')
-    
+
     # Capitalize each word
     node.value = node.value.split(' ').map do |v|
       if v.casecmp('BBQ') == 0
@@ -186,11 +185,11 @@ class BurgerStyler
         v.capitalize()
       end
     end.join(' ')
-    
+
     # Change lettuce to spinach
     node.value = 'Spinach' if node.value == 'Lettuce'
   end
-  
+
   # Style sequences (Psych::Nodes::Sequence)
   # - Arrays
   # - Example: "[Lettuce, Onions, Pickles, Tomatoes]"
@@ -259,50 +258,50 @@ require 'psychgus'
 
 class BurgerStyler
   include Psychgus::Styler # Mix in methods needed for styling
-  
+
   def initialize(sniffer)
     @class_level    = sniffer.level
     @class_position = sniffer.position
   end
-  
+
   # Style all nodes (Psych::Nodes::Node)
   def style(sniffer,node)
     # Remove "!ruby/object:..." for Burger classes (not Burgers class)
     node.tag = nil if node.node_of?(:mapping,:scalar,:sequence)
-    
+
     # This is another way to do the above
     #node.tag = nil if node.respond_to?(:tag=)
   end
-  
+
   # Style maps (Psych::Nodes::Mapping)
   # - Hashes (key/value pairs)
   # - Example: "Burgers: Classic {}"
   def style_mapping(sniffer,node)
     parent = sniffer.parent
-    
+
     if !parent.nil?()
       # BBQ
       node.style = Psychgus::MAPPING_FLOW if parent.node_of?(:scalar) &&
                                              parent.value.casecmp('BBQ') == 0
     end
   end
-  
+
   # Style scalars (Psych::Nodes::Scalar)
   # - Any text (non-alias)
   def style_scalar(sniffer,node)
     parent = sniffer.parent
-    
+
     # Single quote scalars that are not keys to a map
     # - "child_key?" is the same as "child_type == :key"
     node.style = Psychgus::SCALAR_SINGLE_QUOTED unless parent.child_key?()
   end
-  
+
   # Style sequences (Psych::Nodes::Sequence)
   # - Arrays
   # - Example: "[Lettuce, Onions, Pickles, Tomatoes]"
   def style_sequence(sniffer,node)
     relative_level = (sniffer.level - @class_level) + 1
-    
+
     # "[Ketchup, Mustard]"
     node.style = Psychgus::SEQUENCE_FLOW if relative_level == 3
   end
@@ -310,23 +309,23 @@ end
 
 class Burger
   include Psychgus::Blueberry # Mix in methods needed to be stylable
-  
+
   attr_accessor :bun
   attr_accessor :cheese
   attr_accessor :sauce
-  
+
   def initialize(sauce,cheese,bun)
     @bun    = bun
     @cheese = cheese
     @sauce  = sauce
   end
-  
+
   # Return our styler(s)
   # - Can be an Array: [MyStyler1.new, MyStyler2.new]
   def psychgus_stylers(sniffer)
     return BurgerStyler.new(sniffer)
   end
-  
+
   # You can still use Psych's encode_with(), no problem
   def encode_with(coder)
     coder['Bun']    = @bun
@@ -339,23 +338,23 @@ class Burgers
   attr_accessor :burgers
   attr_accessor :toppings
   attr_accessor :favorite
-  
+
   def initialize()
     @burgers = {
       'Classic' => Burger.new(['Ketchup','Mustard'],'American'    ,'Sesame Seed'),
       'BBQ'     => Burger.new('Honey BBQ'          ,'Cheddar'     ,'Kaiser'),
       'Fancy'   => Burger.new('Spicy Wasabi'       ,'Smoked Gouda','Hawaiian')
     }
-    
+
     @toppings = [
       'Mushrooms',
       %w(Lettuce Onions Pickles Tomatoes),
       [%w(Ketchup Mustard),%w(Salt Pepper)]
     ]
-    
+
     @favorite = @burgers['BBQ'] # Alias
   end
-  
+
   # You can still use Psych's encode_with(), no problem
   def encode_with(coder)
     coder['Burgers']  = @burgers
@@ -430,7 +429,7 @@ require 'psychgus'
 
 class MyStyler
   include Psychgus::Styler
-  
+
   def style_sequence(sniffer,node)
     node.style = Psychgus::SEQUENCE_FLOW
   end
@@ -605,7 +604,7 @@ Clean &amp; generate pristine doc:
 [GNU LGPL v3+](LICENSE.txt)
 
 > Psychgus (<https://github.com/esotericpig/psychgus>)  
-> Copyright (c) 2017-2020 Jonathan Bradley Whited (@esotericpig)  
+> Copyright (c) 2017-2021 Jonathan Bradley Whited  
 > 
 > Psychgus is free software: you can redistribute it and/or modify  
 > it under the terms of the GNU Lesser General Public License as published by  

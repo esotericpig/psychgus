@@ -3,20 +3,9 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2019 Jonathan Bradley Whited (@esotericpig)
-# 
-# Psychgus is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# Psychgus is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License for more details.
-# 
-# You should have received a copy of the GNU Lesser General Public License
-# along with Psychgus.  If not, see <http://www.gnu.org/licenses/>.
+# Copyright (c) 2019-2021 Jonathan Bradley Whited
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
 #++
 
 
@@ -26,8 +15,8 @@ module Psychgus
   class SuperSniffer
     ###
     # An empty {SuperSniffer} used for speed when you don't need sniffing in {StyledTreeBuilder}.
-    # 
-    # @author Jonathan Bradley Whited (@esotericpig)
+    #
+    # @author Jonathan Bradley Whited
     # @since  1.0.0
     ###
     class Empty < SuperSniffer
@@ -44,12 +33,12 @@ module Psychgus
       def start_stream(*) end
     end
   end
-  
+
   ###
   # This is used in {StyledTreeBuilder} to "sniff" information about the YAML.
-  # 
+  #
   # Then this information can be used in a {Styler} and/or a {Blueberry}.
-  # 
+  #
   # Most information is straightforward:
   # - {#aliases}   # Array of Psych::Nodes::Alias processed so far
   # - {#documents} # Array of Psych::Nodes::Document processed so far
@@ -58,17 +47,17 @@ module Psychgus
   # - {#scalars}   # Array of Psych::Nodes::Scalar processed so far
   # - {#sequences} # Array of Psych::Nodes::Sequence processed so far
   # - {#streams}   # Array of Psych::Nodes::Stream processed so far
-  # 
+  #
   # {#parent} is the current {SuperSniffer::Parent} of the node being processed,
   # which is an empty Parent for the first node (not nil).
-  # 
+  #
   # {#parents} are all of the (grand){SuperSniffer::Parent}(s) for the current node,
   # which is an Array that just contains an empty Parent for the first node.
-  # 
+  #
   # A parent is a Mapping or Sequence, or a Key (Scalar) in a Mapping.
-  # 
+  #
   # {#level} and {#position} can be best understood by an example.
-  # 
+  #
   # If you have this YAML:
   #  Burgers:
   #     Classic:
@@ -87,10 +76,10 @@ module Psychgus
   #     - Mushrooms
   #     - [Lettuce, Onions, Pickles, Tomatoes]
   #     - [[Ketchup,Mustard], [Salt,Pepper]]
-  # 
+  #
   # Then the levels and positions will be as follows:
   #   # (level:position):current_node - <parent:(parent_level:parent_position)>
-  #   
+  #
   #   (1:1):Psych::Nodes::Stream - <root:(0:0)>
   #   (1:1):Psych::Nodes::Document - <stream:(1:1)>
   #   (1:1):Psych::Nodes::Mapping - <doc:(1:1)>
@@ -137,23 +126,23 @@ module Psychgus
   #       (5:2):Psych::Nodes::Sequence - <seq:(4:3)>
   #        (6:1):Salt - <seq:(5:2)>
   #        (6:2):Pepper - <seq:(5:2)>
-  # 
+  #
   # "The Super Sniffer" is the nickname for Gus's nose from the TV show Psych
   # because he has a very refined sense of smell.
-  # 
+  #
   # @note You should never call the methods that are not readers, like {#add_alias}, {#start_mapping}, etc.
   #       unless you are extending this class (creating a subclass).
-  # 
-  # @author Jonathan Bradley Whited (@esotericpig)
+  #
+  # @author Jonathan Bradley Whited
   # @since  1.0.0
-  # 
+  #
   # @see StyledTreeBuilder
   # @see Styler
   # @see Blueberry#psychgus_stylers
   ###
   class SuperSniffer
     EMPTY = Empty.new().freeze()
-    
+
     attr_reader :aliases # @return [Array<Psych::Nodes::Alias>] the aliases processed so far
     attr_reader :documents # @return [Array<Psych::Nodes::Document>] the documents processed so far
     attr_reader :level # @return [Integer] the current level
@@ -165,7 +154,7 @@ module Psychgus
     attr_reader :scalars # @return [Array<Psych::Nodes::Scalar>] the scalars processed so far
     attr_reader :sequences # @return [Array<Psych::Nodes::Sequence>] the sequences processed so far
     attr_reader :streams # @return [Array<Psych::Nodes::Stream>] the streams processed so far
-    
+
     # Initialize this class for sniffing.
     def initialize()
       @aliases = []
@@ -179,148 +168,148 @@ module Psychgus
       @scalars = []
       @sequences = []
       @streams = []
-      
+
       # Do not pass in "top_level: true"
       start_parent(nil,debug_tag: :root)
     end
-    
+
     # Add a Psych::Nodes::Alias to this class only (not to the YAML).
-    # 
+    #
     # A {Styler} should probably never call this.
-    # 
+    #
     # @param node [Psych::Nodes::Alias] the alias to add
-    # 
+    #
     # @see add_child
     def add_alias(node)
       add_child(node)
       @aliases.push(node)
     end
-    
+
     # Add a Psych::Nodes::Scalar to this class only (not to the YAML).
-    # 
+    #
     # A {Styler} should probably never call this.
-    # 
+    #
     # @param node [Psych::Nodes::Scalar] the scalar to add
-    # 
+    #
     # @see add_child
     def add_scalar(node)
       add_child(node)
       @scalars.push(node)
     end
-    
+
     # End a Psych::Nodes::Document started with {#start_document}.
-    # 
+    #
     # Pops off a parent from {#parents} and sets {#parent} to the last one.
     # {#level} and {#position} are reset according to the last parent.
-    # 
+    #
     # A {Styler} should probably never call this.
     def end_document()
       end_parent(top_level: true)
     end
-    
+
     # End a Psych::Nodes::Mapping started with {#start_mapping}.
-    # 
+    #
     # Pops off a parent from {#parents} and sets {#parent} to the last one.
     # {#level} and {#position} are reset according to the last parent.
-    # 
+    #
     # A {Styler} should probably never call this.
-    # 
+    #
     # @see end_parent
     def end_mapping()
       end_parent(mapping_value: true)
     end
-    
+
     # End a Psych::Nodes::Sequence started with {#start_sequence}.
-    # 
+    #
     # Pops off a parent from {#parents} and sets {#parent} to the last one.
     # {#level} and {#position} are reset according to the last parent.
-    # 
+    #
     # A {Styler} should probably never call this.
-    # 
+    #
     # @see end_parent
     def end_sequence()
       end_parent(mapping_value: true)
     end
-    
+
     # End a Psych::Nodes::Stream started with {#start_stream}.
-    # 
+    #
     # Pops off a parent from {#parents} and sets {#parent} to the last one.
     # {#level} and {#position} are reset according to the last parent.
-    # 
+    #
     # A {Styler} should probably never call this.
     def end_stream()
       end_parent(top_level: true)
     end
-    
+
     # Start a Psych::Nodes::Document.
-    # 
+    #
     # Creates a {SuperSniffer::Parent}, sets {#parent} to it, and adds it to {#parents}.
     # {#level} and {#position} are incremented/set accordingly.
-    # 
+    #
     # A {Styler} should probably never call this.
-    # 
+    #
     # @param node [Psych::Nodes::Document] the Document to start
-    # 
+    #
     # @see start_parent
     def start_document(node)
       start_parent(node,debug_tag: :doc,top_level: true)
       @documents.push(node)
     end
-    
+
     # Start a Psych::Nodes::Mapping.
-    # 
+    #
     # Creates a {SuperSniffer::Parent}, sets {#parent} to it, and adds it to {#parents}.
     # {#level} and {#position} are incremented/set accordingly.
-    # 
+    #
     # A {Styler} should probably never call this.
-    # 
+    #
     # @param node [Psych::Nodes::Mapping] the Mapping to start
-    # 
+    #
     # @see start_parent
     def start_mapping(node)
       start_parent(node,debug_tag: :map,child_type: :key)
       @mappings.push(node)
     end
-    
+
     # Start a Psych::Nodes::Sequence.
-    # 
+    #
     # Creates a {SuperSniffer::Parent}, sets {#parent} to it, and adds it to {#parents}.
     # {#level} and {#position} are incremented/set accordingly.
-    # 
+    #
     # A {Styler} should probably never call this.
-    # 
+    #
     # @param node [Psych::Nodes::Sequence] the Sequence to start
-    # 
+    #
     # @see start_parent
     def start_sequence(node)
       start_parent(node,debug_tag: :seq)
       @sequences.push(node)
     end
-    
+
     # Start a Psych::Nodes::Stream.
-    # 
+    #
     # Creates a {SuperSniffer::Parent}, sets {#parent} to it, and adds it to {#parents}.
     # {#level} and {#position} are incremented/set accordingly.
-    # 
+    #
     # A {Styler} should probably never call this.
-    # 
+    #
     # @param node [Psych::Nodes::Stream] the Stream to start
-    # 
+    #
     # @see start_parent
     def start_stream(node)
       start_parent(node,debug_tag: :stream,top_level: true)
       @streams.push(node)
     end
-    
+
     protected
-    
+
     # Add a non-parent node.
-    # 
+    #
     # This will increment {#position} accordingly, and if the child is a Key to a Mapping,
     # create a fake "{SuperSniffer::Parent}".
-    # 
+    #
     # @param node [Psych::Nodes::Node] the non-parent Node to add
-    # 
+    #
     # @see end_mapping_value
     def add_child(node)
       if !@parent.nil?()
@@ -336,83 +325,83 @@ module Psychgus
           @parent.child_position += 1
         end
       end
-      
+
       @position += 1
-      
+
       @nodes.push(node)
     end
-    
+
     # End a fake "{SuperSniffer::Parent}" that is a Key/Value to a Mapping.
-    # 
+    #
     # @see add_child
     def end_mapping_value()
       end_parent() # Do not pass in "mapping_value: true" and/or "top_level: true"
-      
+
       @parent.child_type = :key unless @parent.nil?()
     end
-    
+
     # End a {SuperSniffer::Parent}.
-    # 
+    #
     # Pops off a parent from {#parents} and sets {#parent} to the last one.
     # {#level} and {#position} are reset according to the last parent.
-    # 
+    #
     # @param mapping_value [true,false] true if parent can be the value of a Mapping's key
     # @param top_level [true,false] true if a top-level parent (i.e., encapsulating the main data)
     def end_parent(mapping_value: false,top_level: false)
       @parents.pop()
       @parent = @parents.last
-      
+
       @level = top_level ? 1 : (@level - 1)
-      
+
       if !@parent.nil?()
         @parent.child_position += 1
         @position = @parent.child_position
-        
+
         # add_child() will not be called again, so end a fake "parent" manually with a fake "value"
         # - This is necessary for any parents that can be the value of a map's key (e.g., Sequence)
         end_mapping_value() if mapping_value && !@parent.child_type.nil?()
       end
     end
-    
+
     # Start a fake "{SuperSniffer::Parent}" that is a Key/Value to a Mapping.
-    # 
+    #
     # Creates a {SuperSniffer::Parent}, sets {#parent} to it, and adds it to {#parents}.
     # {#level} and {#position} are incremented/set accordingly.
-    # 
+    #
     # @param node [Psych::Nodes::Node] the Node to start
-    # 
+    #
     # @see start_parent
     def start_mapping_key(node)
       debug_tag = nil
-      
+
       # Value must be first because Scalar also has an anchor
       if node.respond_to?(:value)
         debug_tag = node.value
       elsif node.respond_to?(:anchor)
         debug_tag = node.anchor
       end
-      
+
       debug_tag = :noface if debug_tag.nil?()
-      
+
       start_parent(node,debug_tag: debug_tag,child_type: :value)
     end
-    
+
     # Start a {SuperSniffer::Parent}.
-    # 
+    #
     # Creates a {SuperSniffer::Parent}, sets {#parent} to it, and adds it to {#parents}.
     # {#level} and {#position} are incremented/set accordingly.
-    # 
+    #
     # @param node [Psych::Nodes::Node] the parent Node to start
     # @param top_level [true,false] true if a top-level parent (i.e., encapsulating the main data)
     # @param extra [Hash] the extra keyword args to pass to {SuperSniffer::Parent#initialize}
-    # 
+    #
     # @see SuperSniffer::Parent#initialize
     def start_parent(node,top_level: false,**extra)
       @parent = Parent.new(self,node,**extra)
-      
+
       @parents.push(@parent)
       @nodes.push(node) unless node.nil?()
-      
+
       if top_level
         @level = 1
         @position = @parent.position

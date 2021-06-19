@@ -1,22 +1,5 @@
 # encoding: UTF-8
-
-#--
-# This file is part of Psychgus.
-# Copyright (c) 2019-2020 Jonathan Bradley Whited (@esotericpig)
-# 
-# Psychgus is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# Psychgus is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License for more details.
-# 
-# You should have received a copy of the GNU Lesser General Public License
-# along with Psychgus.  If not, see <https://www.gnu.org/licenses/>.
-#++
+# frozen_string_literal: true
 
 
 require 'bundler/gem_tasks'
@@ -38,8 +21,7 @@ CLOBBER.include('doc/')
 
 # Execute "rake clobber doc" for pristine docs
 desc 'Generate documentation (YARDoc)'
-task :doc => [:yard,:yard_gfm_fix] do |task|
-end
+task doc: %i[yard yard_gfm_fix]
 
 Rake::TestTask.new() do |task|
   task.libs = ['lib','test']
@@ -53,19 +35,19 @@ end
 desc 'Run all tests (including writing to temp files, etc.)'
 task :test_all do |task|
   ENV['PSYCHGUS_TEST'] = 'all'
-  
+
   test_task = Rake::Task[:test]
-  
+
   test_task.reenable()
   test_task.invoke()
 end
 
 YARD::Rake::YardocTask.new() do |task|
   task.files = [File.join('lib','**','*.rb')]
-  
+
   task.options += ['--files','CHANGELOG.md,LICENSE.txt']
   task.options += ['--readme','README.md']
-  
+
   task.options << '--protected' # Show protected methods
   task.options += ['--template-path',File.join('yard','templates')]
   task.options += ['--title',"Psychgus v#{Psychgus::VERSION} Doc"]
@@ -73,19 +55,19 @@ end
 
 YardGhurt::GFMFixTask.new() do |task|
   task.description = 'Fix (find & replace) text in the YARD files for GitHub differences'
-  
+
   task.arg_names = [:dev]
   task.dry_run = false
   task.fix_code_langs = true
   task.md_files = ['index.html']
-  
+
   task.before = Proc.new() do |task,args|
     # Delete this file as it's never used (index.html is an exact copy)
     YardGhurt.rm_exist(File.join(task.doc_dir,'file.README.html'))
-    
+
     # Root dir of my GitHub Page for CSS/JS
     GHP_ROOT = YardGhurt.to_bool(args.dev) ? '../../esotericpig.github.io' : '../../..'
-    
+
     task.css_styles << %Q(<link rel="stylesheet" type="text/css" href="#{GHP_ROOT}/css/prism.css" />)
     task.js_scripts << %Q(<script src="#{GHP_ROOT}/js/prism.js"></script>)
   end
