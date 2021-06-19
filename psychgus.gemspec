@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
     Dir.glob(File.join('{samples,test,yard}','**','*.{erb,rb}')),
     %W[ Gemfile #{spec.name}.gemspec Rakefile .yardopts ],
     %w[ LICENSE.txt CHANGELOG.md README.md ],
-  ].flatten()
+  ].flatten
 
   # 3.0 is needed for this issue:
   # - https://bugs.ruby-lang.org/issues/13115
