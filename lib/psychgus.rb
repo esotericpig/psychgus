@@ -1,5 +1,5 @@
-#!/usr/bin/env ruby
 # encoding: UTF-8
+# frozen_string_literal: true
 
 #--
 # This file is part of Psychgus.
@@ -303,8 +303,8 @@ module Psychgus
   include Stylables # @since 1.2.0
   include Stylers # @since 1.2.0
 
-  NODE_CLASS_ALIASES = {:Doc => :Document,:Map => :Mapping,:Seq => :Sequence}
-  OPTIONS_ALIASES = {:canon => :canonical,:indent => :indentation}
+  NODE_CLASS_ALIASES = {Doc: :Document,Map: :Mapping,Seq: :Sequence}.freeze
+  OPTIONS_ALIASES = {canon: :canonical,indent: :indentation}.freeze
 
   # Get a Class (constant) from Psych::Nodes.
   #
@@ -320,10 +320,10 @@ module Psychgus
   # @see Psych::Nodes
   # @see NODE_CLASS_ALIASES
   def self.node_class(name)
-    name = name.to_sym().capitalize()
+    name = name.to_sym.capitalize
 
     actual_name = NODE_CLASS_ALIASES[name]
-    name = actual_name unless actual_name.nil?()
+    name = actual_name unless actual_name.nil?
 
     return Psych::Nodes.const_get(name)
   end
@@ -339,7 +339,7 @@ module Psychgus
   # @see .node_class
   def self.node_const(class_name,const_name,lenient=true)
     node_class = node_class(class_name)
-    const_name = const_name.to_sym().upcase()
+    const_name = const_name.to_sym.upcase
 
     return 0 if lenient && !node_class.const_defined?(const_name,true)
     return node_class.const_get(const_name,true)
@@ -454,17 +454,17 @@ module Psychgus
     # will produce [[]] and [nil], which are not empty.
     #
     # dump_stream() w/o any args is the only problem, but resolved w/ [nil].
-    if objects.empty?()
-      objects = options.empty?() ? [nil] : [options]
+    if objects.empty?
+      objects = options.empty? ? [nil] : [options]
       options = {}
     end
 
-    if Hash === io
+    if io.is_a?(Hash)
       options = io
       io = nil
     end
 
-    if !options.empty?()
+    if !options.empty?
       OPTIONS_ALIASES.each do |option_alias,actual_option|
         if options.key?(option_alias) && !options.key?(actual_option)
           options[actual_option] = options[option_alias]
@@ -475,9 +475,10 @@ module Psychgus
     visitor = Psych::Visitors::YAMLTree.create(options,StyledTreeBuilder.new(*stylers,
       deref_aliases: deref_aliases))
 
-    if objects.empty?()
+    if objects.empty?
       # Else, will throw a cryptic NoMethodError:
-      # - "psych/tree_builder.rb:in `set_end_location': undefined method `end_line=' for nil:NilClass (NoMethodError)"
+      # - "psych/tree_builder.rb:in `set_end_location':
+      #    undefined method `end_line=' for nil:NilClass (NoMethodError)"
       #
       # This should never occur because of the if-statement at the top of this method.
       visitor << nil
@@ -583,7 +584,7 @@ module Psychgus
 
     dump_stream(*objects,stylers: styler,**kargs)
 
-    return styler.to_s()
+    return styler.to_s
   end
 
   # Parse +yaml+ into a Psych::Nodes::Document.
@@ -686,7 +687,7 @@ module Psychgus
   # @see Psych::Nodes::Stream
   # @see Psych::SyntaxError
   def self.parse_stream(yaml,filename: nil,stylers: nil,deref_aliases: false,**options,&block)
-    if block_given?()
+    if block_given?
       parser = Psych::Parser.new(StyledDocumentStream.new(*stylers,deref_aliases: deref_aliases,**options,
         &block))
 

@@ -1,5 +1,5 @@
-#!/usr/bin/env ruby
 # encoding: UTF-8
+# frozen_string_literal: true
 
 #--
 # This file is part of Psychgus.
@@ -72,7 +72,7 @@ module Psychgus
           end
 
           # Dereference aliases?
-          if @emitter.deref_aliases?()
+          if @emitter.deref_aliases?
             @st.remove_alias(target) if target.respond_to?(:object_id) && @st.key?(target)
           end
         end

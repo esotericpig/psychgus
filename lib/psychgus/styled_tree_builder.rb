@@ -1,5 +1,5 @@
-#!/usr/bin/env ruby
 # encoding: UTF-8
+# frozen_string_literal: true
 
 #--
 # This file is part of Psychgus.
@@ -45,7 +45,7 @@ module Psychgus
       super()
 
       @deref_aliases = deref_aliases
-      @sniffer = SuperSniffer.new()
+      @sniffer = SuperSniffer.new
       @stylers = []
 
       add_styler(*stylers)
@@ -90,7 +90,7 @@ module Psychgus
     def end_document(*)
       result = super
 
-      @sniffer.end_document()
+      @sniffer.end_document
 
       return result
     end
@@ -102,7 +102,7 @@ module Psychgus
     def end_mapping(*)
       result = super
 
-      @sniffer.end_mapping()
+      @sniffer.end_mapping
 
       return result
     end
@@ -114,7 +114,7 @@ module Psychgus
     def end_sequence(*)
       result = super
 
-      @sniffer.end_sequence()
+      @sniffer.end_sequence
 
       return result
     end
@@ -126,7 +126,7 @@ module Psychgus
     def end_stream(*)
       result = super
 
-      @sniffer.end_stream()
+      @sniffer.end_stream
 
       return result
     end
@@ -149,7 +149,7 @@ module Psychgus
     # @return [Styler,Array<Styler>,nil] the last {Styler}(s), or if empty or count==0, nil
     def pop_styler(count=1)
       return nil if count == 0
-      return @stylers.pop() if count == 1
+      return @stylers.pop if count == 1
 
       return @stylers.pop(count)
     end

@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # encoding: UTF-8
 # frozen_string_literal: true
 
@@ -22,10 +21,10 @@ class PsychgusTester < Minitest::Test
   #
   # To do this, execute:
   #   rake test_all
-  TEST_ALL = (ENV['PSYCHGUS_TEST'].to_s().strip().casecmp('all') == 0)
-  TEST_ALL_SKIP_MSG = %q(Execute "rake test_all" for this test)
+  TEST_ALL = (ENV['PSYCHGUS_TEST'].to_s.strip.casecmp('all') == 0)
+  TEST_ALL_SKIP_MSG = 'Execute "rake test_all" for this test'
 
-  BURGERS_YAML = <<-EOY.freeze()
+  BURGERS_YAML = <<-YAML
 Burgers:
   Classic:
     Sauce:  [Ketchup,Mustard]
@@ -43,10 +42,10 @@ Toppings:
   - Mushrooms
   - [Lettuce, Onions, Pickles, Tomatoes]
   - [[Ketchup,Mustard], [Salt,Pepper]]
-  EOY
-  BURGERS_DATA = Psych.load(BURGERS_YAML).freeze()
+  YAML
+  BURGERS_DATA = Psych.load(BURGERS_YAML).freeze
 
-  COURSES_YAML = <<-EOY.freeze()
+  COURSES_YAML = <<-YAML
 Courses:
   COSC: [470,'Computer Science']
   MUSC: [340,'Music']
@@ -56,10 +55,10 @@ Schedule:
 - {Course: MUSC,Time: '10:30'}
 - {Course: ARTS,Time: '15:10'}
 - {Course: COSC,Time: '13:10'}
-  EOY
-  COURSES_DATA = Psych.load(COURSES_YAML).freeze()
+  YAML
+  COURSES_DATA = Psych.load(COURSES_YAML).freeze
 
-  DOLPHINS_YAML = <<-EOY.freeze()
+  DOLPHINS_YAML = <<-YAML
 Dolphins:
   Common:     &com {Length: ~2.5m, Weight:  ~235kg}
   Bottlenose: &bot {Length:   ~4m, Weight:  ~300kg}
@@ -68,8 +67,8 @@ Dolphins:
 Popular:
   - *bot
   - *orc
-  EOY
-  DOLPHINS_DATA = Psych.load(DOLPHINS_YAML).freeze()
+  YAML
+  DOLPHINS_DATA = Psych.load(DOLPHINS_YAML).freeze
 
   # This is for "<<-" heredoc
   # - Purposely not using "<<~" (tilde) for older Ruby versions

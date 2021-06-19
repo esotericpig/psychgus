@@ -1,0 +1,4 @@
+--files 'LICENSE.txt,CHANGELOG.md'
+--protected
+--readme 'README.md'
+--template-path 'yard/templates'

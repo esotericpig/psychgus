@@ -1,5 +1,5 @@
-#!/usr/bin/env ruby
 # encoding: UTF-8
+# frozen_string_literal: true
 
 #--
 # This file is part of Psychgus.
@@ -23,7 +23,7 @@ class MyStyler
   def style_mapping(sniffer,node)
     parent = sniffer.parent
 
-    if !parent.nil?()
+    if !parent.nil?
       # BBQ
       node.style = Psychgus::MAPPING_FLOW if parent.node_of?(:scalar) && parent.value.casecmp('BBQ') == 0
 
@@ -46,12 +46,12 @@ class MyStyler
 end
 
 class StylerTest < PsychgusTester
-  def setup()
-    @styler = MyStyler.new()
+  def setup
+    @styler = MyStyler.new
   end
 
-  def test_styler()
-    expected = <<-EOY
+  def test_styler
+    expected = <<-YAML
     |---
     |Burgers:
     |  Classic:
@@ -66,7 +66,7 @@ class StylerTest < PsychgusTester
     |- 'Mushrooms'
     |- [Spinach, Onions, Pickles, Tomatoes]
     |- [[Ketchup, Mustard], [Salt, Pepper]]
-    EOY
+    YAML
     expected = self.class.lstrip_pipe(expected)
 
     assert_equal expected,BURGERS_DATA.to_yaml(stylers: @styler)

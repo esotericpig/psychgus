@@ -23,7 +23,7 @@ CLOBBER.include('doc/')
 desc 'Generate documentation (YARDoc)'
 task doc: %i[yard yard_gfm_fix]
 
-Rake::TestTask.new() do |task|
+Rake::TestTask.new do |task|
   task.libs = ['lib','test']
   task.pattern = File.join('test','**','*_test.rb')
   task.description += " ('#{task.pattern}')"
@@ -38,22 +38,16 @@ task :test_all do |task|
 
   test_task = Rake::Task[:test]
 
-  test_task.reenable()
-  test_task.invoke()
+  test_task.reenable
+  test_task.invoke
 end
 
-YARD::Rake::YardocTask.new() do |task|
+YARD::Rake::YardocTask.new do |task|
   task.files = [File.join('lib','**','*.rb')]
-
-  task.options += ['--files','CHANGELOG.md,LICENSE.txt']
-  task.options += ['--readme','README.md']
-
-  task.options << '--protected' # Show protected methods
-  task.options += ['--template-path',File.join('yard','templates')]
   task.options += ['--title',"Psychgus v#{Psychgus::VERSION} Doc"]
 end
 
-YardGhurt::GFMFixTask.new() do |task|
+YardGhurt::GFMFixTask.new do |task|
   task.description = 'Fix (find & replace) text in the YARD files for GitHub differences'
 
   task.arg_names = [:dev]
@@ -61,14 +55,14 @@ YardGhurt::GFMFixTask.new() do |task|
   task.fix_code_langs = true
   task.md_files = ['index.html']
 
-  task.before = Proc.new() do |task,args|
+  task.before = proc do |t2,args|
     # Delete this file as it's never used (index.html is an exact copy)
-    YardGhurt.rm_exist(File.join(task.doc_dir,'file.README.html'))
+    YardGhurt.rm_exist(File.join(t2.doc_dir,'file.README.html'))
 
     # Root dir of my GitHub Page for CSS/JS
-    GHP_ROOT = YardGhurt.to_bool(args.dev) ? '../../esotericpig.github.io' : '../../..'
+    ghp_root = YardGhurt.to_bool(args.dev) ? '../../esotericpig.github.io' : '../../..'
 
-    task.css_styles << %Q(<link rel="stylesheet" type="text/css" href="#{GHP_ROOT}/css/prism.css" />)
-    task.js_scripts << %Q(<script src="#{GHP_ROOT}/js/prism.js"></script>)
+    t2.css_styles << %Q(<link rel="stylesheet" type="text/css" href="#{ghp_root}/css/prism.css" />)
+    t2.js_scripts << %Q(<script src="#{ghp_root}/js/prism.js"></script>)
   end
 end

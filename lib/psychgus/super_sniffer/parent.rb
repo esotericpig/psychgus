@@ -1,5 +1,5 @@
-#!/usr/bin/env ruby
 # encoding: UTF-8
+# frozen_string_literal: true
 
 #--
 # This file is part of Psychgus.
@@ -64,6 +64,8 @@ module Psychgus
       # @param debug_tag [:noface,Symbol,String] the tag (class name, value) used for debugging and in {#to_s}
       # @param child_type [nil,:key,:value] the next child's Mapping type, if +node+ is a Mapping
       def initialize(sniffer,node,debug_tag: nil,child_type: nil)
+        super()
+
         @child_position = 1
         @child_type = child_type
         @debug_tag = debug_tag
@@ -82,7 +84,7 @@ module Psychgus
       # @return [true,false] whether the children are keys to a Mapping
       #
       # @since 1.2.0
-      def child_key?()
+      def child_key?
         return @child_type == :key
       end
 
@@ -91,19 +93,19 @@ module Psychgus
       # @return [true,false] whether the children are values to a Mapping (i.e., values to a key)
       #
       # @since 1.2.0
-      def child_value?()
+      def child_value?
         return @child_type == :value
       end
 
       # @see Psych::Nodes::Document#implicit
       # @see Psych::Nodes::Mapping#implicit
       # @see Psych::Nodes::Sequence#implicit
-      def implicit?()
+      def implicit?
         return @node.implicit
       end
 
       # @see Psych::Nodes::Document#implicit_end
-      def implicit_end?()
+      def implicit_end?
         return @node.implicit_end
       end
 
@@ -113,19 +115,19 @@ module Psychgus
       end
 
       # @see Psych::Nodes::Scalar#plain
-      def plain?()
+      def plain?
         return @node.plain
       end
 
       # @see Psych::Nodes::Scalar#quoted
-      def quoted?()
+      def quoted?
         return @node.quoted
       end
 
       # @note If this method is modified, then tests will fail
       #
       # @return [String] a String representation of this class for debugging and testing
-      def to_s()
+      def to_s
         return "<#{@debug_tag}:(#{@level}:#{@position}):#{@child_type}:(:#{@child_position})>"
       end
     end

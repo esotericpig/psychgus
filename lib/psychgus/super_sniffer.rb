@@ -1,5 +1,5 @@
-#!/usr/bin/env ruby
 # encoding: UTF-8
+# frozen_string_literal: true
 
 #--
 # This file is part of Psychgus.
@@ -20,7 +20,6 @@ module Psychgus
     # @since  1.0.0
     ###
     class Empty < SuperSniffer
-      def initialize(*) end
       def add_alias(*) end
       def add_scalar(*) end
       def end_document(*) end
@@ -141,7 +140,7 @@ module Psychgus
   # @see Blueberry#psychgus_stylers
   ###
   class SuperSniffer
-    EMPTY = Empty.new().freeze()
+    EMPTY = Empty.new.freeze
 
     attr_reader :aliases # @return [Array<Psych::Nodes::Alias>] the aliases processed so far
     attr_reader :documents # @return [Array<Psych::Nodes::Document>] the documents processed so far
@@ -156,7 +155,7 @@ module Psychgus
     attr_reader :streams # @return [Array<Psych::Nodes::Stream>] the streams processed so far
 
     # Initialize this class for sniffing.
-    def initialize()
+    def initialize
       @aliases = []
       @documents = []
       @level = 0
@@ -203,7 +202,7 @@ module Psychgus
     # {#level} and {#position} are reset according to the last parent.
     #
     # A {Styler} should probably never call this.
-    def end_document()
+    def end_document
       end_parent(top_level: true)
     end
 
@@ -215,7 +214,7 @@ module Psychgus
     # A {Styler} should probably never call this.
     #
     # @see end_parent
-    def end_mapping()
+    def end_mapping
       end_parent(mapping_value: true)
     end
 
@@ -227,7 +226,7 @@ module Psychgus
     # A {Styler} should probably never call this.
     #
     # @see end_parent
-    def end_sequence()
+    def end_sequence
       end_parent(mapping_value: true)
     end
 
@@ -237,7 +236,7 @@ module Psychgus
     # {#level} and {#position} are reset according to the last parent.
     #
     # A {Styler} should probably never call this.
-    def end_stream()
+    def end_stream
       end_parent(top_level: true)
     end
 
@@ -312,14 +311,14 @@ module Psychgus
     #
     # @see end_mapping_value
     def add_child(node)
-      if !@parent.nil?()
+      if !@parent.nil?
         # Fake a "parent" if necessary
         case @parent.child_type
         when :key
           start_mapping_key(node)
           return
         when :value
-          end_mapping_value()
+          end_mapping_value
           return
         else
           @parent.child_position += 1
@@ -334,10 +333,10 @@ module Psychgus
     # End a fake "{SuperSniffer::Parent}" that is a Key/Value to a Mapping.
     #
     # @see add_child
-    def end_mapping_value()
-      end_parent() # Do not pass in "mapping_value: true" and/or "top_level: true"
+    def end_mapping_value
+      end_parent # Do not pass in "mapping_value: true" and/or "top_level: true"
 
-      @parent.child_type = :key unless @parent.nil?()
+      @parent.child_type = :key unless @parent.nil?
     end
 
     # End a {SuperSniffer::Parent}.
@@ -348,18 +347,18 @@ module Psychgus
     # @param mapping_value [true,false] true if parent can be the value of a Mapping's key
     # @param top_level [true,false] true if a top-level parent (i.e., encapsulating the main data)
     def end_parent(mapping_value: false,top_level: false)
-      @parents.pop()
+      @parents.pop
       @parent = @parents.last
 
       @level = top_level ? 1 : (@level - 1)
 
-      if !@parent.nil?()
+      if !@parent.nil?
         @parent.child_position += 1
         @position = @parent.child_position
 
         # add_child() will not be called again, so end a fake "parent" manually with a fake "value"
         # - This is necessary for any parents that can be the value of a map's key (e.g., Sequence)
-        end_mapping_value() if mapping_value && !@parent.child_type.nil?()
+        end_mapping_value if mapping_value && !@parent.child_type.nil?
       end
     end
 
@@ -381,7 +380,7 @@ module Psychgus
         debug_tag = node.anchor
       end
 
-      debug_tag = :noface if debug_tag.nil?()
+      debug_tag = :noface if debug_tag.nil?
 
       start_parent(node,debug_tag: debug_tag,child_type: :value)
     end
@@ -400,7 +399,7 @@ module Psychgus
       @parent = Parent.new(self,node,**extra)
 
       @parents.push(@parent)
-      @nodes.push(node) unless node.nil?()
+      @nodes.push(node) unless node.nil?
 
       if top_level
         @level = 1

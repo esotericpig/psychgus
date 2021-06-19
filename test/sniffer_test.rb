@@ -1,5 +1,5 @@
-#!/usr/bin/env ruby
 # encoding: UTF-8
+# frozen_string_literal: true
 
 #--
 # This file is part of Psychgus.
@@ -14,7 +14,7 @@ require 'psychgus_tester'
 require 'stringio'
 
 class SnifferTest < PsychgusTester
-  def setup()
+  def setup
   end
 
   def assert_hierarchy(*data,expected)
@@ -24,8 +24,8 @@ class SnifferTest < PsychgusTester
     assert_equal expected,hierarchy
   end
 
-  def test_multi_doc()
-    assert_hierarchy(BURGERS_DATA,COURSES_DATA,DOLPHINS_DATA,<<-EOH
+  def test_multi_doc
+    assert_hierarchy(BURGERS_DATA,COURSES_DATA,DOLPHINS_DATA,<<-HIER)
     |(1:1):Psych::Nodes::Stream - <root:(0:0)::(:1)>
     |(1:1):Psych::Nodes::Document - <stream:(1:1)::(:1)>
     |(1:1):Psych::Nodes::Mapping - <doc:(1:1)::(:1)>
@@ -142,12 +142,11 @@ class SnifferTest < PsychgusTester
     |  (3:1):Psych::Nodes::Sequence - <Popular:(2:2):value:(:1)>
     |   (4:1):Psych::Nodes::Alias - <seq:(3:1)::(:1)>
     |   (4:2):Psych::Nodes::Alias - <seq:(3:1)::(:2)>
-    EOH
-    )
+    HIER
   end
 
-  def test_single_docs()
-    assert_hierarchy(BURGERS_DATA,<<-EOH
+  def test_single_docs
+    assert_hierarchy(BURGERS_DATA,<<-HIER)
     |(1:1):Psych::Nodes::Stream - <root:(0:0)::(:1)>
     |(1:1):Psych::Nodes::Document - <stream:(1:1)::(:1)>
     |(1:1):Psych::Nodes::Mapping - <doc:(1:1)::(:1)>
@@ -194,10 +193,9 @@ class SnifferTest < PsychgusTester
     |    (5:2):Psych::Nodes::Sequence - <seq:(4:3)::(:2)>
     |     (6:1):Salt - <seq:(5:2)::(:1)>
     |     (6:2):Pepper - <seq:(5:2)::(:2)>
-    EOH
-    )
+    HIER
 
-    assert_hierarchy(COURSES_DATA,<<-EOH
+    assert_hierarchy(COURSES_DATA,<<-HIER)
     |(1:1):Psych::Nodes::Stream - <root:(0:0)::(:1)>
     |(1:1):Psych::Nodes::Document - <stream:(1:1)::(:1)>
     |(1:1):Psych::Nodes::Mapping - <doc:(1:1)::(:1)>
@@ -237,7 +235,6 @@ class SnifferTest < PsychgusTester
     |     (6:1):COSC - <Course:(5:1):value:(:1)>
     |    (5:2):Time - <map:(4:4):key:(:2)>
     |     (6:1):13:10 - <Time:(5:2):value:(:1)>
-    EOH
-    )
+    HIER
   end
 end

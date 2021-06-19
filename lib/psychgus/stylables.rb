@@ -1,5 +1,5 @@
-#!/usr/bin/env ruby
 # encoding: UTF-8
+# frozen_string_literal: true
 
 #--
 # This file is part of Psychgus.
@@ -72,9 +72,9 @@ module Psychgus
       # @param delim [String,Regexp] the delimiter to split on
       # @param kargs [Hash] capture extra keyword args, so no error for undefined args
       def initialize(each_word: true,new_delim: nil,delim: /[\s_\-]/,**kargs)
-        delim = Regexp.quote(delim.to_s()) unless delim.is_a?(Regexp)
+        delim = Regexp.quote(delim.to_s) unless delim.is_a?(Regexp)
 
-        @delim = Regexp.new("(#{delim.to_s()})")
+        @delim = Regexp.new("(#{delim})")
         @each_word = each_word
         @new_delim = new_delim
       end
@@ -87,12 +87,12 @@ module Psychgus
       #
       # @return [String] the capitalized word
       def cap_word(word)
-        return word if word.nil?() || word.empty?()
+        return word if word.nil? || word.empty?
 
         # Already capitalized, good for all-capitalized words, like 'BBQ'
-        return word if word[0] == word[0].upcase()
+        return word if word[0] == word[0].upcase
 
-        return word.capitalize()
+        return word.capitalize
       end
 
       # Capitalize +node.value+.
@@ -100,23 +100,23 @@ module Psychgus
       # @see cap_word
       # @see Styler#style_scalar
       def style_scalar(sniffer,node)
-        if !@each_word || node.value.nil?() || node.value.empty?()
+        if !@each_word || node.value.nil? || node.value.empty?
           node.value = cap_word(node.value)
           return
         end
 
         is_delim = false
 
-        node.value = node.value.split(@delim).map() do |v|
+        node.value = node.value.split(@delim).map do |v|
           if is_delim
-            v = @new_delim unless @new_delim.nil?()
+            v = @new_delim unless @new_delim.nil?
           else
             v = cap_word(v)
           end
 
           is_delim = !is_delim
           v
-        end.join()
+        end.join
       end
     end
 
@@ -132,7 +132,7 @@ module Psychgus
       # @param io [IO] the IO to write to
       # @param verbose [true,false] whether to be more verbose (e.g., write child info)
       # @param kargs [Hash] capture extra keyword args, so no error for undefined args
-      def initialize(io: StringIO.new(),verbose: false,**kargs)
+      def initialize(io: StringIO.new,verbose: false,**kargs)
         @io = io
         @verbose = verbose
       end
@@ -141,7 +141,7 @@ module Psychgus
       #
       # @see Styler#style
       def style(sniffer,node)
-        @io.print (' ' * (sniffer.level - 1))
+        @io.print(' ' * (sniffer.level - 1))
 
         name = node.respond_to?(:value) ? node.value : node.class.name
         parent = sniffer.parent
@@ -160,8 +160,8 @@ module Psychgus
       # Convert {io} to a String if possible (e.g., StringIO).
       #
       # @return [String] the IO String result or just {io} as a String
-      def to_s()
-        return @io.respond_to?(:string) ? @io.string : @io.to_s()
+      def to_s
+        return @io.respond_to?(:string) ? @io.string : @io.to_s
       end
     end
 
@@ -178,7 +178,7 @@ module Psychgus
       def initialize(*)
         super
 
-        @new_style = MAPPING_FLOW if @new_style.nil?()
+        @new_style = MAPPING_FLOW if @new_style.nil?
       end
 
       # Change the style of a Mapping to FLOW (or to the value of {new_style})
@@ -211,11 +211,11 @@ module Psychgus
       #
       # @see Styler#style_scalar
       def style_scalar(sniffer,node)
-        return if node.value.nil?() || node.value.empty?()
+        return if node.value.nil? || node.value.empty?
         return if node.value[0] != ':'
 
         node.value = node.value[1..-1]
-        node.value = node.value.capitalize() if @cap
+        node.value = node.value.capitalize if @cap
       end
     end
 
@@ -246,7 +246,7 @@ module Psychgus
       def initialize(*)
         super
 
-        @new_style = SEQUENCE_FLOW if @new_style.nil?()
+        @new_style = SEQUENCE_FLOW if @new_style.nil?
       end
 
       # Change the style of a Sequence to FLOW (or to the value of {new_style})

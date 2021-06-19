@@ -1,5 +1,5 @@
-#!/usr/bin/env ruby
 # encoding: UTF-8
+# frozen_string_literal: true
 
 #--
 # This file is part of Psychgus.
@@ -39,7 +39,7 @@ class Burgers
   attr_accessor :burgers
   attr_accessor :toppings
 
-  def initialize()
+  def initialize
     @burgers = {
       'Classic' => Burger.new(['Ketchup','Mustard'],'American','Sesame Seed'),
       'BBQ'     => Burger.new('Honey BBQ','Cheddar','Kaiser'),
@@ -48,8 +48,8 @@ class Burgers
 
     @toppings = [
       'Mushrooms',
-      %w(Lettuce Onions Pickles Tomatoes),
-      [%w(Ketchup Mustard),%w(Salt Pepper)]
+      %w[Lettuce Onions Pickles Tomatoes],
+      [%w[Ketchup Mustard],%w[Salt Pepper]]
     ]
   end
 
@@ -75,7 +75,7 @@ class BurgerStyler
   def style_mapping(sniffer,node)
     parent = sniffer.parent
 
-    if !parent.nil?()
+    if !parent.nil?
       # BBQ
       node.style = Psychgus::MAPPING_FLOW if parent.respond_to?(:value) && parent.value.casecmp('BBQ') == 0
     end
@@ -95,12 +95,12 @@ class BurgerStyler
 end
 
 class BlueberryTest < PsychgusTester
-  def setup()
-    @burgers = Burgers.new()
+  def setup
+    @burgers = Burgers.new
   end
 
-  def test_blueberry()
-    expected = <<-EOY
+  def test_blueberry
+    expected = <<-YAML
     |--- !ruby/object:Burgers
     |Burgers:
     |  Classic:
@@ -122,9 +122,9 @@ class BlueberryTest < PsychgusTester
     |    - Mustard
     |  - - Salt
     |    - Pepper
-    EOY
+    YAML
     expected = self.class.lstrip_pipe(expected)
 
-    assert_equal expected,@burgers.to_yaml()
+    assert_equal expected,@burgers.to_yaml
   end
 end

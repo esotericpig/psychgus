@@ -1,5 +1,5 @@
-#!/usr/bin/env ruby
 # encoding: UTF-8
+# frozen_string_literal: true
 
 #--
 # This file is part of Psychgus.
@@ -64,7 +64,7 @@ module Psychgus
   # @see Ext::YAMLTreeExt#accept
   ###
   module Styler
-    EMPTY = Empty.new().freeze()
+    EMPTY = Empty.new.freeze
 
     # Style a node of any type.
     #
