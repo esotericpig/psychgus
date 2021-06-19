@@ -39,7 +39,7 @@ module Psychgus
     # @see SuperSniffer#end_parent SuperSniffer#end_parent
     # @see Styler
     ###
-    class Parent < Delegator
+    class Parent < SimpleDelegator
       # Calling the getter is fine; calling the setter is *not* and could cause weird results.
       #
       # @return [Integer] the next child's position
@@ -64,7 +64,7 @@ module Psychgus
       # @param debug_tag [:noface,Symbol,String] the tag (class name, value) used for debugging and in {#to_s}
       # @param child_type [nil,:key,:value] the next child's Mapping type, if +node+ is a Mapping
       def initialize(sniffer,node,debug_tag: nil,child_type: nil)
-        super()
+        super(node)
 
         @child_position = 1
         @child_type = child_type
