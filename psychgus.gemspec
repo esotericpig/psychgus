@@ -35,10 +35,24 @@ Gem::Specification.new do |spec|
     %w[ LICENSE.txt CHANGELOG.md README.md ],
   ].flatten
 
+  # Test using different Gem versions:
+  #   GST=1 bundle update && bundle exec rake test_all
+  gemspec_test = ENV.fetch('GST','').to_s.strip
+  psych_gemv = false
+
+  if !gemspec_test.empty?
+    case gemspec_test
+    when '1' then psych_gemv = '~> 3.0'
+    end
+
+    puts 'Using Gem versions:'
+    puts "  psych: #{psych_gemv.inspect}"
+  end
+
   # 3.0 is needed for this issue:
   # - https://bugs.ruby-lang.org/issues/13115
   # - https://github.com/ruby/psych/commit/712a65a53f3c15105cd86e8ad3ee3c779050ada4
-  spec.add_runtime_dependency 'psych','>= 3.0'
+  spec.add_runtime_dependency 'psych',psych_gemv || '>= 3.0'
 
   spec.add_development_dependency 'bundler'   ,'~> 2.2'
   spec.add_development_dependency 'minitest'  ,'~> 5.14' # For testing

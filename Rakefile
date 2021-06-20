@@ -23,6 +23,8 @@ CLOBBER.include('doc/')
 desc 'Generate documentation (YARDoc)'
 task doc: %i[yard yard_gfm_fix]
 
+# To test using different Gem versions:
+#   GST=1 bundle update && bundle exec rake test
 Rake::TestTask.new do |task|
   task.libs = ['lib','test']
   task.pattern = File.join('test','**','*_test.rb')

@@ -68,7 +68,11 @@ Popular:
   - *bot
   - *orc
   YAML
-  DOLPHINS_DATA = Psych.load(DOLPHINS_YAML).freeze
+  # Psych v4+ uses safe_load() by default for load(),
+  #   so use unsafe_load() to have aliases turned on.
+  # Don't do 'aliases: true' because that doesn't exist
+  #   in older versions of Psych.
+  DOLPHINS_DATA = Psych.unsafe_load(DOLPHINS_YAML).freeze
 
   # This is for "<<-" heredoc
   # - Purposely not using "<<~" (tilde) for older Ruby versions
