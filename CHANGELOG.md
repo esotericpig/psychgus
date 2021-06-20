@@ -1,18 +1,32 @@
 # Changelog | Psychgus
 
-Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+All notable changes to this project will be documented in this file.
 
-## [[Unreleased]](https://github.com/esotericpig/psychgus/compare/v1.3.3...master)
+Format is based on [Keep a Changelog v1.0.0](https://keepachangelog.com/en/1.0.0),
+and this project adheres to [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html).
+
+## [[Unreleased]](https://github.com/esotericpig/psychgus/compare/v1.3.4...HEAD)
+-
+
+
+## [v1.3.4] - 2021-06-20
+### Fixed
+- Fixed test file to use `unsafe_load()` for Psych v4+.
+
+### Changed
+- Changed `SuperSniffer::Parent` to use `SimpleDelegator`.
+- Updated Gems.
+- Formatted files with RuboCop.
+
 
 ## [v1.3.3] - 2020-04-25
-
 ### Fixed
 - SuperSniffer::Parent
     - Added require of `delegate` for Delegator
     - Rake test task didn't catch this (must already include it)
 
-## [v1.3.2] - 2020-04-23
 
+## [v1.3.2] - 2020-04-23
 ### Changed
 - SuperSniffer::Parent
     - Changed to use Delegator to delegate all methods of `node`
@@ -22,16 +36,16 @@ Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Fixed some Ruby 2.7 warnings in tests
 
-## [v1.2.2] - 2020-03-15
 
+## [v1.2.2] - 2020-03-15
 ### Fixed
 - Fixed Psych version to be >= 3.0 for `to_yaml/encode_with` warnings
     - This is mainly for Windows
     - [Ruby-lang Bug #13115](https://bugs.ruby-lang.org/issues/13115)
     - [GitHub Psych Commit](https://github.com/ruby/psych/commit/712a65a53f3c15105cd86e8ad3ee3c779050ada4)
 
-## [v1.2.1] - 2019-12-18
 
+## [v1.2.1] - 2019-12-18
 ### Added
 - Use of YardGhurt gem for Rakefile tasks
 
@@ -44,8 +58,8 @@ Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Updated gems
 
-## [v1.2.0] - 2019-07-11
 
+## [v1.2.0] - 2019-07-11
 ### Added
 - Commonly-used Stylers and Stylables
 - Changelog
@@ -59,6 +73,7 @@ Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 - Psychgus.dump_stream() if you only pass in a Hash w/ symbols as keys (options would be set to it, instead of objects)
+
 
 ## [v1.0.0] - 2019-07-03
 ### Added
