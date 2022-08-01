@@ -1,0 +1,39 @@
+name: tests
+
+on:
+  push:
+    branches: [ 'master' ]
+  pull_request:
+    branches: [ 'master' ]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ 'ubuntu-latest', 'macos-latest' ]
+        ruby-version: [ '2.6', 'ruby-head', 'jruby-head' ]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    # See: https://github.com/ruby/setup-ruby
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true
+
+    - name: Run tests
+      run: bundle exec rake test_all
+
+    - name: Run tests w/ specific Psych gem
+      run: |
+        export GST=1
+        bundle update
+        bundle exec rake test_all
+        unset GST
