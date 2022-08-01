@@ -1,4 +1,4 @@
-name: tests
+name: ci
 
 on:
   push:
@@ -14,6 +14,7 @@ jobs:
     strategy:
       matrix:
         os: [ 'ubuntu-latest', 'macos-latest' ]
+        # - https://www.ruby-lang.org/en/downloads/branches
         ruby-version: [ '2.6', 'ruby-head' ]
 
     runs-on: ${{ matrix.os }}
@@ -21,7 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    # See: https://github.com/ruby/setup-ruby
+    # - https://github.com/ruby/setup-ruby
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -31,7 +32,7 @@ jobs:
     - name: Run tests
       run: bundle exec rake test_all
 
-    - name: Run tests w/ specific Psych gem
+    - name: Run tests w/ Psych gem v3.0
       run: |
         export GST=1
         bundle update
