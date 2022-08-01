@@ -30,11 +30,12 @@ jobs:
         bundler-cache: true
 
     - name: Run tests
-      run: bundle exec rake test_all
+      run: |
+        unset GST
+        bundle exec rake test_all
 
     - name: Run tests w/ Psych gem v3.0
       run: |
         export GST=1
         bundle update
         bundle exec rake test_all
-        unset GST
