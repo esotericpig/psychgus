@@ -1,6 +1,7 @@
 # Psychgus
 
 [![Gem Version](https://badge.fury.io/rb/psychgus.svg)](https://badge.fury.io/rb/psychgus)
+[![Tests Status](https://github.com/esotericpig/psychgus/actions/workflows/ruby_test.yml/badge.svg)](https://github.com/esotericpig/psychgus/actions/workflows/ruby_test.yml)
 [![Doc Coverage](http://inch-ci.org/github/esotericpig/psychgus.svg?branch=master)](https://inch-ci.org/github/esotericpig/psychgus)
 
 [![Documentation](https://img.shields.io/badge/doc-yard-%23A0522D.svg)](https://esotericpig.github.io/docs/psychgus/yardoc/index.html)
