@@ -3,11 +3,10 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2019-2021 Jonathan Bradley Whited
+# Copyright (c) 2019 Bradley Whited
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
-
 
 require 'psychgus/styler'
 require 'psychgus/super_sniffer'
@@ -18,9 +17,6 @@ module Psychgus
   ###
   # A collection of commonly-used {Styler} mixins
   # that can be included in a class instead of {Styler}.
-  #
-  # @author Jonathan Bradley Whited
-  # @since  1.2.0
   #
   # @see Stylers
   # @see Styler

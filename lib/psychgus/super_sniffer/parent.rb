@@ -3,14 +3,12 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2019-2021 Jonathan Bradley Whited
+# Copyright (c) 2019 Bradley Whited
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
 
-
 require 'delegate'
-
 
 module Psychgus
   class SuperSniffer
@@ -30,9 +28,6 @@ module Psychgus
     #     parent.node.fubar = true # Use some new Psych::Nodes::Node method not in this version
     #                              #   of Psychgus or that is not exposed by Parent
     #   end
-    #
-    # @author Jonathan Bradley Whited
-    # @since  1.0.0
     #
     # @see SuperSniffer
     # @see SuperSniffer#start_parent SuperSniffer#start_parent
@@ -82,8 +77,6 @@ module Psychgus
       # Check if the children of this parent are keys to a Mapping.
       #
       # @return [true,false] whether the children are keys to a Mapping
-      #
-      # @since 1.2.0
       def child_key?
         return @child_type == :key
       end
@@ -91,8 +84,6 @@ module Psychgus
       # Check if the children of this parent are values to a Mapping (i.e., values to a key).
       #
       # @return [true,false] whether the children are values to a Mapping (i.e., values to a key)
-      #
-      # @since 1.2.0
       def child_value?
         return @child_type == :value
       end

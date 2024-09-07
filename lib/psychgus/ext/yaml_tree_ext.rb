@@ -3,11 +3,10 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2019-2021 Jonathan Bradley Whited
+# Copyright (c) 2019 Bradley Whited
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
-
 
 require 'psych'
 require 'rubygems/version'
@@ -21,9 +20,6 @@ module Psychgus
 
     ###
     # Extensions to Psych::Visitors::YAMLTree::Registrar.
-    #
-    # @author Jonathan Bradley Whited
-    # @since  1.0.0
     ###
     module RegistrarExt
       # Remove +target+ from this Registrar to prevent it becoming an alias.
@@ -45,9 +41,6 @@ module Psychgus
 
     ###
     # Extensions to Psych::Visitors::YAMLTree.
-    #
-    # @author Jonathan Bradley Whited
-    # @since  1.0.0
     ###
     module YAMLTreeExt
       # Accepts a new Object to convert to YAML.

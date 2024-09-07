@@ -3,11 +3,10 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2019-2021 Jonathan Bradley Whited
+# Copyright (c) 2019 Bradley Whited
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
-
 
 require 'psychgus_tester'
 
@@ -26,9 +25,6 @@ class EggCarton
   end
 end
 
-###
-# @since 1.2.0
-###
 class StylersTest < PsychgusTester
   def setup
     @egg_carton = EggCarton.new

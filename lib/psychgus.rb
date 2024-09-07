@@ -3,16 +3,14 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2017-2021 Jonathan Bradley Whited
+# Copyright (c) 2017 Bradley Whited
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
 
-
 require 'psych'
 
 require 'psychgus/blueberry'
-require 'psychgus/ext'
 require 'psychgus/stylables'
 require 'psychgus/styled_document_stream'
 require 'psychgus/styled_tree_builder'
@@ -294,14 +292,11 @@ require 'psychgus/super_sniffer/parent'
 #   parser.parse(yaml)
 #   parser.handler
 #   parser.handler.root
-#
-# @author Jonathan Bradley Whited
-# @since  1.0.0
 ###
 module Psychgus
   # Include these in the top namespace for convenience (i.e., less typing).
-  include Stylables # @since 1.2.0
-  include Stylers # @since 1.2.0
+  include Stylables
+  include Stylers
 
   NODE_CLASS_ALIASES = {Doc: :Document,Map: :Mapping,Seq: :Sequence}.freeze
   OPTIONS_ALIASES = {canon: :canonical,indent: :indentation}.freeze
@@ -577,8 +572,6 @@ module Psychgus
   #
   # @see Stylers::HierarchyStyler
   # @see dump_stream
-  #
-  # @since 1.2.0
   def self.hierarchy(*objects,**kargs)
     styler = Stylers::HierarchyStyler.new(**kargs)
 
@@ -757,9 +750,6 @@ module Psychgus
   # Private methods of Psych are not defined.
   #
   # @note For devs/hacking: because extend is used, do not prefix methods with "self."
-  #
-  # @author Jonathan Bradley Whited
-  # @since  1.0.0
   ###
   module PsychDropIn
     # @see Psych.add_builtin_type

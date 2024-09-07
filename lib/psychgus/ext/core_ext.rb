@@ -3,19 +3,15 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2019-2021 Jonathan Bradley Whited
+# Copyright (c) 2019 Bradley Whited
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
-
 
 module Psychgus
   module Ext
     ###
     # Core extensions to Object.
-    #
-    # @author Jonathan Bradley Whited
-    # @since  1.0.0
     #
     # @see https://github.com/ruby/psych/blob/master/lib/psych/core_ext.rb
     ###

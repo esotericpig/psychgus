@@ -3,11 +3,10 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2019-2021 Jonathan Bradley Whited
+# Copyright (c) 2019 Bradley Whited
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
-
 
 require 'psychgus/super_sniffer/parent'
 
@@ -15,9 +14,6 @@ module Psychgus
   class SuperSniffer
     ###
     # An empty {SuperSniffer} used for speed when you don't need sniffing in {StyledTreeBuilder}.
-    #
-    # @author Jonathan Bradley Whited
-    # @since  1.0.0
     ###
     class Empty < SuperSniffer
       def add_alias(*) end
@@ -131,9 +127,6 @@ module Psychgus
   #
   # @note You should never call the methods that are not readers, like {#add_alias}, {#start_mapping}, etc.
   #       unless you are extending this class (creating a subclass).
-  #
-  # @author Jonathan Bradley Whited
-  # @since  1.0.0
   #
   # @see StyledTreeBuilder
   # @see Styler

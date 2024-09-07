@@ -3,11 +3,10 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2019-2021 Jonathan Bradley Whited
+# Copyright (c) 2019 Bradley Whited
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
-
 
 require 'psychgus/super_sniffer'
 
@@ -15,9 +14,6 @@ module Psychgus
   module Styler
     ###
     # An empty {Styler} as a class.
-    #
-    # @author Jonathan Bradley Whited
-    # @since  1.0.0
     ###
     class Empty
       include Styler
@@ -52,9 +48,6 @@ module Psychgus
   #   # Coffee:
   #   #   Roast: [Light, Medium, Dark, Extra Dark]
   #   #   Style: [Cappuccino, Espresso, Latte, Mocha]
-  #
-  # @author Jonathan Bradley Whited
-  # @since  1.0.0
   #
   # @see Psychgus
   # @see Ext::ObjectExt#to_yaml

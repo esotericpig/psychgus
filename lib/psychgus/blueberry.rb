@@ -3,11 +3,10 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2017-2021 Jonathan Bradley Whited
+# Copyright (c) 2017 Bradley Whited
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
-
 
 module Psychgus
   ###
@@ -77,9 +76,6 @@ module Psychgus
   # affecting the sibling object(s). See {Ext::YAMLTreeExt} and {Ext::YAMLTreeExt#accept} for details.
   #
   # "The Blueberry" is the name of Gus's car from the TV show Psych.
-  #
-  # @author Jonathan Bradley Whited
-  # @since  1.0.0
   #
   # @see Ext::YAMLTreeExt
   # @see Ext::YAMLTreeExt#accept

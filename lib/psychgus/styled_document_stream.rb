@@ -3,11 +3,10 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2019-2021 Jonathan Bradley Whited
+# Copyright (c) 2019 Bradley Whited
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
-
 
 require 'psych'
 
@@ -16,9 +15,6 @@ require 'psychgus/styled_tree_builder'
 module Psychgus
   ###
   # Use this wherever Psych::Handlers::DocumentStream would have been used, to enable styling.
-  #
-  # @author Jonathan Bradley Whited
-  # @since  1.0.0
   #
   # @see Psychgus.parse_stream Psychgus.parse_stream
   # @see Psych::Handlers::DocumentStream

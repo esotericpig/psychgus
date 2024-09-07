@@ -1,14 +1,12 @@
 # encoding: UTF-8
 # frozen_string_literal: true
 
-
 require_relative 'lib/psychgus/version'
-
 
 Gem::Specification.new do |spec|
   spec.name        = 'psychgus'
   spec.version     = Psychgus::VERSION
-  spec.authors     = ['Jonathan Bradley Whited']
+  spec.authors     = ['Bradley Whited']
   spec.email       = ['code@esotericpig.com']
   spec.licenses    = ['LGPL-3.0-or-later']
   spec.homepage    = 'https://github.com/esotericpig/psychgus'

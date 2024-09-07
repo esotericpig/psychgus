@@ -3,11 +3,10 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2019-2021 Jonathan Bradley Whited
+# Copyright (c) 2019 Bradley Whited
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
-
 
 require 'psych'
 
@@ -15,9 +14,6 @@ module Psychgus
   module Ext
     ###
     # Extensions to Psych::Nodes::Node.
-    #
-    # @author Jonathan Bradley Whited
-    # @since  1.0.0
     ###
     module NodeExt
       # Check if this Node is of a certain type (Alias, Mapping, Scalar, Sequence, etc.).

@@ -3,11 +3,10 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2019-2021 Jonathan Bradley Whited
+# Copyright (c) 2019 Bradley Whited
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
-
 
 require 'psychgus/stylables'
 
@@ -62,9 +61,6 @@ module Psychgus
   #   #      (6:3):Psych::Nodes::Sequence - <seq:(5:1)>
   #   #       (7:1):Blue - <seq:(6:3)>
   #   #       (7:2):Green - <seq:(6:3)>
-  #
-  # @author Jonathan Bradley Whited
-  # @since  1.2.0
   #
   # @see Stylables
   # @see Styler

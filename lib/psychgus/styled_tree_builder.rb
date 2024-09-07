@@ -3,11 +3,10 @@
 
 #--
 # This file is part of Psychgus.
-# Copyright (c) 2019-2021 Jonathan Bradley Whited
+# Copyright (c) 2019 Bradley Whited
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
-
 
 require 'psych'
 
@@ -17,9 +16,6 @@ require 'psychgus/super_sniffer'
 module Psychgus
   ###
   # Use this wherever Psych::TreeBuilder would have been used, to enable styling.
-  #
-  # @author Jonathan Bradley Whited
-  # @since  1.0.0
   #
   # @see Psychgus.parser Psychgus.parser
   # @see Psychgus.dump_stream Psychgus.dump_stream

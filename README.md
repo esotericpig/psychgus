@@ -40,7 +40,7 @@ Psych Gus:
   Skills: [The Blueberry, The Super Sniffer, Positive Work Attitude]
 ```
 
-Thank you to the people that worked and continue to work hard on the Psych project.
+Thank you to the people that work hard on the Psych project.
 
 The Psychgus name comes from the well-styled character Gus from the TV show Psych.
 
@@ -71,7 +71,7 @@ In your *Gemspec* (*&lt;project&gt;.gemspec*):
 
 ```Ruby
 # Pick one...
-spec.add_runtime_dependency 'psychgus', '~> X.X.X'
+spec.add_dependency 'psychgus', '~> X.X.X'
 spec.add_development_dependency 'psychgus', '~> X.X.X'
 ```
 
@@ -601,7 +601,7 @@ Clean &amp; generate pristine doc:
 [GNU LGPL v3+](LICENSE.txt)
 
 > Psychgus (<https://github.com/esotericpig/psychgus>)  
-> Copyright (c) 2017-2024 Jonathan Bradley Whited  
+> Copyright (c) 2017-2024 Bradley Whited  
 > 
 > Psychgus is free software: you can redistribute it and/or modify  
 > it under the terms of the GNU Lesser General Public License as published by  
