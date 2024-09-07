@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
     'documentation_uri' => 'https://esotericpig.github.io/docs/psychgus/yardoc/index.html',
   }
 
-  spec.required_ruby_version = '>= 2.1.10'
+  spec.required_ruby_version = '>= 2.2'
   spec.require_paths         = ['lib']
   spec.bindir                = 'bin'
 
