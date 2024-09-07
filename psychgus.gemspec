@@ -40,7 +40,7 @@ Gem::Specification.new do |spec|
 
   if !gemspec_test.empty?
     case gemspec_test
-    when '1' then psych_gemv = '5.1.1'
+    when '1' then psych_gemv = '<= 5.1.1'
     end
 
     puts 'Using Gem versions:'
