@@ -59,7 +59,7 @@ The Psychgus name comes from the well-styled character Gus from the TV show Psyc
     - [Generating Doc](#generating-doc)
 - [License](#license)
 
-## [//](#contents) Setup
+## Setup
 
 Pick your poison...
 
@@ -93,7 +93,7 @@ $ bundle install
 $ bundle exec rake install:local
 ```
 
-## [//](#contents) Using
+## Using
 
 Documentation (YARDoc) is available on my [GitHub Page](https://esotericpig.github.io/docs/psychgus/yardoc/index.html) and on [RubyDoc.info](https://www.rubydoc.info/gems/psychgus).
 
@@ -111,7 +111,7 @@ Instead of making your own styler, you can also use one of the [pre-defined styl
 | [Advanced Usage](#advanced-usage)
 | [Common Stylers](#common-stylers)
 
-### [//](#using) Simple Example
+### Simple Example
 
 ```Ruby
 require 'psychgus'
@@ -157,7 +157,7 @@ puts Coffee.new.to_yaml
 # style: [Cappuccino, Espresso, Latte, Mocha]
 ```
 
-### [//](#using) Hash Example
+### Hash Example
 
 ```Ruby
 require 'psychgus'
@@ -252,7 +252,7 @@ puts burgers.to_yaml({:indent => 3,:stylers => BurgerStyler.new,:deref_aliases =
 #    Bun: Kaiser
 ```
 
-### [//](#using) Class Example
+### Class Example
 
 ```Ruby
 require 'psychgus'
@@ -423,7 +423,7 @@ puts burgers.to_yaml({:indent => 3,:deref_aliases => true})
 #    Sauce: 'Honey BBQ'
 ```
 
-### [//](#using) Advanced Usage
+### Advanced Usage
 
 ```Ruby
 require 'psychgus'
@@ -514,7 +514,7 @@ puts parser.handler.root.to_ruby
 puts
 ```
 
-### [//](#using) Common Stylers
+### Common Stylers
 
 A collection of commonly-used [Stylers](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers.html) and [Stylables](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylables.html) are included with Psychgus.
 
@@ -527,7 +527,7 @@ A collection of commonly-used [Stylers](https://esotericpig.github.io/docs/psych
 | [NoTagStyler](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers/NoTagStyler.html) | Tag remover for classes |
 | [SeqFlowStyler](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers/SeqFlowStyler.html) | FLOW style changer for Sequences only |
 
-#### [//](#common-stylers) Stylers Example
+#### Stylers Example
 
 ```Ruby
 require 'psychgus'
@@ -571,7 +571,7 @@ puts EggCarton.new.to_yaml
 #     - green
 ```
 
-## [//](#contents) Hacking
+## Hacking
 
 ```
 $ git clone 'https://github.com/esotericpig/psychgus.git'
@@ -580,13 +580,13 @@ $ bundle install
 $ bundle exec rake -T
 ```
 
-### [//](#hacking) Testing
+### Testing
 
 Run tests:
 
 `$ bundle exec rake test`
 
-### [//](#hacking) Generating Doc
+### Generating Doc
 
 Generate doc:
 
@@ -596,7 +596,7 @@ Clean &amp; generate pristine doc:
 
 `$ bundle exec rake clobber doc`
 
-## [//](#contents) License
+## License
 
 [GNU LGPL v3+](LICENSE.txt)
 
