@@ -15,15 +15,6 @@ require 'psychgus'
 
 # Changing the YAML/data will break tests
 class PsychgusTester < Minitest::Test
-  # If true, will...
-  # - Run tests that create temp file(s).
-  #   - I don't like creating temp file(s) every time I run tests (which is a lot).
-  #
-  # To do this, execute:
-  #   rake test_all
-  TEST_ALL = (ENV['PSYCHGUS_TEST'].to_s.strip.casecmp('all') == 0)
-  TEST_ALL_SKIP_MSG = 'Execute "rake test_all" for this test'
-
   BURGERS_YAML = <<-YAML
 Burgers:
   Classic:

@@ -36,13 +36,13 @@ Gem::Specification.new do |spec|
   ].flatten
 
   # Test using different Gem versions:
-  #   GST=1 bundle update && bundle exec rake test_all
+  #   GST=1 bundle update && bundle exec rake test
   gemspec_test = ENV.fetch('GST','').to_s.strip
   psych_gemv = false
 
   if !gemspec_test.empty?
     case gemspec_test
-    when '1' then psych_gemv = '~> 3.0'
+    when '1' then psych_gemv = '5.1.1'
     end
 
     puts 'Using Gem versions:'
@@ -52,13 +52,16 @@ Gem::Specification.new do |spec|
   # 3.0 is needed for this issue:
   # - https://bugs.ruby-lang.org/issues/13115
   # - https://github.com/ruby/psych/commit/712a65a53f3c15105cd86e8ad3ee3c779050ada4
-  spec.add_runtime_dependency 'psych',psych_gemv || '>= 3.0'
+  spec.add_dependency 'psych',psych_gemv || '>= 3.0'
 
-  spec.add_development_dependency 'bundler'   ,'~> 2.2'
-  spec.add_development_dependency 'minitest'  ,'~> 5.14' # For testing
-  spec.add_development_dependency 'rake'      ,'~> 13.0'
-  spec.add_development_dependency 'rdoc'      ,'~> 6.3'  # For RDoc for YARD (*.rb)
-  spec.add_development_dependency 'redcarpet' ,'~> 3.5'  # For Markdown for YARD (*.md)
-  spec.add_development_dependency 'yard'      ,'~> 0.9'  # For documentation
-  spec.add_development_dependency 'yard_ghurt','~> 1.2'  # For YARD GitHub rake tasks
+  # Build.
+  spec.add_development_dependency 'bundler'   ,'~> 2.5'
+  spec.add_development_dependency 'rake'      ,'~> 13.2'
+  # Tests.
+  spec.add_development_dependency 'minitest'  ,'~> 5.25'  # Tests.
+  # Doc.
+  spec.add_development_dependency 'rdoc'      ,'~> 6.7'   # RDoc for YARD (*.rb).
+  spec.add_development_dependency 'redcarpet' ,'~> 3.6'   # Markdown for YARD (*.md).
+  spec.add_development_dependency 'yard'      ,'~> 0.9'   # Doc.
+  spec.add_development_dependency 'yard_ghurt','~> 1.2'   # YARD GitHub rake tasks.
 end

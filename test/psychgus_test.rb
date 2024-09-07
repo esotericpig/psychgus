@@ -65,15 +65,9 @@ Toppings:
     assert_equal EXPECTED_BURGERS,BURGERS_DATA.to_yaml(stylers: @flow_styler)
   end
 
-  # Execute "rake test_all" if you update Psychgus.dump_file()/load_file()
   def test_file
-    if !TEST_ALL
-      skip(TEST_ALL_SKIP_MSG)
-      return # Justin Case
-    end
-
     Tempfile.create(['Psychgus','.yaml']) do |file|
-      puts "Testing #{self.class.name} w/ temp file: #{file.path}"
+      #puts "Testing #{self.class.name} w/ temp file: #{file.path}"
 
       Psychgus.dump_file(file,BURGERS_DATA,
         mode: File::CREAT | File::RDWR,

@@ -59,7 +59,7 @@ The Psychgus name comes from the well-styled character Gus from the TV show Psyc
     - [Generating Doc](#generating-doc)
 - [License](#license)
 
-## [Setup](#contents)
+## [//](#contents) Setup
 
 Pick your poison...
 
@@ -93,7 +93,7 @@ $ bundle install
 $ bundle exec rake install:local
 ```
 
-## [Using](#contents)
+## [//](#contents) Using
 
 Documentation (YARDoc) is available on my [GitHub Page](https://esotericpig.github.io/docs/psychgus/yardoc/index.html) and on [RubyDoc.info](https://www.rubydoc.info/gems/psychgus).
 
@@ -111,7 +111,7 @@ Instead of making your own styler, you can also use one of the [pre-defined styl
 | [Advanced Usage](#advanced-usage)
 | [Common Stylers](#common-stylers)
 
-### [Simple Example](#using)
+### [//](#using) Simple Example
 
 ```Ruby
 require 'psychgus'
@@ -157,7 +157,7 @@ puts Coffee.new.to_yaml
 # style: [Cappuccino, Espresso, Latte, Mocha]
 ```
 
-### [Hash Example](#using)
+### [//](#using) Hash Example
 
 ```Ruby
 require 'psychgus'
@@ -252,7 +252,7 @@ puts burgers.to_yaml({:indent => 3,:stylers => BurgerStyler.new,:deref_aliases =
 #    Bun: Kaiser
 ```
 
-### [Class Example](#using)
+### [//](#using) Class Example
 
 ```Ruby
 require 'psychgus'
@@ -423,7 +423,7 @@ puts burgers.to_yaml({:indent => 3,:deref_aliases => true})
 #    Sauce: 'Honey BBQ'
 ```
 
-### [Advanced Usage](#using)
+### [//](#using) Advanced Usage
 
 ```Ruby
 require 'psychgus'
@@ -514,7 +514,7 @@ puts parser.handler.root.to_ruby
 puts
 ```
 
-### [Common Stylers](#using)
+### [//](#using) Common Stylers
 
 A collection of commonly-used [Stylers](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers.html) and [Stylables](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylables.html) are included with Psychgus.
 
@@ -527,7 +527,7 @@ A collection of commonly-used [Stylers](https://esotericpig.github.io/docs/psych
 | [NoTagStyler](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers/NoTagStyler.html) | Tag remover for classes |
 | [SeqFlowStyler](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers/SeqFlowStyler.html) | FLOW style changer for Sequences only |
 
-#### [Stylers Example](#common-stylers)
+#### [//](#common-stylers) Stylers Example
 
 ```Ruby
 require 'psychgus'
@@ -571,7 +571,7 @@ puts EggCarton.new.to_yaml
 #     - green
 ```
 
-## [Hacking](#contents)
+## [//](#contents) Hacking
 
 ```
 $ git clone 'https://github.com/esotericpig/psychgus.git'
@@ -580,17 +580,13 @@ $ bundle install
 $ bundle exec rake -T
 ```
 
-### [Testing](#hacking)
+### [//](#hacking) Testing
 
-Run tests, excluding tests that create temp files:
+Run tests:
 
 `$ bundle exec rake test`
 
-Run all tests:
-
-`$ bundle exec rake test_all`
-
-### [Generating Doc](#hacking)
+### [//](#hacking) Generating Doc
 
 Generate doc:
 
@@ -600,12 +596,12 @@ Clean &amp; generate pristine doc:
 
 `$ bundle exec rake clobber doc`
 
-## [License](#contents)
+## [//](#contents) License
 
 [GNU LGPL v3+](LICENSE.txt)
 
 > Psychgus (<https://github.com/esotericpig/psychgus>)  
-> Copyright (c) 2017-2022 Jonathan Bradley Whited  
+> Copyright (c) 2017-2024 Jonathan Bradley Whited  
 > 
 > Psychgus is free software: you can redistribute it and/or modify  
 > it under the terms of the GNU Lesser General Public License as published by  

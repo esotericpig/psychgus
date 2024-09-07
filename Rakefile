@@ -34,19 +34,8 @@ Rake::TestTask.new do |task|
   task.warning = true
 end
 
-desc 'Run all tests (including writing to temp files, etc.)'
-task :test_all do |task|
-  ENV['PSYCHGUS_TEST'] = 'all'
-
-  test_task = Rake::Task[:test]
-
-  test_task.reenable
-  test_task.invoke
-end
-
 YARD::Rake::YardocTask.new do |task|
   task.files = [File.join('lib','**','*.rb')]
-  task.options += ['--title',"Psychgus v#{Psychgus::VERSION} Doc"]
 end
 
 YardGhurt::GFMFixTask.new do |task|
@@ -61,10 +50,7 @@ YardGhurt::GFMFixTask.new do |task|
     # Delete this file as it's never used (index.html is an exact copy)
     YardGhurt.rm_exist(File.join(t2.doc_dir,'file.README.html'))
 
-    # Root dir of my GitHub Page for CSS/JS
-    ghp_root = YardGhurt.to_bool(args.dev) ? '../../esotericpig.github.io' : '../../..'
-
-    t2.css_styles << %Q(<link rel="stylesheet" type="text/css" href="#{ghp_root}/css/prism.css" />)
-    t2.js_scripts << %Q(<script src="#{ghp_root}/js/prism.js"></script>)
+    t2.css_styles << %Q(<link rel="stylesheet" type="text/css" href="/css/prism.css" />)
+    t2.js_scripts << %Q(<script src="/js/prism.js"></script>)
   end
 end
