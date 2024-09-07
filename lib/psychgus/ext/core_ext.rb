@@ -55,7 +55,10 @@ module Psychgus
       # @return [String] the YAML generated from this Object
       #
       # @see Psychgus.dump
-      def to_yaml(**options)
+      def to_yaml(options={})
+        # NOTE: This method signature must use old-style `options={}` instead of `**options`!
+        #       Because some Gems, like `Moneta`, depend on this.
+
         # Do not use Psych.dump() if no Stylers, because a class might be a Blueberry
         return Psychgus.dump(self,**options)
       end
