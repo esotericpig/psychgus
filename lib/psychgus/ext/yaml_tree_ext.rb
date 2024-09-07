@@ -10,11 +10,15 @@
 
 
 require 'psych'
+require 'rubygems/version'
 
 require 'psychgus/styled_tree_builder'
 
 module Psychgus
   module Ext
+    PSYCHGUS_PSYCH_VERSION = Gem::Version.create(Psych::VERSION)
+    PSYCHGUS_PSYCH_VERSION_5_1_2 = Gem::Version.create('5.1.2')
+
     ###
     # Extensions to Psych::Visitors::YAMLTree::Registrar.
     #
@@ -25,8 +29,17 @@ module Psychgus
       # Remove +target+ from this Registrar to prevent it becoming an alias.
       #
       # @param target [Object] the Object to remove from this Registrar
-      def remove_alias(target)
-        @obj_to_node.delete(target.object_id)
+      def psychgus_unregister(target)
+        if PSYCHGUS_PSYCH_VERSION < PSYCHGUS_PSYCH_VERSION_5_1_2
+          return unless key?(target) && target.respond_to?(:object_id)
+
+          @obj_to_node.delete(target.object_id)
+        else # 5.1.2+
+          return unless key?(target)
+
+          @targets.delete(target)
+          @obj_to_node.delete(target)
+        end
       end
     end
 
@@ -72,9 +85,7 @@ module Psychgus
           end
 
           # Dereference aliases?
-          if @emitter.deref_aliases?
-            @st.remove_alias(target) if target.respond_to?(:object_id) && @st.key?(target)
-          end
+          @st.psychgus_unregister(target) if @emitter.deref_aliases?
         end
 
         result = super(target)
