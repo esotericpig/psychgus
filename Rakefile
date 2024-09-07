@@ -47,7 +47,8 @@ YardGhurt::GFMFixTask.new do |task|
     # Delete this file as it's never used (index.html is an exact copy)
     YardGhurt.rm_exist(File.join(t2.doc_dir,'file.README.html'))
 
-    t2.css_styles << '<link rel="stylesheet" type="text/css" href="/css/prism.css" />'
-    t2.js_scripts << '<script src="/js/prism.js"></script>)'
+    ghp_root = '../../..'
+    t2.css_styles << %Q(<link rel="stylesheet" type="text/css" href="#{ghp_root}/css/prism.css" />)
+    t2.js_scripts << %Q(<script src="#{ghp_root}/js/prism.js"></script>)
   end
 end
