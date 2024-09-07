@@ -5,8 +5,18 @@ All notable changes to this project will be documented in this file.
 Format is based on [Keep a Changelog v1.0.0](https://keepachangelog.com/en/1.0.0),
 and this project adheres to [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html).
 
-## [[Unreleased]](https://github.com/esotericpig/psychgus/compare/v1.3.4...HEAD)
--
+## [[Unreleased]](https://github.com/esotericpig/psychgus/compare/v1.3.5...HEAD)
+
+
+## [v1.3.5] - 2024-09-06
+### Fixed
+- Fixed to_yaml() to work with older-style gems.
+  - Example Gem: moneta
+- Fixed deref aliases to work with Psych v5.1.2.
+
+### Changed
+- Updated min Ruby to v2.2.
+- Updated Gems.
 
 
 ## [v1.3.4] - 2021-06-20
