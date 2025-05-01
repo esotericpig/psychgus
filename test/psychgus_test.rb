@@ -66,12 +66,13 @@ Toppings:
 
   def test_file
     Tempfile.create(['Psychgus','.yaml']) do |file|
-      #puts "Testing #{self.class.name} w/ temp file: #{file.path}"
+      # puts "Testing #{self.class.name} w/ temp file: #{file.path}"
 
-      Psychgus.dump_file(file,BURGERS_DATA,
+      Psychgus.dump_file(
+        file,BURGERS_DATA,
         mode: File::CREAT | File::RDWR,
         opt: {textmode: true},
-        #perm: 644, # Unix only
+        # perm: 644, # Unix only
         stylers: @flow_styler,
       )
 
@@ -141,7 +142,7 @@ Toppings:
   def test_parse
     parser = Psychgus.parser(stylers: @flow_styler)
     parser.parse(BURGERS_YAML)
-    yaml = "---\n" + parser.handler.root.to_yaml
+    yaml = "---\n#{parser.handler.root.to_yaml}"
     assert_equal EXPECTED_BURGERS,yaml
 
     node = Psychgus.parse(BURGERS_YAML,stylers: @flow_styler)

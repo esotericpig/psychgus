@@ -38,7 +38,7 @@ module Psychgus
       # @param min_level [Integer] the minimum level (inclusive) to style
       # @param new_style [Integer] the new style to set the nodes to
       # @param kargs [Hash] capture extra keyword args, so no error for undefined args
-      def initialize(min_level=0,new_style: nil,**kargs)
+      def initialize(min_level = 0,new_style: nil,**_kargs)
         @min_level = min_level
         @new_style = new_style
       end
@@ -67,7 +67,7 @@ module Psychgus
       # @param new_delim [nil,String] the replacement for each +delim+ if not nil
       # @param delim [String,Regexp] the delimiter to split on
       # @param kargs [Hash] capture extra keyword args, so no error for undefined args
-      def initialize(each_word: true,new_delim: nil,delim: /[\s_\-]/,**kargs)
+      def initialize(each_word: true,new_delim: nil,delim: /[\s_\-]/,**_kargs)
         delim = Regexp.quote(delim.to_s) unless delim.is_a?(Regexp)
 
         @delim = Regexp.new("(#{delim})")
@@ -95,7 +95,7 @@ module Psychgus
       #
       # @see cap_word
       # @see Styler#style_scalar
-      def style_scalar(sniffer,node)
+      def style_scalar(_sniffer,node)
         if !@each_word || node.value.nil? || node.value.empty?
           node.value = cap_word(node.value)
           return
@@ -128,7 +128,7 @@ module Psychgus
       # @param io [IO] the IO to write to
       # @param verbose [true,false] whether to be more verbose (e.g., write child info)
       # @param kargs [Hash] capture extra keyword args, so no error for undefined args
-      def initialize(io: StringIO.new,verbose: false,**kargs)
+      def initialize(io: StringIO.new,verbose: false,**_kargs)
         @io = io
         @verbose = verbose
       end
@@ -199,14 +199,14 @@ module Psychgus
 
       # @param cap [true,false] whether to capitalize the symbol
       # @param kargs [Hash] capture extra keyword args, so no error for undefined args
-      def initialize(cap: true,**kargs)
+      def initialize(cap: true,**_kargs)
         @cap = cap
       end
 
       # If +node.value+ is a symbol, change it into a string and capitalize it.
       #
       # @see Styler#style_scalar
-      def style_scalar(sniffer,node)
+      def style_scalar(_sniffer,node)
         return if node.value.nil? || node.value.empty?
         return if node.value[0] != ':'
 
@@ -224,7 +224,7 @@ module Psychgus
       # If +node.tag+ is settable, set it to nil.
       #
       # @see Styler#style
-      def style(sniffer,node)
+      def style(_sniffer,node)
         node.tag = nil if node.respond_to?(:tag=)
       end
     end

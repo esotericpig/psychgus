@@ -20,7 +20,7 @@ class EggCarton
     }
   end
 
-  def psychgus_stylers(sniffer)
+  def psychgus_stylers(_sniffer)
     return Psychgus::FlowStyler.new(4)
   end
 end

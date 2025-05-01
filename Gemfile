@@ -3,16 +3,15 @@
 
 source 'https://rubygems.org'
 
-group(:development) do
+group(:development,:test) do
   # Build.
-  gem 'bundler'   ,'~> 2.5'
+  gem 'bundler'   ,'~> 2.6'
   gem 'rake'      ,'~> 13.2'
 
   # Doc.
-  gem 'rdoc'      ,'~> 6.7'   # RDoc for YARD (*.rb).
-  gem 'redcarpet' ,'~> 3.6'   # Markdown for YARD (*.md).
+  gem 'rdoc'      ,'~> 6.13'  # RDoc (*.rb).
+  gem 'redcarpet' ,'~> 3.6'   # Markdown (*.md).
   gem 'yard'      ,'~> 0.9'   # Doc.
-  gem 'yard_ghurt','~> 1.2'   # YARD GitHub rake tasks.
 end
 
 group(:test) do

@@ -332,7 +332,7 @@ module Psychgus
   # @return [Integer,Object] the constant value from the class (usually an int)
   #
   # @see .node_class
-  def self.node_const(class_name,const_name,lenient=true)
+  def self.node_const(class_name,const_name,lenient: true)
     node_class = node_class(class_name)
     const_name = const_name.to_sym.upcase
 
@@ -378,7 +378,7 @@ module Psychgus
   #
   # @see .dump_stream
   # @see Psych.dump_stream
-  def self.dump(object,io=nil,**options)
+  def self.dump(object,io = nil,**options)
     return dump_stream(object,io: io,**options)
   end
 
@@ -467,8 +467,10 @@ module Psychgus
       end
     end
 
-    visitor = Psych::Visitors::YAMLTree.create(options,StyledTreeBuilder.new(*stylers,
-      deref_aliases: deref_aliases))
+    visitor = Psych::Visitors::YAMLTree.create(
+      options,
+      StyledTreeBuilder.new(*stylers,deref_aliases: deref_aliases)
+    )
 
     if objects.empty?
       # Else, will throw a cryptic NoMethodError:
@@ -681,8 +683,9 @@ module Psychgus
   # @see Psych::SyntaxError
   def self.parse_stream(yaml,filename: nil,stylers: nil,deref_aliases: false,**options,&block)
     if block_given?
-      parser = Psych::Parser.new(StyledDocumentStream.new(*stylers,deref_aliases: deref_aliases,**options,
-        &block))
+      parser = Psych::Parser.new(
+        StyledDocumentStream.new(*stylers,deref_aliases: deref_aliases,**options,&block)
+      )
 
       return parser.parse(yaml,filename)
     else

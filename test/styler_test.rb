@@ -31,7 +31,7 @@ class MyStyler
     end
   end
 
-  def style_scalar(sniffer,node)
+  def style_scalar(_sniffer,node)
     node.style = Psychgus::SCALAR_SINGLE_QUOTED if node.value.casecmp('Mushrooms') == 0
     node.value = 'Spinach' if node.value.casecmp('Lettuce') == 0
   end

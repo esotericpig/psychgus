@@ -66,7 +66,7 @@ class BurgerStyler
     @position = sniffer.position
   end
 
-  def style(sniffer,node)
+  def style(_sniffer,node)
     # Remove ugly and unsafe "!ruby/object:Burger"
     node.tag = nil if node.respond_to?(:tag)
   end
@@ -74,13 +74,13 @@ class BurgerStyler
   def style_mapping(sniffer,node)
     parent = sniffer.parent
 
-    if !parent.nil?
+    if !parent.nil? && parent.respond_to?(:value) && parent.value.casecmp('BBQ') == 0
       # BBQ
-      node.style = Psychgus::MAPPING_FLOW if parent.respond_to?(:value) && parent.value.casecmp('BBQ') == 0
+      node.style = Psychgus::MAPPING_FLOW
     end
   end
 
-  def style_scalar(sniffer,node)
+  def style_scalar(_sniffer,node)
     # Only for Burgers
     node.style = Psychgus::SCALAR_SINGLE_QUOTED
   end

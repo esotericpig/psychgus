@@ -88,7 +88,7 @@ module Psychgus
     #                               class/module/etc.
     #
     # @return [Styler,Array<Styler>,nil] {Styler}(s) for this class/module/etc.
-    def psychgus_stylers(sniffer)
+    def psychgus_stylers(_sniffer)
       return nil
     end
   end

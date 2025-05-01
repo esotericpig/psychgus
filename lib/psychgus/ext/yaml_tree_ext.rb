@@ -80,7 +80,7 @@ module Psychgus
           @st.psychgus_unregister(target) if @emitter.deref_aliases?
         end
 
-        result = super(target)
+        result = super(target) # rubocop:disable Style/SuperArguments
 
         # Check styler_count because @emitter may not be a StyledTreeBuilder and target may not be a Blueberry
         @emitter.pop_styler(styler_count) if styler_count > 0

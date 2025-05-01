@@ -37,7 +37,7 @@ module Psychgus
     # @param stylers [Styler] {Styler}(s) to use for styling this TreeBuilder
     # @param deref_aliases [true,false] whether to dereference aliases; output the actual value
     #                                   instead of the alias
-    def initialize(*stylers,deref_aliases: false,**options)
+    def initialize(*stylers,deref_aliases: false,**_options)
       super()
 
       @deref_aliases = deref_aliases
@@ -143,7 +143,7 @@ module Psychgus
     # @param count [Integer] the optional amount of tail elements to pop
     #
     # @return [Styler,Array<Styler>,nil] the last {Styler}(s), or if empty or count==0, nil
-    def pop_styler(count=1)
+    def pop_styler(count = 1)
       return nil if count == 0
       return @stylers.pop if count == 1
 

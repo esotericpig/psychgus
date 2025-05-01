@@ -35,7 +35,7 @@ module Psychgus
     # This mimics the behavior of Psych::Handlers::DocumentStream#end_document.
     #
     # @see Psych::Handlers::DocumentStream#end_document
-    def end_document(implicit_end=!streaming?)
+    def end_document(implicit_end = !streaming?)
       @last.implicit_end = implicit_end
       @block.call(pop)
     end
