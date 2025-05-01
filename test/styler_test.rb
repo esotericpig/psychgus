@@ -8,49 +8,15 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
 
-require 'psychgus_tester'
+require 'test_helper'
 
-class MyStyler
-  include Psychgus::Styler
-
-  def style(sniffer,node)
-  end
-
-  def style_alias(sniffer,node)
-  end
-
-  def style_mapping(sniffer,node)
-    parent = sniffer.parent
-
-    if !parent.nil?
-      # BBQ
-      node.style = Psychgus::MAPPING_FLOW if parent.node_of?(:scalar) && parent.value.casecmp('BBQ') == 0
-
-      # Fancy
-      node.style = Psychgus::MAPPING_FLOW if parent.level == 4 && parent.position == 3
-    end
-  end
-
-  def style_scalar(_sniffer,node)
-    node.style = Psychgus::SCALAR_SINGLE_QUOTED if node.value.casecmp('Mushrooms') == 0
-    node.value = 'Spinach' if node.value.casecmp('Lettuce') == 0
-  end
-
-  def style_sequence(sniffer,node)
-    node.style = Psychgus::SEQUENCE_FLOW if sniffer.level >= 3
-
-    # Burgers=>Classic=>Sauce and Mushrooms
-    node.style = Psychgus::SEQUENCE_BLOCK if sniffer.position == 1
-  end
-end
-
-class StylerTest < PsychgusTester
+class StylerTest < Minitest::Test
   def setup
     @styler = MyStyler.new
   end
 
   def test_styler
-    expected = <<-YAML
+    expected = TestHelper.lstrip_pipe(<<-YAML)
     |---
     |Burgers:
     |  Classic:
@@ -66,8 +32,41 @@ class StylerTest < PsychgusTester
     |- [Spinach, Onions, Pickles, Tomatoes]
     |- [[Ketchup, Mustard], [Salt, Pepper]]
     YAML
-    expected = self.class.lstrip_pipe(expected)
 
-    assert_equal expected,BURGERS_DATA.to_yaml(stylers: @styler)
+    assert_equal expected,TestHelper::BURGERS_DATA.to_yaml(stylers: @styler)
+  end
+end
+
+class MyStyler
+  include Psychgus::Styler
+
+  def style(sniffer,node)
+  end
+
+  def style_alias(sniffer,node)
+  end
+
+  def style_mapping(sniffer,node)
+    parent = sniffer.parent
+
+    if !parent.nil?
+      # BBQ.
+      node.style = Psychgus::MAPPING_FLOW if parent.node_of?(:scalar) && parent.value.casecmp('BBQ') == 0
+
+      # Fancy.
+      node.style = Psychgus::MAPPING_FLOW if parent.level == 4 && parent.position == 3
+    end
+  end
+
+  def style_scalar(_sniffer,node)
+    node.style = Psychgus::SCALAR_SINGLE_QUOTED if node.value.casecmp('Mushrooms') == 0
+    node.value = 'Spinach' if node.value.casecmp('Lettuce') == 0
+  end
+
+  def style_sequence(sniffer,node)
+    node.style = Psychgus::SEQUENCE_FLOW if sniffer.level >= 3
+
+    # Burgers => Classic => Sauce and Mushrooms.
+    node.style = Psychgus::SEQUENCE_BLOCK if sniffer.position == 1
   end
 end

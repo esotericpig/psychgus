@@ -12,8 +12,14 @@ require 'minitest/autorun'
 
 require 'psychgus'
 
-# Changing the YAML/data will break tests
-class PsychgusTester < Minitest::Test
+# NOTE: Changing the YAML/data will break tests
+module TestHelper
+  # This is for `<<-` heredoc.
+  # - Purposely not using `<<~` (tilde) for older Ruby versions.
+  def self.lstrip_pipe(str)
+    return str.gsub(/^\s*\|/,'')
+  end
+
   BURGERS_YAML = <<-YAML
 Burgers:
   Classic:
@@ -63,10 +69,4 @@ Popular:
   # Don't do 'aliases: true' because that doesn't exist
   #   in older versions of Psych.
   DOLPHINS_DATA = Psych.unsafe_load(DOLPHINS_YAML).freeze
-
-  # This is for "<<-" heredoc
-  # - Purposely not using "<<~" (tilde) for older Ruby versions
-  def self.lstrip_pipe(str)
-    return str.gsub(/^\s*\|/,'')
-  end
 end

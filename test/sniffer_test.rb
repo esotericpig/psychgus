@@ -8,23 +8,23 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
 
-require 'psychgus_tester'
+require 'test_helper'
 
 require 'stringio'
 
-class SnifferTest < PsychgusTester
+class SnifferTest < Minitest::Test
   def setup
   end
 
   def assert_hierarchy(*data,expected)
-    expected = self.class.lstrip_pipe(expected)
+    expected = TestHelper.lstrip_pipe(expected)
     hierarchy = Psychgus.hierarchy(*data,verbose: true)
 
     assert_equal expected,hierarchy
   end
 
   def test_multi_doc
-    assert_hierarchy(BURGERS_DATA,COURSES_DATA,DOLPHINS_DATA,<<-HIER)
+    assert_hierarchy(TestHelper::BURGERS_DATA,TestHelper::COURSES_DATA,TestHelper::DOLPHINS_DATA,<<-HIER)
     |(1:1):Psych::Nodes::Stream - <root:(0:0)::(:1)>
     |(1:1):Psych::Nodes::Document - <stream:(1:1)::(:1)>
     |(1:1):Psych::Nodes::Mapping - <doc:(1:1)::(:1)>
@@ -145,7 +145,7 @@ class SnifferTest < PsychgusTester
   end
 
   def test_single_docs
-    assert_hierarchy(BURGERS_DATA,<<-HIER)
+    assert_hierarchy(TestHelper::BURGERS_DATA,<<-HIER)
     |(1:1):Psych::Nodes::Stream - <root:(0:0)::(:1)>
     |(1:1):Psych::Nodes::Document - <stream:(1:1)::(:1)>
     |(1:1):Psych::Nodes::Mapping - <doc:(1:1)::(:1)>
@@ -194,7 +194,7 @@ class SnifferTest < PsychgusTester
     |     (6:2):Pepper - <seq:(5:2)::(:2)>
     HIER
 
-    assert_hierarchy(COURSES_DATA,<<-HIER)
+    assert_hierarchy(TestHelper::COURSES_DATA,<<-HIER)
     |(1:1):Psych::Nodes::Stream - <root:(0:0)::(:1)>
     |(1:1):Psych::Nodes::Document - <stream:(1:1)::(:1)>
     |(1:1):Psych::Nodes::Mapping - <doc:(1:1)::(:1)>

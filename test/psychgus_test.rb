@@ -8,23 +8,11 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #++
 
-require 'psychgus_tester'
+require 'test_helper'
 
 require 'tempfile'
 
-class FlowStyler
-  include Psychgus::Styler
-
-  def style_mapping(sniffer,node)
-    node.style = Psychgus::MAPPING_FLOW if sniffer.level >= 4
-  end
-
-  def style_sequence(sniffer,node)
-    node.style = Psychgus::SEQUENCE_FLOW if sniffer.level >= 4
-  end
-end
-
-class PsychgusTest < PsychgusTester
+class PsychgusTest < Minitest::Test
   EXPECTED_BURGERS = <<-YAML
 ---
 Burgers:
@@ -42,7 +30,7 @@ Toppings:
   end
 
   def test_alias
-    expected = <<-YAML
+    expected = TestHelper.lstrip_pipe(<<-YAML)
     |---
     |Dolphins:
     |  Common: {Length: "~2.5m", Weight: "~235kg"}
@@ -53,15 +41,14 @@ Toppings:
     |- {Length: "~4m", Weight: "~300kg"}
     |- {Length: "~7m", Weight: "~3600kg"}
     YAML
-    expected = self.class.lstrip_pipe(expected)
 
-    assert_equal expected,DOLPHINS_DATA.to_yaml(deref_aliases: true,stylers: @flow_styler)
+    assert_equal expected,TestHelper::DOLPHINS_DATA.to_yaml(deref_aliases: true,stylers: @flow_styler)
   end
 
   def test_dump
-    assert_equal EXPECTED_BURGERS,Psychgus.dump(BURGERS_DATA,stylers: @flow_styler)
-    assert_equal EXPECTED_BURGERS,Psychgus.dump_stream(BURGERS_DATA,stylers: @flow_styler)
-    assert_equal EXPECTED_BURGERS,BURGERS_DATA.to_yaml(stylers: @flow_styler)
+    assert_equal EXPECTED_BURGERS,Psychgus.dump(TestHelper::BURGERS_DATA,stylers: @flow_styler)
+    assert_equal EXPECTED_BURGERS,Psychgus.dump_stream(TestHelper::BURGERS_DATA,stylers: @flow_styler)
+    assert_equal EXPECTED_BURGERS,TestHelper::BURGERS_DATA.to_yaml(stylers: @flow_styler)
   end
 
   def test_file
@@ -69,7 +56,7 @@ Toppings:
       # puts "Testing #{self.class.name} w/ temp file: #{file.path}"
 
       Psychgus.dump_file(
-        file,BURGERS_DATA,
+        file,TestHelper::BURGERS_DATA,
         mode: File::CREAT | File::RDWR,
         opt: {textmode: true},
         # perm: 644, # Unix only
@@ -95,8 +82,8 @@ Toppings:
   end
 
   def test_indent
-    # Indent of 3 spaces
-    expected = <<-YAML
+    # Indent of 3 spaces, like a crazy person.
+    expected = TestHelper.lstrip_pipe(<<-YAML)
     |---
     |Burgers:
     |   Classic: {Sauce: [Ketchup, Mustard], Cheese: American, Bun: Sesame Seed}
@@ -107,13 +94,12 @@ Toppings:
     |- [Lettuce, Onions, Pickles, Tomatoes]
     |- [[Ketchup, Mustard], [Salt, Pepper]]
     YAML
-    expected = self.class.lstrip_pipe(expected)
 
     # rubocop:disable Style/HashSyntax
-    assert_equal expected,BURGERS_DATA.to_yaml(indent: 3,stylers: @flow_styler)
-    assert_equal expected,BURGERS_DATA.to_yaml(**{:indent => 3,:stylers => @flow_styler})
-    assert_equal expected,BURGERS_DATA.to_yaml(indentation: 3,stylers: @flow_styler)
-    assert_equal expected,BURGERS_DATA.to_yaml(**{:indentation => 3,:stylers => @flow_styler})
+    assert_equal expected,TestHelper::BURGERS_DATA.to_yaml(indent: 3,stylers: @flow_styler)
+    assert_equal expected,TestHelper::BURGERS_DATA.to_yaml(**{:indent => 3,:stylers => @flow_styler})
+    assert_equal expected,TestHelper::BURGERS_DATA.to_yaml(indentation: 3,stylers: @flow_styler)
+    assert_equal expected,TestHelper::BURGERS_DATA.to_yaml(**{:indentation => 3,:stylers => @flow_styler})
     # rubocop:enable all
   end
 
@@ -141,15 +127,27 @@ Toppings:
 
   def test_parse
     parser = Psychgus.parser(stylers: @flow_styler)
-    parser.parse(BURGERS_YAML)
+    parser.parse(TestHelper::BURGERS_YAML)
     yaml = "---\n#{parser.handler.root.to_yaml}"
     assert_equal EXPECTED_BURGERS,yaml
 
-    node = Psychgus.parse(BURGERS_YAML,stylers: @flow_styler)
+    node = Psychgus.parse(TestHelper::BURGERS_YAML,stylers: @flow_styler)
     refute_equal false,node
 
-    yaml = Psychgus.parse_stream(BURGERS_YAML,stylers: @flow_styler).to_yaml
+    yaml = Psychgus.parse_stream(TestHelper::BURGERS_YAML,stylers: @flow_styler).to_yaml
     yaml = "---\n#{yaml}"
     assert_equal EXPECTED_BURGERS,yaml
+  end
+end
+
+class FlowStyler
+  include Psychgus::Styler
+
+  def style_mapping(sniffer,node)
+    node.style = Psychgus::MAPPING_FLOW if sniffer.level >= 4
+  end
+
+  def style_sequence(sniffer,node)
+    node.style = Psychgus::SEQUENCE_FLOW if sniffer.level >= 4
   end
 end
