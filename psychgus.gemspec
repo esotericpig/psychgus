@@ -27,9 +27,9 @@ Gem::Specification.new do |spec|
   spec.bindir                = 'bin'
 
   spec.files = [
-    Dir.glob(File.join("{#{spec.require_paths.join(',')}}",'**','*.{erb,rb}')),
-    Dir.glob(File.join(spec.bindir,'*')),
-    Dir.glob(File.join('{samples,test,yard}','**','*.{erb,rb}')),
+    Dir.glob("{#{spec.require_paths.join(',')}}/**/*.{erb,rb}"),
+    Dir.glob("#{spec.bindir}/*"),
+    Dir.glob('{samples,test,yard}/**/*.{erb,rb}'),
     %W[Gemfile #{spec.name}.gemspec Rakefile .yardopts],
     %w[LICENSE.txt CHANGELOG.md README.md],
   ].flatten

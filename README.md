@@ -93,8 +93,6 @@ For classes, you can optionally include `Psychgus::Blueberry` and return the sty
 
 Instead of making your own styler, you can also use one of the [pre-defined stylers](#common-stylers).
 
-### Contents | Using
-
 [Common Stylers](#common-stylers)
 | [Simple Example](#simple-example)
 | [Hash Example](#hash-example)
@@ -103,7 +101,7 @@ Instead of making your own styler, you can also use one of the [pre-defined styl
 
 ### Common Stylers
 
-A collection of commonly-used [Stylers](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers.html) and [Stylables](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylables.html) are included with Psychgus.
+A collection of commonly-used [Stylers](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers.html) and [Stylables](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylables.html) are included with Psychgus. They're the easiest & quickest way to get started.
 
 | Styler | Description |
 | --- | --- |
@@ -114,7 +112,7 @@ A collection of commonly-used [Stylers](https://esotericpig.github.io/docs/psych
 | [NoTagStyler](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers/NoTagStyler.html) | Tag remover for classes |
 | [SeqFlowStyler](https://esotericpig.github.io/docs/psychgus/yardoc/Psychgus/Stylers/SeqFlowStyler.html) | FLOW style changer for Sequences only |
 
-#### Stylers Example
+Example usage:
 
 ```Ruby
 require 'psychgus'

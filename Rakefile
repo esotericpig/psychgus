@@ -12,7 +12,7 @@ require 'rake/testtask'
 task default: %i[test]
 
 CLEAN.exclude('.git/','stock/')
-CLOBBER.include('doc/')
+CLOBBER.include('.yardoc/','doc/')
 
 # Execute "rake clobber doc" for pristine docs.
 desc 'Generate documentation (YARDoc)'
@@ -22,12 +22,13 @@ task doc: %i[yard]
 #   GST=1 bundle update && bundle exec rake test
 Rake::TestTask.new do |task|
   task.libs = ['lib','test']
-  task.pattern = File.join('test','**','*_test.rb')
+  task.pattern = 'test/**/*_test.rb'
   # task.options = '--verbose' # Execute "rake test TESTOPT=-v" instead.
   task.verbose = true
   task.warning = true
 end
 
 YARD::Rake::YardocTask.new do |task|
-  task.files = [File.join('lib','**','*.rb')]
+  task.files = ['lib/**/*.rb']
+  task.options += ['--title',"Psychgus v#{Psychgus::VERSION}"]
 end
