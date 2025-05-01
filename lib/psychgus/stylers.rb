@@ -20,21 +20,23 @@ module Psychgus
   #   class EggCarton
   #     def initialize
   #       @eggs = {
-  #         :styles => ['fried', 'scrambled', ['BBQ', 'ketchup & mustard']],
-  #         :colors => ['brown', 'white', ['blue', 'green']]
+  #         styles: ['fried', 'scrambled', ['BBQ', 'ketchup & mustard']],
+  #         colors: ['brown', 'white', ['blue', 'green']],
   #       }
   #     end
   #   end
   #
   #   hierarchy = Psychgus::HierarchyStyler.new(io: $stdout)
   #
-  #   puts EggCarton.new.to_yaml(stylers: [
-  #     Psychgus::NoSymStyler.new,
-  #     Psychgus::NoTagStyler.new,
-  #     Psychgus::CapStyler.new,
-  #     Psychgus::FlowStyler.new(4),
-  #     hierarchy
-  #   ])
+  #   puts EggCarton.new.to_yaml(
+  #     stylers: [
+  #       Psychgus::NoSymStyler.new,
+  #       Psychgus::NoTagStyler.new,
+  #       Psychgus::CapStyler.new,
+  #       Psychgus::FlowStyler.new(4),
+  #       hierarchy,
+  #     ]
+  #   )
   #
   #   # Output:
   #   # ---
@@ -78,8 +80,9 @@ module Psychgus
     #       'BBQ eggs',
     #       'hard-boiled eggs',
     #       'soft_boiled eggs',
-    #       'fried@eggs'
-    #   ]}
+    #       'fried@eggs',
+    #     ]
+    #   }
     #
     #   seq_flow = Psychgus::SeqFlowStyler.new
     #
@@ -205,10 +208,11 @@ module Psychgus
     #   require 'psychgus'
     #
     #   data = {
-    #     :eggs => {
-    #       :styles => ['Fried', 'Scrambled', ['BBQ', 'Ketchup']],
-    #       :colors => ['Brown', 'White', ['Blue', 'Green']]
-    #   }}
+    #     eggs: {
+    #       styles: ['Fried', 'Scrambled', ['BBQ', 'Ketchup']],
+    #       colors: ['Brown', 'White', ['Blue', 'Green']],
+    #     }
+    #   }
     #
     #   flow = Psychgus::FlowStyler.new(4)
     #

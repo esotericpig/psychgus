@@ -24,7 +24,7 @@ module Psychgus
   #     attr_reader :my_hash
   #
   #     def initialize()
-  #       @my_hash = {:key1=>'val1',:key2=>'val2'}
+  #       @my_hash = {key1: 'val1',key2: 'val2'}
   #     end
   #
   #     def psychgus_stylers(sniffer)

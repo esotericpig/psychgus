@@ -30,10 +30,11 @@ module Psychgus
       #   end
       #
       #   my_obj = {
-      #     :Foods => {
-      #       :Fruits  => %w(Apple Banana Blueberry Pear),
-      #       :Veggies => %w(Bean Carrot Celery Pea)
-      #   }}
+      #     Foods: {
+      #       Fruits:  %w[Apple Banana Blueberry Pear],
+      #       Veggies: %w[Bean Carrot Celery Pea],
+      #     }
+      #   }
       #
       #   puts my_obj.to_yaml(indentation: 5,stylers: MyStyler.new)
       #

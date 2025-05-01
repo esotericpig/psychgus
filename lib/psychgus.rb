@@ -22,7 +22,6 @@ require 'psychgus/version'
 require 'psychgus/ext/core_ext'
 require 'psychgus/ext/node_ext'
 require 'psychgus/ext/yaml_tree_ext'
-
 require 'psychgus/super_sniffer/parent'
 
 ###
@@ -31,267 +30,6 @@ require 'psychgus/super_sniffer/parent'
 # Thank you to the people that worked and continue to work hard on that project.
 #
 # The name comes from the well-styled character Gus from the TV show Psych.
-#
-# == Create a Styler
-#
-# First, we will create a {Styler}.
-#
-# All you need to do is add +include Psychgus::Styler+ to a class.
-#
-# Here is a complex {Styler} for the examples below:
-#   require 'psychgus'
-#
-#   class BurgerStyler
-#     # Mix in methods needed for styling
-#     include Psychgus::Styler
-#
-#     def initialize(sniffer=nil)
-#       if sniffer.nil?()
-#         @class_level = 0
-#         @class_position = 0
-#       else
-#         # For the Class Example
-#         @class_level = sniffer.level
-#         @class_position = sniffer.position
-#       end
-#     end
-#
-#     # Style all nodes (Psych::Nodes::Node)
-#     def style(sniffer,node)
-#       # Remove "!ruby/object:..." for classes
-#       node.tag = nil if node.node_of?(:mapping,:scalar,:sequence)
-#
-#       # This is another way to do the above
-#       #node.tag = nil if node.respond_to?(:tag=)
-#     end
-#
-#     # Style aliases (Psych::Nodes::Alias)
-#     def style_alias(sniffer,node)
-#     end
-#
-#     # Style maps (Psych::Nodes::Mapping)
-#     # - Hashes (key/value pairs)
-#     # - Example: "Burgers: Classic {}"
-#     def style_mapping(sniffer,node)
-#       parent = sniffer.parent
-#
-#       if !parent.nil?()
-#         # BBQ
-#         node.style = Psychgus::MAPPING_FLOW if parent.node_of?(:scalar) &&
-#                                                parent.value.casecmp('BBQ') == 0
-#       end
-#     end
-#
-#     # Style scalars (Psych::Nodes::Scalar)
-#     # - Any text (non-alias)
-#     def style_scalar(sniffer,node)
-#       parent = sniffer.parent
-#
-#       # Single quote scalars that are not keys to a map
-#       # - "child_key?" is the same as "child_type == :key"
-#       node.style = Psychgus::SCALAR_SINGLE_QUOTED unless parent.child_key?()
-#
-#       # Remove colon (change symbols into strings)
-#       node.value = node.value.sub(':','')
-#
-#       # Change lettuce to spinach
-#       node.value = 'Spinach' if node.value.casecmp('Lettuce') == 0
-#
-#       # Capitalize each word
-#       node.value = node.value.split(' ').map do |v|
-#         if v.casecmp('BBQ') == 0
-#           v.upcase()
-#         else
-#           v.capitalize()
-#         end
-#       end.join(' ')
-#     end
-#
-#     # Style sequences (Psych::Nodes::Sequence)
-#     # - Arrays
-#     # - Example: "[Lettuce, Onions, Pickles, Tomatoes]"
-#     def style_sequence(sniffer,node)
-#       relative_level = (sniffer.level - @class_level) + 1
-#
-#       node.style = Psychgus::SEQUENCE_FLOW if sniffer.level >= 4
-#
-#       # Make "[Ketchup, Mustard]" a block for the Class Example
-#       node.style = Psychgus::SEQUENCE_BLOCK if relative_level == 7
-#     end
-#   end
-#
-# @example Hash example
-#   require 'psychgus'
-#
-#   burgers = {
-#     :Burgers => {
-#       :Classic => {
-#         :Sauce  => %w(Ketchup Mustard),
-#         :Cheese => 'American',
-#         :Bun    => 'Sesame Seed'
-#       },
-#       :BBQ => {
-#         :Sauce  => 'Honey BBQ',
-#         :Cheese => 'Cheddar',
-#         :Bun    => 'Kaiser'
-#       },
-#       :Fancy => {
-#         :Sauce  => 'Spicy Wasabi',
-#         :Cheese => 'Smoked Gouda',
-#         :Bun    => 'Hawaiian'
-#       }
-#     },
-#     :Toppings => [
-#       'Mushrooms',
-#       %w(Lettuce Onions Pickles Tomatoes),
-#       [%w(Ketchup Mustard), %w(Salt Pepper)]
-#     ]
-#   }
-#   burgers[:Favorite] = burgers[:Burgers][:BBQ] # Alias
-#
-#   puts burgers.to_yaml(indent: 3,stylers: BurgerStyler.new,deref_aliases: true)
-#
-#   # Output:
-#   # ---
-#   # Burgers:
-#   #    Classic:
-#   #       Sauce: ['Ketchup', 'Mustard']
-#   #       Cheese: 'American'
-#   #       Bun: 'Sesame Seed'
-#   #    BBQ: {Sauce: 'Honey BBQ', Cheese: 'Cheddar', Bun: 'Kaiser'}
-#   #    Fancy:
-#   #       Sauce: 'Spicy Wasabi'
-#   #       Cheese: 'Smoked Gouda'
-#   #       Bun: 'Hawaiian'
-#   # Toppings:
-#   # - 'Mushrooms'
-#   # - ['Spinach', 'Onions', 'Pickles', 'Tomatoes']
-#   # - [['Ketchup', 'Mustard'], ['Salt', 'Pepper']]
-#   # Favorite:
-#   #    Sauce: 'Honey BBQ'
-#   #    Cheese: 'Cheddar'
-#   #    Bun: 'Kaiser'
-#
-# @example Class example
-#   require 'psychgus'
-#
-#   class Burger
-#     attr_accessor :bun
-#     attr_accessor :cheese
-#     attr_accessor :sauce
-#
-#     def initialize(sauce,cheese,bun)
-#       @bun = bun
-#       @cheese = cheese
-#       @sauce = sauce
-#     end
-#
-#     # You can still use Psych's encode_with(), no problem
-#     #def encode_with(coder)
-#     #  coder['Bun'] = @bun
-#     #  coder['Cheese'] = @cheese
-#     #  coder['Sauce'] = @sauce
-#     #end
-#   end
-#
-#   class Burgers
-#     include Psychgus::Blueberry
-#
-#     attr_accessor :burgers
-#     attr_accessor :toppings
-#     attr_accessor :favorite
-#
-#     def initialize()
-#       @burgers = {
-#         'Classic' => Burger.new(['Ketchup','Mustard'],'American','Sesame Seed'),
-#         'BBQ'     => Burger.new('Honey BBQ','Cheddar','Kaiser'),
-#         'Fancy'   => Burger.new('Spicy Wasabi','Smoked Gouda','Hawaiian')
-#       }
-#
-#       @toppings = [
-#         'Mushrooms',
-#         %w(Lettuce Onions Pickles Tomatoes),
-#         [%w(Ketchup Mustard),%w(Salt Pepper)]
-#       ]
-#
-#       @favorite = @burgers['BBQ'] # Alias
-#     end
-#
-#     def psychgus_stylers(sniffer)
-#       return BurgerStyler.new(sniffer)
-#     end
-#
-#     # You can still use Psych's encode_with(), no problem
-#     #def encode_with(coder)
-#     #  coder['Burgers'] = @burgers
-#     #  coder['Toppings'] = @toppings
-#     #  coder['Favorite'] = @favorite
-#     #end
-#   end
-#
-#   burgers = Burgers.new
-#   puts burgers.to_yaml(indent: 3,deref_aliases: true)
-#
-#   # Output:
-#   # ---
-#   # Burgers:
-#   #    Classic:
-#   #       Bun: 'Sesame Seed'
-#   #       Cheese: 'American'
-#   #       Sauce:
-#   #       - 'Ketchup'
-#   #       - 'Mustard'
-#   #    BBQ: {Bun: 'Kaiser', Cheese: 'Cheddar', Sauce: 'Honey BBQ'}
-#   #    Fancy:
-#   #       Bun: 'Hawaiian'
-#   #       Cheese: 'Smoked Gouda'
-#   #       Sauce: 'Spicy Wasabi'
-#   # Toppings:
-#   # - 'Mushrooms'
-#   # - ['Spinach', 'Onions', 'Pickles', 'Tomatoes']
-#   # - [['Ketchup', 'Mustard'], ['Salt', 'Pepper']]
-#   # Favorite:
-#   #    Bun: 'Kaiser'
-#   #    Cheese: 'Cheddar'
-#   #    Sauce: 'Honey BBQ'
-#
-# @example Emitting / Parsing examples
-#   styler = BurgerStyler.new()
-#   options = {:indentation=>3,:stylers=>styler,:deref_aliases=>true}
-#   yaml = burgers.to_yaml(options)
-#
-#   # High-level emitting
-#   Psychgus.dump(burgers,options)
-#   Psychgus.dump_file('burgers.yaml',burgers,options)
-#   burgers.to_yaml(options)
-#
-#   # High-level parsing
-#   # - Because to_ruby() will be called, just use Psych:
-#   #   - load(), load_file(), load_stream(), safe_load()
-#
-#   # Mid-level emitting
-#   stream = Psychgus.parse_stream(yaml,stylers: styler,deref_aliases: true)
-#
-#   stream.to_yaml()
-#
-#   # Mid-level parsing
-#   Psychgus.parse(yaml,stylers: styler,deref_aliases: true)
-#   Psychgus.parse_file('burgers.yaml',stylers: styler,deref_aliases: true)
-#   Psychgus.parse_stream(yaml,stylers: styler,deref_aliases: true)
-#
-#   # Low-level emitting
-#   tree_builder = Psychgus::StyledTreeBuilder.new(styler,deref_aliases: true)
-#   visitor = Psych::Visitors::YAMLTree.create(options,tree_builder)
-#
-#   visitor << burgers
-#   visitor.tree.to_yaml
-#
-#   # Low-level parsing
-#   parser = Psychgus.parser(stylers: styler,deref_aliases: true)
-#
-#   parser.parse(yaml)
-#   parser.handler
-#   parser.handler.root
 ###
 module Psychgus
   # Include these in the top namespace for convenience (i.e., less typing).
@@ -443,7 +181,7 @@ module Psychgus
     # then options will be set to the Hash, instead of objects.
     #
     # For example, the below will be stored in options, not objects:
-    # - dump_stream({:coffee => {:roast => [],:style => []}})
+    # - dump_stream({coffee: {roast: [],style: []}})
     #
     # This if-statement is guaranteed because dump_stream([]) and dump_stream(nil)
     # will produce [[]] and [nil], which are not empty.
@@ -474,8 +212,8 @@ module Psychgus
 
     if objects.empty?
       # Else, will throw a cryptic NoMethodError:
-      # - "psych/tree_builder.rb:in `set_end_location':
-      #    undefined method `end_line=' for nil:NilClass (NoMethodError)"
+      #   psych/tree_builder.rb:in `set_end_location':
+      #   undefined method `end_line=' for nil:NilClass (NoMethodError)
       #
       # This should never occur because of the if-statement at the top of this method.
       visitor << nil
@@ -496,21 +234,21 @@ module Psychgus
   #   require 'psychgus'
   #
   #   burgers = {
-  #     :burgers => {
-  #       :classic => {:sauce  => %w(Ketchup Mustard),
-  #                    :cheese => 'American',
-  #                    :bun    => 'Sesame Seed'},
-  #       :bbq     => {:sauce  => 'Honey BBQ',
-  #                    :cheese => 'Cheddar',
-  #                    :bun    => 'Kaiser'},
-  #       :fancy   => {:sauce  => 'Spicy Wasabi',
-  #                    :cheese => 'Smoked Gouda',
-  #                    :bun    => 'Hawaiian'}
+  #     burgers: {
+  #       classic: {sauce:  %w[Ketchup Mustard],
+  #                 cheese: 'American',
+  #                 bun:    'Sesame Seed'},
+  #       bbq:     {sauce:  'Honey BBQ',
+  #                 cheese: 'Cheddar',
+  #                 bun:    'Kaiser'},
+  #       fancy:   {sauce:  'Spicy Wasabi',
+  #                 cheese: 'Smoked Gouda',
+  #                 bun:    'Hawaiian'},
   #     },
-  #     :toppings => [
+  #     toppings: [
   #       'Mushrooms',
-  #       %w(Lettuce Onions Pickles Tomatoes),
-  #       [%w(Ketchup Mustard), %w(Salt Pepper)]
+  #       %w[Lettuce Onions Pickles Tomatoes],
+  #       [%w[Ketchup Mustard], %w[Salt Pepper]],
   #     ]
   #   }
   #
@@ -637,17 +375,17 @@ module Psychgus
   # and the styler(s) will do nothing for you.
   #
   # @example
-  #   burgers = <<EOY
-  #   ---
-  #   Burgers:
-  #     Classic:
-  #       BBQ: {Sauce: Honey BBQ, Cheese: Cheddar, Bun: Kaiser}
-  #   ---
-  #   Toppings:
-  #   - [Mushrooms, Mustard]
-  #   - [Salt, Pepper, Pickles]
-  #   ---
-  #   `Invalid`
+  #   burgers = <<~EOY
+  #     ---
+  #     Burgers:
+  #       Classic:
+  #         BBQ: {Sauce: Honey BBQ, Cheese: Cheddar, Bun: Kaiser}
+  #     ---
+  #     Toppings:
+  #     - [Mushrooms, Mustard]
+  #     - [Salt, Pepper, Pickles]
+  #     ---
+  #     `Invalid`
   #   EOY
   #
   #   i = 0
@@ -707,16 +445,16 @@ module Psychgus
   #     end
   #   end
   #
-  #   coffee = <<EOY
-  #   Coffee:
-  #     Roast:
-  #       - Light
-  #       - Medium
-  #       - Dark
-  #     Style:
-  #       - Cappuccino
-  #       - Latte
-  #       - Mocha
+  #   coffee = <<~EOY
+  #     Coffee:
+  #       Roast:
+  #         - Light
+  #         - Medium
+  #         - Dark
+  #       Style:
+  #         - Cappuccino
+  #         - Latte
+  #         - Mocha
   #   EOY
   #
   #   parser = Psychgus.parser(stylers: CoffeeStyler.new)
@@ -752,7 +490,7 @@ module Psychgus
   #
   # Private methods of Psych are not defined.
   #
-  # @note For devs/hacking: because extend is used, do not prefix methods with "self."
+  # @note For devs/hacking: because extend is used, do not prefix methods with `self.`.
   ###
   module PsychDropIn
     # @see Psych.add_builtin_type
