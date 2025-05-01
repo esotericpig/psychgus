@@ -1,11 +1,20 @@
 # Changelog | Psychgus
 
-All notable changes to this project will be documented in this file.
+- [Keep a Changelog v1.0.0](https://keepachangelog.com/en/1.0.0)
+- [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html)
 
-Format is based on [Keep a Changelog v1.0.0](https://keepachangelog.com/en/1.0.0),
-and this project adheres to [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html).
+## [Unreleased]
+- https://github.com/esotericpig/psychgus/compare/v1.3.6...HEAD
 
-## [[Unreleased]](https://github.com/esotericpig/psychgus/compare/v1.3.5...HEAD)
+
+## [v1.3.6] - 2025-05-01
+### Fixed
+- Fixed deref aliases for Psych v5.2.0+.
+
+### Changed
+- Applied RuboCop suggestions.
+- Refactored tests.
+- Removed `yard_ghurt` gem.
 
 
 ## [v1.3.5] - 2024-09-06
