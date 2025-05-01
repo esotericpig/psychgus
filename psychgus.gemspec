@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
     'homepage_uri'          => 'https://github.com/esotericpig/psychgus',
     'source_code_uri'       => 'https://github.com/esotericpig/psychgus',
     'bug_tracker_uri'       => 'https://github.com/esotericpig/psychgus/issues',
-    'changelog_uri'         => 'https://github.com/esotericpig/psychgus/blob/master/CHANGELOG.md',
+    'changelog_uri'         => 'https://github.com/esotericpig/psychgus/blob/main/CHANGELOG.md',
     'documentation_uri'     => 'https://esotericpig.github.io/docs/psychgus/yardoc/index.html',
   }
 

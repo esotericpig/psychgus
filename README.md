@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/psychgus.svg)](https://badge.fury.io/rb/psychgus)
 [![CI Status](https://github.com/esotericpig/psychgus/actions/workflows/ci.yml/badge.svg)](https://github.com/esotericpig/psychgus/actions/workflows/ci.yml)
-[![Doc Coverage](http://inch-ci.org/github/esotericpig/psychgus.svg?branch=master)](https://inch-ci.org/github/esotericpig/psychgus)
+[![Doc Coverage](http://inch-ci.org/github/esotericpig/psychgus.svg?branch=main)](https://inch-ci.org/github/esotericpig/psychgus)
 
 [![Documentation](https://img.shields.io/badge/doc-yard-%23A0522D.svg)](https://esotericpig.github.io/docs/psychgus/yardoc/index.html)
 [![Source Code](https://img.shields.io/badge/source-github-%23211F1F.svg)](https://github.com/esotericpig/psychgus)
@@ -601,7 +601,7 @@ Clean &amp; generate pristine doc:
 [GNU LGPL v3+](LICENSE.txt)
 
 > Psychgus (<https://github.com/esotericpig/psychgus>)  
-> Copyright (c) 2017-2024 Bradley Whited  
+> Copyright (c) 2017-2025 Bradley Whited  
 > 
 > Psychgus is free software: you can redistribute it and/or modify  
 > it under the terms of the GNU Lesser General Public License as published by  

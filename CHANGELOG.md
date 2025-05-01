@@ -12,6 +12,7 @@
 - Fixed deref aliases for Psych v5.2.0+.
 
 ### Changed
+- Renamed `master` branch to `main`.
 - Applied RuboCop suggestions.
 - Refactored tests.
 - Removed `yard_ghurt` gem.
