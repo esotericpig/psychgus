@@ -12,6 +12,7 @@ group(:development,:test) do
   gem 'rdoc'      ,'~> 6.13'  # RDoc (*.rb).
   gem 'redcarpet' ,'~> 3.6'   # Markdown (*.md).
   gem 'yard'      ,'~> 0.9'   # Doc.
+  gem 'yard_ghurt','~> 1.2'   # Rake tasks for fixing YARD.
 end
 
 group(:test) do
