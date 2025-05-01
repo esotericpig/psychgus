@@ -14,11 +14,12 @@ Gem::Specification.new do |spec|
   spec.description = 'Easily style YAML files using Psych, like Sequence/Mapping Flow style.'
 
   spec.metadata = {
-    'homepage_uri'      => 'https://github.com/esotericpig/psychgus',
-    'source_code_uri'   => 'https://github.com/esotericpig/psychgus',
-    'bug_tracker_uri'   => 'https://github.com/esotericpig/psychgus/issues',
-    'changelog_uri'     => 'https://github.com/esotericpig/psychgus/blob/master/CHANGELOG.md',
-    'documentation_uri' => 'https://esotericpig.github.io/docs/psychgus/yardoc/index.html',
+    'rubygems_mfa_required' => 'true',
+    'homepage_uri'          => 'https://github.com/esotericpig/psychgus',
+    'source_code_uri'       => 'https://github.com/esotericpig/psychgus',
+    'bug_tracker_uri'       => 'https://github.com/esotericpig/psychgus/issues',
+    'changelog_uri'         => 'https://github.com/esotericpig/psychgus/blob/master/CHANGELOG.md',
+    'documentation_uri'     => 'https://esotericpig.github.io/docs/psychgus/yardoc/index.html',
   }
 
   spec.required_ruby_version = '>= 2.2'
@@ -29,8 +30,8 @@ Gem::Specification.new do |spec|
     Dir.glob(File.join("{#{spec.require_paths.join(',')}}",'**','*.{erb,rb}')),
     Dir.glob(File.join(spec.bindir,'*')),
     Dir.glob(File.join('{samples,test,yard}','**','*.{erb,rb}')),
-    %W[ Gemfile #{spec.name}.gemspec Rakefile .yardopts ],
-    %w[ LICENSE.txt CHANGELOG.md README.md ],
+    %W[Gemfile #{spec.name}.gemspec Rakefile .yardopts],
+    %w[LICENSE.txt CHANGELOG.md README.md],
   ].flatten
 
   # Test using different Gem versions:
@@ -41,6 +42,8 @@ Gem::Specification.new do |spec|
   if !gemspec_test.empty?
     case gemspec_test
     when '1' then psych_gemv = '<= 5.1.1'
+    when '2' then psych_gemv = '5.1.2'
+    when '3' then psych_gemv = '5.2.0'
     end
 
     puts 'Using Gem versions:'

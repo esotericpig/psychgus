@@ -36,8 +36,8 @@ jobs:
         unset GST
         bundle exec rake test
 
-    - name: Run tests w/ older Psych gem
+    - name: Run tests w/ older Psych gems
       run: |
-        export GST=1
-        bundle update
-        bundle exec rake test
+        GST=1 bundle update && bundle exec rake test
+        GST=2 bundle update && bundle exec rake test
+        GST=3 bundle update && bundle exec rake test

@@ -33,7 +33,6 @@ module Psychgus
         else # 5.1.2+
           return unless key?(target)
 
-          @targets.delete(target)
           @obj_to_node.delete(target)
         end
       end
