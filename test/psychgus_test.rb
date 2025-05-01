@@ -73,11 +73,11 @@ Toppings:
 
       data = Psych.load_file(file)
       refute_equal false,data
-      refute_equal nil,data
+      refute_nil data
 
       data = Psychgus.parse_file(file)
       refute_equal false,data
-      refute_equal nil,data
+      refute_nil data
     end
   end
 
