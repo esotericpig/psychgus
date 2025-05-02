@@ -3,8 +3,10 @@
 - [Keep a Changelog v1.0.0](https://keepachangelog.com/en/1.0.0)
 - [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html)
 
-## [Unreleased]
-- https://github.com/esotericpig/psychgus/compare/v1.3.6...HEAD
+
+## [v1.3.7] - 2025-05-01
+### Fixed
+- Fixed up code examples in README and doc.
 
 
 ## [v1.3.6] - 2025-05-01
@@ -15,7 +17,6 @@
 - Renamed `master` branch to `main`.
 - Applied RuboCop suggestions.
 - Refactored tests.
-- Removed `yard_ghurt` gem.
 
 
 ## [v1.3.5] - 2024-09-06
