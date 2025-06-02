@@ -210,7 +210,7 @@ puts Coffee.new.to_yaml
 require 'psychgus'
 
 class BurgerStyler
-  include Psychgus::Styler # Mix in methods needed for styling
+  include Psychgus::Styler # Mix in methods needed for styling.
 
   # Style hash maps (Psych::Nodes::Mapping).
   def style_mapping(sniffer,node)
