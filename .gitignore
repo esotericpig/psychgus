@@ -1,12 +1,11 @@
-.env
-
-Gemfile.lock
+.idea/
+.yardoc/
+/doc/
+/pkg/
+/stock/
 
 *.gem
 *.rbc
 
-/.yardoc/
-
-/doc/
-/pkg/
-/stock/
+.env
+Gemfile.lock

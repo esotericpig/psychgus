@@ -58,29 +58,31 @@ Pick your poison...
 
 With the RubyGems CLI package manager:
 
-`$ gem install psychgus`
+```bash
+gem install psychgus
+```
 
 In your *.gemspec* file:
 
-```Ruby
+```ruby
 spec.add_dependency 'psychgus', '~> X.X.X'
 ```
 
 In your *Gemfile*:
 
-```Ruby
-# Pick one...
+```ruby
+# Pick your poison...
 gem 'psychgus', '~> X.X.X', group: :development
-gem 'psychgus', git: 'https://github.com/esotericpig/psychgus.git', tag: 'vX.X.X'
+gem 'psychgus', git: 'https://github.com/esotericpig/psychgus.git', branch: 'main'
 ```
 
-Manually:
+From source:
 
-```
-$ git clone --depth 1 'https://github.com/esotericpig/psychgus.git'
-$ cd psychgus
-$ bundle install
-$ bundle exec rake install:local
+```bash
+git clone --depth 1 'https://github.com/esotericpig/psychgus.git'
+cd psychgus
+bundle install
+bundle exec rake install:local
 ```
 
 ## Using
@@ -114,7 +116,7 @@ A collection of commonly-used [Stylers](https://esotericpig.github.io/docs/psych
 
 Example usage:
 
-```Ruby
+```ruby
 require 'psychgus'
 
 class EggCarton
@@ -160,7 +162,7 @@ puts EggCarton.new.to_yaml
 
 ### Simple Example
 
-```Ruby
+```ruby
 require 'psychgus'
 
 class CoffeeStyler
@@ -206,7 +208,7 @@ puts Coffee.new.to_yaml
 
 ### Hash Example
 
-```Ruby
+```ruby
 require 'psychgus'
 
 class BurgerStyler
@@ -296,7 +298,7 @@ puts burgers.to_yaml({indent: 3,stylers: BurgerStyler.new,deref_aliases: true})
 
 ### Class Example
 
-```Ruby
+```ruby
 require 'psychgus'
 
 class BurgerStyler
@@ -462,7 +464,7 @@ puts burgers.to_yaml({indent: 3,deref_aliases: true})
 
 ### Advanced Usage
 
-```Ruby
+```ruby
 require 'psychgus'
 
 class MyStyler
@@ -572,20 +574,32 @@ puts
 
 ## Hacking
 
-```
-$ git clone 'https://github.com/esotericpig/psychgus.git'
-$ cd psychgus
-$ bundle install
-$ bundle exec rake -T
+```bash
+git clone 'https://github.com/esotericpig/psychgus.git'
+cd psychgus
+bundle install
+bundle exec rake -T
 ```
 
 Run tests:
 
-`$ bundle exec rake test`
+```bash
+bundle exec rake test
+```
+
+Run tests for older Psych versions (see [psychgus.gemspec](psychgus.gemspec)):
+
+```bash
+GST=1 bundle update && bundle exec rake test
+GST=2 bundle update && bundle exec rake test
+GST=3 bundle update && bundle exec rake test
+```
 
 Generate doc:
 
-`$ bundle exec rake clobber doc`
+```bash
+bundle exec rake clobber doc
+```
 
 ## License
 

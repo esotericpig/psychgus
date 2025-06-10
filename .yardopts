@@ -1,3 +1,5 @@
---files 'LICENSE.txt,CHANGELOG.md'
+--charset 'UTF-8'
+--embed-mixins
+--files 'CHANGELOG.md,LICENSE.txt'
 --protected
 --readme 'README.md'

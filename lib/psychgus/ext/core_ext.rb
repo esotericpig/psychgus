@@ -13,7 +13,7 @@ module Psychgus
     ###
     # Core extensions to Object.
     #
-    # @see https://github.com/ruby/psych/blob/master/lib/psych/core_ext.rb
+    # @see https://github.com/ruby/psych/blob/HEAD/lib/psych/core_ext.rb
     ###
     module ObjectExt
       # Convert an Object to YAML.

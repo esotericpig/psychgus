@@ -16,21 +16,24 @@ jobs:
       matrix:
         os: [ 'ubuntu-latest','macos-latest' ]
         # - https://www.ruby-lang.org/en/downloads/branches
-        ruby-version: [ 'head','3.4','3.3','3.2' ]
+        ruby: [ '3.1','head' ]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: "${{ matrix.os }}"
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Check out repo
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
 
     # - https://github.com/ruby/setup-ruby
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: ${{ matrix.ruby-version }}
+        ruby-version: "${{ matrix.ruby }}"
         bundler: 'latest'
         bundler-cache: true
-        #cache-version: 1
+#        cache-version: 1
 
     - name: Run tests
       run: |
@@ -42,3 +45,12 @@ jobs:
         GST=1 bundle update && bundle exec rake test
         GST=2 bundle update && bundle exec rake test
         GST=3 bundle update && bundle exec rake test
+
+    - name: Test doc
+      run: bundle exec rake doc
+
+    - name: Test build & install
+      run: |
+        bundle exec rake build
+        gem install --document --local pkg/*.gem
+        ruby -w -rpsychgus -e 'puts Psychgus::VERSION'

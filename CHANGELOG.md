@@ -1,15 +1,16 @@
 # Changelog | Psychgus
 
-- [Keep a Changelog v1.0.0](https://keepachangelog.com/en/1.0.0)
-- [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html)
+- [Keep a Changelog](https://keepachangelog.com/en/1.1.0)
+- [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [Unreleased](https://github.com/esotericpig/psychgus/compare/v1.3.7...HEAD)
+- ...
 
-## [v1.3.7] - 2025-05-01
+## [1.3.7] - 2025-05-01
 ### Fixed
 - Fixed up code examples in README and doc.
 
-
-## [v1.3.6] - 2025-05-01
+## [1.3.6] - 2025-05-01
 ### Fixed
 - Fixed deref aliases for Psych v5.2.0+.
 
@@ -18,8 +19,7 @@
 - Applied RuboCop suggestions.
 - Refactored tests.
 
-
-## [v1.3.5] - 2024-09-06
+## [1.3.5] - 2024-09-06
 ### Fixed
 - Fixed to_yaml() to work with older-style gems.
   - Example Gem: moneta
@@ -29,8 +29,7 @@
 - Updated min Ruby to v2.2.
 - Updated Gems.
 
-
-## [v1.3.4] - 2021-06-20
+## [1.3.4] - 2021-06-20
 ### Fixed
 - Fixed test file to use `unsafe_load()` for Psych v4+.
 
@@ -39,15 +38,13 @@
 - Updated Gems.
 - Formatted files with RuboCop.
 
-
-## [v1.3.3] - 2020-04-25
+## [1.3.3] - 2020-04-25
 ### Fixed
 - SuperSniffer::Parent
     - Added require of `delegate` for Delegator
     - Rake test task didn't catch this (must already include it)
 
-
-## [v1.3.2] - 2020-04-23
+## [1.3.2] - 2020-04-23
 ### Changed
 - SuperSniffer::Parent
     - Changed to use Delegator to delegate all methods of `node`
@@ -57,16 +54,14 @@
 ### Fixed
 - Fixed some Ruby 2.7 warnings in tests
 
-
-## [v1.2.2] - 2020-03-15
+## [1.2.2] - 2020-03-15
 ### Fixed
 - Fixed Psych version to be >= 3.0 for `to_yaml/encode_with` warnings
     - This is mainly for Windows
     - [Ruby-lang Bug #13115](https://bugs.ruby-lang.org/issues/13115)
     - [GitHub Psych Commit](https://github.com/ruby/psych/commit/712a65a53f3c15105cd86e8ad3ee3c779050ada4)
 
-
-## [v1.2.1] - 2019-12-18
+## [1.2.1] - 2019-12-18
 ### Added
 - Use of YardGhurt gem for Rakefile tasks
 
@@ -79,8 +74,7 @@
 ### Fixed
 - Updated gems
 
-
-## [v1.2.0] - 2019-07-11
+## [1.2.0] - 2019-07-11
 ### Added
 - Commonly-used Stylers and Stylables
 - Changelog
@@ -95,11 +89,5 @@
 ### Fixed
 - Psychgus.dump_stream() if you only pass in a Hash w/ symbols as keys (options would be set to it, instead of objects)
 
-
-## [v1.0.0] - 2019-07-03
-### Added
-### Changed
-### Deprecated
-### Removed
-### Fixed
-### Security
+## [1.0.0] - 2019-07-03
+Initial release.
