@@ -10,55 +10,47 @@
 
 require 'test_helper'
 
-class StylersTest < Minitest::Test
-  def setup
+describe Psychgus::Stylers do
+  before do
     @egg_carton = EggCarton.new
   end
 
-  def test_capstyler
-    actual = @egg_carton.to_yaml(stylers: Psychgus::CapStyler.new(each_word: false))
-    expected = TestHelper.lstrip_pipe(<<-YAML)
-    |--- !ruby/object:EggCarton
-    |Eggs:
-    |  :styles: [Omelette, BBQ eggs, Hard-boiled eggs, Soft_boiled eggs, Fried@eggs]
-    |  :colors: [Brown, White, [Blue, Green]]
+  it '::CapStyler should capitalize the words' do
+    _(
+      @egg_carton.to_yaml(stylers: Psychgus::CapStyler.new(each_word: false))
+    ).must_equal(<<~YAML)
+      --- !ruby/object:EggCarton
+      Eggs:
+        :styles: [Omelette, BBQ eggs, Hard-boiled eggs, Soft_boiled eggs, Fried@eggs]
+        :colors: [Brown, White, [Blue, Green]]
     YAML
 
-    assert_equal expected,actual
-
-    actual = @egg_carton.to_yaml(stylers: Psychgus::CapStyler.new(new_delim: '+',delim: /[\s_\-@]/))
-    expected = TestHelper.lstrip_pipe(<<-YAML)
-    |--- !ruby/object:EggCarton
-    |Eggs:
-    |  :styles: [Omelette, BBQ+Eggs, Hard+Boiled+Eggs, Soft+Boiled+Eggs, Fried+Eggs]
-    |  :colors: [Brown, White, [Blue, Green]]
+    _(
+      @egg_carton.to_yaml(stylers: Psychgus::CapStyler.new(new_delim: '+',delim: /[\s_\-@]/))
+    ).must_equal(<<~YAML)
+      --- !ruby/object:EggCarton
+      Eggs:
+        :styles: [Omelette, BBQ+Eggs, Hard+Boiled+Eggs, Soft+Boiled+Eggs, Fried+Eggs]
+        :colors: [Brown, White, [Blue, Green]]
     YAML
-
-    assert_equal expected,actual
   end
 
-  def test_nosymstyler
-    actual = @egg_carton.to_yaml(stylers: Psychgus::NoSymStyler.new)
-    expected = TestHelper.lstrip_pipe(<<-YAML)
-    |--- !ruby/object:EggCarton
-    |eggs:
-    |  Styles: [omelette, BBQ eggs, hard-boiled eggs, soft_boiled eggs, fried@eggs]
-    |  Colors: [brown, white, [blue, green]]
+  it '::NoSymStyler should convert the symbols to strings' do
+    _(@egg_carton.to_yaml(stylers: Psychgus::NoSymStyler.new)).must_equal(<<~YAML)
+      --- !ruby/object:EggCarton
+      eggs:
+        Styles: [omelette, BBQ eggs, hard-boiled eggs, soft_boiled eggs, fried@eggs]
+        Colors: [brown, white, [blue, green]]
     YAML
-
-    assert_equal expected,actual
   end
 
-  def test_notagstyler
-    actual = @egg_carton.to_yaml(stylers: Psychgus::NoTagStyler.new)
-    expected = TestHelper.lstrip_pipe(<<-YAML)
-    |---
-    |eggs:
-    |  :styles: [omelette, BBQ eggs, hard-boiled eggs, soft_boiled eggs, fried@eggs]
-    |  :colors: [brown, white, [blue, green]]
+  it '::NoTagStyler should remove the tags' do
+    _(@egg_carton.to_yaml(stylers: Psychgus::NoTagStyler.new)).must_equal(<<~YAML)
+      ---
+      eggs:
+        :styles: [omelette, BBQ eggs, hard-boiled eggs, soft_boiled eggs, fried@eggs]
+        :colors: [brown, white, [blue, green]]
     YAML
-
-    assert_equal expected,actual
   end
 end
 

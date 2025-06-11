@@ -10,30 +10,28 @@
 
 require 'test_helper'
 
-class StylerTest < Minitest::Test
-  def setup
+describe Psychgus::Styler do
+  before do
     @styler = MyStyler.new
   end
 
-  def test_styler
-    expected = TestHelper.lstrip_pipe(<<-YAML)
-    |---
-    |Burgers:
-    |  Classic:
-    |    Sauce:
-    |    - Ketchup
-    |    - Mustard
-    |    Cheese: American
-    |    Bun: Sesame Seed
-    |  BBQ: {Sauce: Honey BBQ, Cheese: Cheddar, Bun: Kaiser}
-    |  Fancy: {Sauce: Spicy Wasabi, Cheese: Smoked Gouda, Bun: Hawaiian}
-    |Toppings:
-    |- 'Mushrooms'
-    |- [Spinach, Onions, Pickles, Tomatoes]
-    |- [[Ketchup, Mustard], [Salt, Pepper]]
+  it 'should style the YAML' do
+    _(TestHelper::BURGERS_DATA.to_yaml(stylers: @styler)).must_equal(<<~YAML)
+      ---
+      Burgers:
+        Classic:
+          Sauce:
+          - Ketchup
+          - Mustard
+          Cheese: American
+          Bun: Sesame Seed
+        BBQ: {Sauce: Honey BBQ, Cheese: Cheddar, Bun: Kaiser}
+        Fancy: {Sauce: Spicy Wasabi, Cheese: Smoked Gouda, Bun: Hawaiian}
+      Toppings:
+      - 'Mushrooms'
+      - [Spinach, Onions, Pickles, Tomatoes]
+      - [[Ketchup, Mustard], [Salt, Pepper]]
     YAML
-
-    assert_equal expected,TestHelper::BURGERS_DATA.to_yaml(stylers: @styler)
   end
 end
 

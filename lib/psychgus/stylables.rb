@@ -210,7 +210,7 @@ module Psychgus
         return if node.value.nil? || node.value.empty?
         return if node.value[0] != ':'
 
-        node.value = node.value[1..-1]
+        node.value = node.value[1..]
         node.value = node.value.capitalize if @cap
       end
     end

@@ -494,13 +494,13 @@ module Psychgus
   ###
   module PsychDropIn
     # @see Psych.add_builtin_type
-    def add_builtin_type(*args,&block)
-      Psych.add_builtin_type(*args,&block)
+    def add_builtin_type(...)
+      Psych.add_builtin_type(...)
     end
 
     # @see Psych.add_domain_type
-    def add_domain_type(*args,&block)
-      Psych.add_domain_type(*args,&block)
+    def add_domain_type(...)
+      Psych.add_domain_type(...)
     end
 
     # @see Psych.add_tag

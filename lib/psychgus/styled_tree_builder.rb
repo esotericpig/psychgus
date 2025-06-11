@@ -158,8 +158,8 @@ module Psychgus
     # @param block [Proc] an optional block to call when +styler+ is not found
     #
     # @return [Styler,nil] the last {Styler}, or if not found, nil or the result of +block+
-    def remove_styler(styler,&block)
-      return @stylers.delete(styler,&block)
+    def remove_styler(styler,&)
+      return @stylers.delete(styler,&)
     end
 
     # Remove the {Styler} at +index+ from the data structure.

@@ -225,7 +225,7 @@ class BurgerStyler
     node.value = node.value.sub(':','')
 
     # Capitalize each word
-    node.value = node.value.split(' ').map do |v|
+    node.value = node.value.split.map do |v|
       if v.casecmp('BBQ') == 0
         v.upcase
       else
@@ -259,7 +259,7 @@ burgers = {
     'Mushrooms',
     %w[Lettuce Onions Pickles Tomatoes],
     [%w[Ketchup Mustard], %w[Salt Pepper]],
-  ]
+  ],
 }
 burgers[:favorite] = burgers[:burgers][:bbq] # Alias.
 
@@ -479,13 +479,13 @@ coffee = {
   'Coffee' => {
     'Roast' => ['Light', 'Medium', 'Dark', 'Extra Dark'],
     'Style' => ['Cappuccino', 'Espresso', 'Latte', 'Mocha'],
-  }
+  },
 }
 eggs = {
   'Eggs' => {
     'Color' => ['Brown', 'White', 'Blue', 'Olive'],
     'Style' => ['Fried', 'Scrambled', 'Omelette', 'Poached'],
-  }
+  },
 }
 
 filename = 'coffee-and-eggs.yaml'

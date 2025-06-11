@@ -15,23 +15,23 @@ Gem::Specification.new do |spec|
 
   spec.metadata = {
     'rubygems_mfa_required' => 'true',
-    'homepage_uri'          => 'https://github.com/esotericpig/psychgus',
+    'homepage_uri'          => spec.homepage,
     'source_code_uri'       => 'https://github.com/esotericpig/psychgus',
     'bug_tracker_uri'       => 'https://github.com/esotericpig/psychgus/issues',
     'changelog_uri'         => 'https://github.com/esotericpig/psychgus/blob/main/CHANGELOG.md',
     'documentation_uri'     => 'https://esotericpig.github.io/docs/psychgus/yardoc/index.html',
   }
 
-  spec.required_ruby_version = '>= 2.2'
+  spec.required_ruby_version = '>= 3.1'
   spec.require_paths         = ['lib']
   spec.bindir                = 'bin'
 
   spec.files = [
     Dir.glob("{#{spec.require_paths.join(',')}}/**/*.{erb,rb}"),
     Dir.glob("#{spec.bindir}/*"),
-    Dir.glob('{samples,test,yard}/**/*.{erb,rb}'),
+    Dir.glob('{spec,test}/**/*.{erb,rb}'),
     %W[Gemfile #{spec.name}.gemspec Rakefile .yardopts],
-    %w[LICENSE.txt CHANGELOG.md README.md],
+    %w[CHANGELOG.md LICENSE.txt README.md],
   ].flatten
 
   # Test using different Gem versions:

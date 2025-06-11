@@ -10,37 +10,35 @@
 
 require 'test_helper'
 
-class BlueberryTest < Minitest::Test
-  def setup
+describe Psychgus::Blueberry do
+  before do
     @burgers = Burgers.new
   end
 
-  def test_blueberry
-    expected = TestHelper.lstrip_pipe(<<-YAML)
-    |--- !ruby/object:Burgers
-    |Burgers:
-    |  Classic:
-    |    'Bun': 'Sesame Seed'
-    |    'Cheese': 'American'
-    |    'Sauce': ['Ketchup', 'Mustard']
-    |  BBQ: {'Bun': 'Kaiser', 'Cheese': 'Cheddar', 'Sauce': 'Honey BBQ'}
-    |  Fancy:
-    |    'Bun': 'Hawaiian'
-    |    'Cheese': 'Smoked Gouda'
-    |    'Sauce': 'Spicy Wasabi'
-    |Toppings:
-    |- Mushrooms
-    |- - Lettuce
-    |  - Onions
-    |  - Pickles
-    |  - Tomatoes
-    |- - - Ketchup
-    |    - Mustard
-    |  - - Salt
-    |    - Pepper
+  it 'should use the stylers from psychgus_stylers()' do
+    _(@burgers.to_yaml).must_equal(<<~YAML)
+      --- !ruby/object:Burgers
+      Burgers:
+        Classic:
+          'Bun': 'Sesame Seed'
+          'Cheese': 'American'
+          'Sauce': ['Ketchup', 'Mustard']
+        BBQ: {'Bun': 'Kaiser', 'Cheese': 'Cheddar', 'Sauce': 'Honey BBQ'}
+        Fancy:
+          'Bun': 'Hawaiian'
+          'Cheese': 'Smoked Gouda'
+          'Sauce': 'Spicy Wasabi'
+      Toppings:
+      - Mushrooms
+      - - Lettuce
+        - Onions
+        - Pickles
+        - Tomatoes
+      - - - Ketchup
+          - Mustard
+        - - Salt
+          - Pepper
     YAML
-
-    assert_equal expected,@burgers.to_yaml
   end
 end
 
