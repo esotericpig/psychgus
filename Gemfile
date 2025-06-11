@@ -11,6 +11,7 @@ group(:development,:test) do
   gem 'rake'      ,'~> 13.3'
 
   # Doc.
+  gem 'irb'       ,'~> 1.15'  # Fix for Yard Ruby v3.5+.
   gem 'rdoc'      ,'~> 6.14'  # RDoc (*.rb).
   gem 'redcarpet' ,'~> 3.6'   # Markdown (*.md).
   gem 'yard'      ,'~> 0.9'   # Doc.
