@@ -139,7 +139,7 @@ describe Psychgus::SuperSniffer do
     HIER
   end
 
-  it 'should sniff single a doc' do
+  it 'should sniff a single doc' do
     _(Psychgus.hierarchy(TestHelper::BURGERS_DATA,verbose: true)).must_equal(<<~HIER)
       (1:1):Psych::Nodes::Stream - <root:(0:0)::(:1)>
       (1:1):Psych::Nodes::Document - <stream:(1:1)::(:1)>
