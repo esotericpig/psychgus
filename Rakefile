@@ -41,7 +41,7 @@ YardGhurt::GFMFixTask.new do |task|
   task.fix_code_langs = true
   task.md_files = ['index.html']
 
-  task.before = proc do |b,_args|
+  task.before = proc do |b,args|
     # Delete this file as it's never used (`index.html` is an exact copy).
     YardGhurt.rm_exist(File.join(b.doc_dir,'file.README.html'))
 

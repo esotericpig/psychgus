@@ -37,7 +37,7 @@ module Psychgus
       #
       # @param min_level [Integer] the minimum level (inclusive) to style
       # @param new_style [Integer] the new style to set the nodes to
-      # @param kargs [Hash] capture extra keyword args, so no error for undefined args
+      # @param _kargs [Hash] capture extra keyword args, so no error for undefined args
       def initialize(min_level = 0,new_style: nil,**_kargs)
         @min_level = min_level
         @new_style = new_style
@@ -66,7 +66,7 @@ module Psychgus
       # @param each_word [true,false] whether to capitalize each word separated by +delim+
       # @param new_delim [nil,String] the replacement for each +delim+ if not nil
       # @param delim [String,Regexp] the delimiter to split on
-      # @param kargs [Hash] capture extra keyword args, so no error for undefined args
+      # @param _kargs [Hash] capture extra keyword args, so no error for undefined args
       def initialize(each_word: true,new_delim: nil,delim: /[\s_\-]/,**_kargs)
         delim = Regexp.quote(delim.to_s) unless delim.is_a?(Regexp)
 
@@ -127,7 +127,7 @@ module Psychgus
 
       # @param io [IO] the IO to write to
       # @param verbose [true,false] whether to be more verbose (e.g., write child info)
-      # @param kargs [Hash] capture extra keyword args, so no error for undefined args
+      # @param _kargs [Hash] capture extra keyword args, so no error for undefined args
       def initialize(io: StringIO.new,verbose: false,**_kargs)
         @io = io
         @verbose = verbose
@@ -168,7 +168,7 @@ module Psychgus
       include StyleStylable
 
       # (see StyleStylable#initialize)
-      # @!method initialize(min_level=0,new_style: nil,**kargs)
+      # @!method initialize(min_level=0,new_style: nil,**_kargs)
       #
       # If +new_style+ is nil (the default), then {MAPPING_FLOW} will be used.
       def initialize(*)
@@ -198,7 +198,7 @@ module Psychgus
       alias_method :cap?,:cap
 
       # @param cap [true,false] whether to capitalize the symbol
-      # @param kargs [Hash] capture extra keyword args, so no error for undefined args
+      # @param _kargs [Hash] capture extra keyword args, so no error for undefined args
       def initialize(cap: true,**_kargs)
         @cap = cap
       end
@@ -236,7 +236,7 @@ module Psychgus
       include StyleStylable
 
       # (see StyleStylable#initialize)
-      # @!method initialize(min_level=0,new_style: nil,**kargs)
+      # @!method initialize(min_level=0,new_style: nil,**_kargs)
       #
       # If +new_style+ is nil (the default), then {SEQUENCE_FLOW} will be used.
       def initialize(*)

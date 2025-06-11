@@ -83,9 +83,9 @@ module Psychgus
   module Blueberry
     # Duck Type this method to return the {Styler}(s) for your class/module/etc.
     #
-    # @param sniffer [SuperSniffer] passed in from {StyledTreeBuilder}; use this for storing the level,
-    #                               position, etc. for styling your instance variables later relative to your
-    #                               class/module/etc.
+    # @param _sniffer [SuperSniffer] passed in from {StyledTreeBuilder}; use this for storing the level,
+    #                                position, etc. for styling your instance variables later relative to your
+    #                                class/module/etc.
     #
     # @return [Styler,Array<Styler>,nil] {Styler}(s) for this class/module/etc.
     def psychgus_stylers(_sniffer)

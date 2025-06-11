@@ -13,7 +13,7 @@ Psychgus uses the core standard library [Psych](https://github.com/ruby/psych) f
 
 Turn this YAML...
 
-```YAML
+```yaml
 ---
 Psych Gus:
   Aliases:
@@ -29,7 +29,7 @@ Psych Gus:
 
 Into this:
 
-```YAML
+```yaml
 ---
 Psych Gus:
   Aliases: [Squirts Macintosh, Big Baby Burton, Chocolate Einstein, MC Clap Yo Handz]
@@ -138,26 +138,26 @@ puts EggCarton.new.to_yaml(
 )
 
 # Output:
-# ---
-# Eggs:
-#   Styles: [Fried, Scrambled, [BBQ, Ketchup & Mustard]]
-#   Colors: [Brown, White, [Blue, Green]]
+#   ---
+#   Eggs:
+#     Styles: [Fried, Scrambled, [BBQ, Ketchup & Mustard]]
+#     Colors: [Brown, White, [Blue, Green]]
 
 puts EggCarton.new.to_yaml
 
 # Output (without Stylers):
-# --- !ruby/object:EggCarton
-# eggs:
-#   :styles:
-#   - fried
-#   - scrambled
-#   - - BBQ
-#     - ketchup & mustard
-#   :colors:
-#   - brown
-#   - white
-#   - - blue
-#     - green
+#   --- !ruby/object:EggCarton
+#   eggs:
+#     :styles:
+#     - fried
+#     - scrambled
+#     - - BBQ
+#       - ketchup & mustard
+#     :colors:
+#     - brown
+#     - white
+#     - - blue
+#       - green
 ```
 
 ### Simple Example
@@ -168,7 +168,7 @@ require 'psychgus'
 class CoffeeStyler
   include Psychgus::Styler
 
-  def style_sequence(sniffer,node)
+  def style_sequence(_sniffer,node)
     node.style = Psychgus::SEQUENCE_FLOW
   end
 end
@@ -181,9 +181,9 @@ coffee = {
 puts coffee.to_yaml(stylers: CoffeeStyler.new)
 
 # Output:
-# ---
-# Roast: [Light, Medium, Dark, Extra Dark]
-# Style: [Cappuccino, Espresso, Latte, Mocha]
+#   ---
+#   Roast: [Light, Medium, Dark, Extra Dark]
+#   Style: [Cappuccino, Espresso, Latte, Mocha]
 
 class Coffee
   include Psychgus::Blueberry
@@ -193,7 +193,7 @@ class Coffee
     @style = ['Cappuccino', 'Espresso', 'Latte', 'Mocha']
   end
 
-  def psychgus_stylers(sniffer)
+  def psychgus_stylers(_sniffer)
     CoffeeStyler.new
   end
 end
@@ -201,9 +201,9 @@ end
 puts Coffee.new.to_yaml
 
 # Output:
-# --- !ruby/object:Coffee
-# roast: [Light, Medium, Dark, Extra Dark]
-# style: [Cappuccino, Espresso, Latte, Mocha]
+#   --- !ruby/object:Coffee
+#   roast: [Light, Medium, Dark, Extra Dark]
+#   style: [Cappuccino, Espresso, Latte, Mocha]
 ```
 
 ### Hash Example
@@ -266,34 +266,34 @@ burgers[:favorite] = burgers[:burgers][:bbq] # Alias.
 puts burgers.to_yaml(indent: 3,stylers: BurgerStyler.new)
 
 # Output:
-# ---
-# Burgers:
-#    Classic: {Sauce: [Ketchup, Mustard], Cheese: American, Bun: Sesame Seed}
-#    BBQ: &1 {Sauce: Honey BBQ, Cheese: Cheddar, Bun: Kaiser}
-#    Fancy: {Sauce: Spicy Wasabi, Cheese: Smoked Gouda, Bun: Hawaiian}
-# Toppings:
-# - Mushrooms
-# - [Spinach, Onions, Pickles, Tomatoes]
-# - [[Ketchup, Mustard], [Salt, Pepper]]
-# Favorite: *1
+#   ---
+#   Burgers:
+#      Classic: {Sauce: [Ketchup, Mustard], Cheese: American, Bun: Sesame Seed}
+#      BBQ: &1 {Sauce: Honey BBQ, Cheese: Cheddar, Bun: Kaiser}
+#      Fancy: {Sauce: Spicy Wasabi, Cheese: Smoked Gouda, Bun: Hawaiian}
+#   Toppings:
+#   - Mushrooms
+#   - [Spinach, Onions, Pickles, Tomatoes]
+#   - [[Ketchup, Mustard], [Salt, Pepper]]
+#   Favorite: *1
 
-# Or pass in a Hash. Can also dereference aliases.
+# Or pass in a Hash, and can also dereference aliases.
 puts burgers.to_yaml({indent: 3,stylers: BurgerStyler.new,deref_aliases: true})
 
 # Output:
-# ---
-# Burgers:
-#    Classic: {Sauce: [Ketchup, Mustard], Cheese: American, Bun: Sesame Seed}
-#    BBQ: {Sauce: Honey BBQ, Cheese: Cheddar, Bun: Kaiser}
-#    Fancy: {Sauce: Spicy Wasabi, Cheese: Smoked Gouda, Bun: Hawaiian}
-# Toppings:
-# - Mushrooms
-# - [Spinach, Onions, Pickles, Tomatoes]
-# - [[Ketchup, Mustard], [Salt, Pepper]]
-# Favorite:
-#    Sauce: Honey BBQ
-#    Cheese: Cheddar
-#    Bun: Kaiser
+#   ---
+#   Burgers:
+#      Classic: {Sauce: [Ketchup, Mustard], Cheese: American, Bun: Sesame Seed}
+#      BBQ: {Sauce: Honey BBQ, Cheese: Cheddar, Bun: Kaiser}
+#      Fancy: {Sauce: Spicy Wasabi, Cheese: Smoked Gouda, Bun: Hawaiian}
+#   Toppings:
+#   - Mushrooms
+#   - [Spinach, Onions, Pickles, Tomatoes]
+#   - [[Ketchup, Mustard], [Salt, Pepper]]
+#   Favorite:
+#      Sauce: Honey BBQ
+#      Cheese: Cheddar
+#      Bun: Kaiser
 ```
 
 ### Class Example
@@ -310,7 +310,7 @@ class BurgerStyler
   end
 
   # Style all nodes (Psych::Nodes::Node).
-  def style(sniffer,node)
+  def style(_sniffer,node)
     # Remove `!ruby/object:...` for Burger classes (not Burgers class).
     node.tag = nil if node.node_of?(:mapping,:scalar,:sequence)
 
@@ -392,7 +392,7 @@ class Burgers
       [%w[Ketchup Mustard],%w[Salt Pepper]],
     ]
 
-    @favorite = @burgers['BBQ'] # Alias
+    @favorite = @burgers['BBQ'] # Alias.
   end
 
   # You can still use Psych's encode_with(), no problem.
@@ -408,58 +408,58 @@ burgers = Burgers.new
 puts burgers.to_yaml(indent: 3)
 
 # Output:
-# --- !ruby/object:Burgers
-# Burgers:
-#    Classic:
-#       Bun: 'Sesame Seed'
-#       Cheese: 'American'
-#       Sauce: ['Ketchup', 'Mustard']
-#    BBQ: &1 {Bun: 'Kaiser', Cheese: 'Cheddar', Sauce: 'Honey BBQ'}
-#    Fancy:
-#       Bun: 'Hawaiian'
-#       Cheese: 'Smoked Gouda'
-#       Sauce: 'Spicy Wasabi'
-# Toppings:
-# - Mushrooms
-# -  - Lettuce
-#    - Onions
-#    - Pickles
-#    - Tomatoes
-# -  -  - Ketchup
-#       - Mustard
-#    -  - Salt
-#       - Pepper
-# Favorite: *1
+#   --- !ruby/object:Burgers
+#   Burgers:
+#      Classic:
+#         Bun: 'Sesame Seed'
+#         Cheese: 'American'
+#         Sauce: ['Ketchup', 'Mustard']
+#      BBQ: &1 {Bun: 'Kaiser', Cheese: 'Cheddar', Sauce: 'Honey BBQ'}
+#      Fancy:
+#         Bun: 'Hawaiian'
+#         Cheese: 'Smoked Gouda'
+#         Sauce: 'Spicy Wasabi'
+#   Toppings:
+#   - Mushrooms
+#   -  - Lettuce
+#      - Onions
+#      - Pickles
+#      - Tomatoes
+#   -  -  - Ketchup
+#         - Mustard
+#      -  - Salt
+#         - Pepper
+#   Favorite: *1
 
-# Or pass in a Hash. Can also dereference aliases.
+# Or pass in a Hash, and can also dereference aliases.
 puts burgers.to_yaml({indent: 3,deref_aliases: true})
 
 # Output:
-# --- !ruby/object:Burgers
-# Burgers:
-#    Classic:
-#       Bun: 'Sesame Seed'
-#       Cheese: 'American'
-#       Sauce: ['Ketchup', 'Mustard']
-#    BBQ: {Bun: 'Kaiser', Cheese: 'Cheddar', Sauce: 'Honey BBQ'}
-#    Fancy:
-#       Bun: 'Hawaiian'
-#       Cheese: 'Smoked Gouda'
-#       Sauce: 'Spicy Wasabi'
-# Toppings:
-# - Mushrooms
-# -  - Lettuce
-#    - Onions
-#    - Pickles
-#    - Tomatoes
-# -  -  - Ketchup
-#       - Mustard
-#    -  - Salt
-#       - Pepper
-# Favorite:
-#    Bun: 'Kaiser'
-#    Cheese: 'Cheddar'
-#    Sauce: 'Honey BBQ'
+#   --- !ruby/object:Burgers
+#   Burgers:
+#      Classic:
+#         Bun: 'Sesame Seed'
+#         Cheese: 'American'
+#         Sauce: ['Ketchup', 'Mustard']
+#      BBQ: {Bun: 'Kaiser', Cheese: 'Cheddar', Sauce: 'Honey BBQ'}
+#      Fancy:
+#         Bun: 'Hawaiian'
+#         Cheese: 'Smoked Gouda'
+#         Sauce: 'Spicy Wasabi'
+#   Toppings:
+#   - Mushrooms
+#   -  - Lettuce
+#      - Onions
+#      - Pickles
+#      - Tomatoes
+#   -  -  - Ketchup
+#         - Mustard
+#      -  - Salt
+#         - Pepper
+#   Favorite:
+#      Bun: 'Kaiser'
+#      Cheese: 'Cheddar'
+#      Sauce: 'Honey BBQ'
 ```
 
 ### Advanced Usage
@@ -470,7 +470,7 @@ require 'psychgus'
 class MyStyler
   include Psychgus::Styler
 
-  def style_sequence(sniffer,node)
+  def style_sequence(_sniffer,node)
     node.style = Psychgus::SEQUENCE_FLOW
   end
 end

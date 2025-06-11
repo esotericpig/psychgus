@@ -155,9 +155,11 @@ module Psychgus
     # An optional +block+ can return a default value if not found.
     #
     # @param styler [Styler] the {Styler} to find and remove
-    # @param block [Proc] an optional block to call when +styler+ is not found
     #
     # @return [Styler,nil] the last {Styler}, or if not found, nil or the result of +block+
+    #
+    # @overload remove_styler(styler,&block)
+    #   @param block [Proc] an optional block to call when +styler+ is not found
     def remove_styler(styler,&)
       return @stylers.delete(styler,&)
     end
