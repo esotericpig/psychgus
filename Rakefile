@@ -12,7 +12,7 @@ require 'rake/testtask'
 
 task default: %i[test]
 
-CLEAN.exclude('.git/','.github/','.idea/','stock/')
+CLEAN.exclude('{.git,.github,.idea,stock}/**/*')
 CLOBBER.include('.yardoc/','doc/')
 
 # Execute "rake clobber doc" for pristine docs.
